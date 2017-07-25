@@ -501,9 +501,9 @@ MonoBehaviour:
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 44}
-    m_SelectedIDs: 54290000
-    m_LastClickedID: 10580
-    m_ExpandedIDs: 000000006e250000b0250000c6250000cc250000d8250000ec2500000e27000092270000a8270000be270000f6270000de280000e82800005c290000a2290000b2290000602e0000622e0000642e0000662e0000682e00006a2e00006c2e00006e2e0000702e0000722e0000742e0000762e0000782e00007a2e00007c2e00007e2e0000802e0000822e0000842e0000862e0000882e00008a2e000000ca9a3bffffff7f
+    m_SelectedIDs: 52290000
+    m_LastClickedID: 10578
+    m_ExpandedIDs: 000000006e250000ae250000c4250000ca250000d6250000ea2500000c2700008e270000a4270000ba270000f2270000dc280000e62800005a290000a0290000b0290000fa2e0000fc2e0000fe2e0000002f0000022f0000042f0000062f0000082f00000a2f00000c2f00000e2f0000102f0000122f0000142f0000162f0000182f00001a2f00001c2f00001e2f0000202f0000222f0000242f000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -531,7 +531,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000006e250000b0250000c6250000cc250000d8250000ec2500000c2700000e27000092270000a8270000be270000f6270000de280000e82800005c290000a2290000b2290000602e0000622e0000642e0000662e0000682e00006a2e00006c2e00006e2e0000702e0000722e0000742e0000762e0000782e00007a2e00007c2e00007e2e0000802e0000822e0000842e0000862e0000882e00008a2e0000
+    m_ExpandedIDs: 000000006e250000ae250000c4250000ca250000d6250000ea2500000c2700008e270000a4270000ba270000f2270000dc280000e62800005a290000a0290000b0290000fa2e0000fc2e0000fe2e0000002f0000022f0000042f0000062f0000082f00000a2f00000c2f00000e2f0000102f0000122f0000142f0000162f0000182f00001a2f00001c2f00001e2f0000202f0000222f0000242f0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -647,23 +647,23 @@ MonoBehaviour:
     height: 424
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 
-    m_LastClickedID: 0
-    m_ExpandedIDs: e8fbffff000000001a2d0000
+    m_SelectedIDs: 06fbffff
+    m_LastClickedID: -1274
+    m_ExpandedIDs: 6016ffffee36ffffa637ffff0038ffff1640ffffc881ffff7696ffffe8fbffff000000005e2a0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: FPSController
-      m_OriginalName: FPSController
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: -2448
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 0
       m_ClientGUIView: {fileID: 2}
     m_SearchString: 
@@ -699,14 +699,14 @@ MonoBehaviour:
     width: 975
     height: 424
   m_SceneLighting: 1
-  lastFramingTime: 12339.21558807371
+  lastFramingTime: 21121.638321153827
   m_2DMode: 0
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 204.89708, y: 25.0282, z: 81.316864}
+    m_Target: {x: 272.99905, y: -615.9977, z: 900.36743}
     speed: 2
-    m_Value: {x: 204.89708, y: 25.0282, z: 81.316864}
+    m_Value: {x: 272.99905, y: -615.9977, z: 900.36743}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -729,13 +729,13 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: -0.1900376, y: -0.36674687, z: 0.076801136, w: -0.9074603}
+    m_Target: {x: -0.36709455, y: -0.016003842, z: 0.0063151587, w: -0.93002456}
     speed: 2
-    m_Value: {x: -0.1900376, y: -0.36674687, z: 0.076801136, w: -0.9074603}
+    m_Value: {x: -0.36709455, y: -0.016003842, z: 0.0063151587, w: -0.93002456}
   m_Size:
-    m_Target: 46.919113
+    m_Target: 1169.2041
     speed: 2
-    m_Value: 46.919113
+    m_Value: 1169.2041
   m_Ortho:
     m_Target: 0
     speed: 2
