@@ -40,8 +40,8 @@ MonoBehaviour:
     y: 0
     width: 204
     height: 577
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 204, y: 221}
+  m_MaxSize: {x: 4004, y: 4021}
   m_ActualView: {fileID: 20}
   m_Panes:
   - {fileID: 20}
@@ -490,19 +490,19 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Terrain/Environment/TerrainAssets/SurfaceTextures
+    - Assets/Bridge/Materials
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Terrain/Environment/TerrainAssets/SurfaceTextures
+  - Assets/Bridge/Materials
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\MCLeite\Documents\Unity\AmeiseVR\AMEISE_VR
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: f2310000
-    m_LastClickedID: 12786
-    m_ExpandedIDs: 0000000072310000783100009031000096310000cc310000f6310000fc3100000c320000103200002a3200004c32000052320000703200008a3200007437000076370000783700007a3700007c3700007e37000080370000823700008437000086370000883700008a3700008c3700008e37000090370000923700009437000096370000983700009a3700009c3700009e37000000ca9a3bffffff7f
+    m_SelectedIDs: 18290000
+    m_LastClickedID: 10520
+    m_ExpandedIDs: 00000000d0260000ee26000004270000142700001a270000be2700001c2800002e2800003e28000042280000d62800001c290000622900008e30000090300000923000009430000096300000983000009a3000009c3000009e300000a0300000a2300000a4300000a6300000a8300000aa300000ac300000ae300000b0300000b2300000b4300000b6300000b8300000ce30000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -530,7 +530,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000072310000783100009031000096310000cc310000f6310000fc3100000c320000103200002a3200004c32000052320000703200007437000076370000783700007a3700007c3700007e37000080370000823700008437000086370000883700008a3700008c3700008e37000090370000923700009437000096370000983700009a3700009c3700009e370000
+    m_ExpandedIDs: 00000000d0260000ee260000142700001a270000be2700001c2800002e2800003e2800004228000066280000ca280000d62800001c290000622900008e30000090300000923000009430000096300000983000009a3000009c3000009e300000a0300000a2300000a4300000a6300000a8300000aa300000ac300000ae300000b0300000b2300000b4300000b6300000b8300000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -645,10 +645,10 @@ MonoBehaviour:
     width: 200
     height: 556
   m_TreeViewState:
-    scrollPos: {x: 0, y: 405}
-    m_SelectedIDs: 8c60f7ff
-    m_LastClickedID: -565108
-    m_ExpandedIDs: 0232f6ff746bf7ff0436f9ffe08ffbff0092ffff22e9ffff12eaffff000000002e3300009033000096330000e0350000c23600003a370000
+    scrollPos: {x: 0, y: 64}
+    m_SelectedIDs: 9e2f0000
+    m_LastClickedID: 12190
+    m_ExpandedIDs: 1671fdff6683feff6ec2feffeed6ffff1efcffff00000000ce290000e4290000942a0000002b0000102b0000d62b00007a2d0000e42d0000d22e0000402f0000d62f0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -703,9 +703,9 @@ MonoBehaviour:
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 249.12947, y: 8.526218, z: 116.73458}
+    m_Target: {x: 218.65234, y: 17.061962, z: 91.05163}
     speed: 2
-    m_Value: {x: 249.12947, y: 8.526218, z: 116.73458}
+    m_Value: {x: 218.65234, y: 17.061962, z: 91.05163}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -728,9 +728,9 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: 0.031858437, y: -0.02083442, z: 0.00066829304, w: 0.99927497}
+    m_Target: {x: 0.11913626, y: 0.19804695, z: -0.024253637, w: 0.9726231}
     speed: 2
-    m_Value: {x: 0.03185844, y: -0.020834422, z: 0.0006682931, w: 0.999275}
+    m_Value: {x: 0.11913626, y: 0.19804695, z: -0.024253637, w: 0.9726231}
   m_Size:
     m_Target: 22
     speed: 2
