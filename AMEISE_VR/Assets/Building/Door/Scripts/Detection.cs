@@ -33,6 +33,8 @@ public class Detection : MonoBehaviour
     [Range(0.0F, 1.0F)]
     public float Opacity = 1.0F;
 
+	public GameObject LoginControl;
+
     void Start()
     {
         gameObject.name = "Player";
@@ -98,9 +100,9 @@ public class Detection : MonoBehaviour
 			        TextPrefabLoginInstance.transform.SetParent(transform, true); // Make the player the parent object of the text element
 		        }
 
-		        if (Input.GetKey(Character))
+		        if (Input.GetKey(Character) && !LoginControl.activeSelf)
 		        {
-			        //TODO: show login screen
+			        LoginControl.SetActive(true);
 		        }
 	        }
 
