@@ -16,7 +16,12 @@ public class Detection : MonoBehaviour
     [HideInInspector] public GameObject TextPrefabInstance; // A copy of the text prefab to prevent data corruption
     [HideInInspector] public bool TextActive;
 
-    [Tooltip("The image or text that is shown in the middle of the the screen.")]
+	[Tooltip("The image or text that will be shown whenever the player is in reach of the login.")]
+	public GameObject TextPrefabLogin; // A text element to display when the player is in reach of the login
+	[HideInInspector] public GameObject TextPrefabLoginInstance; // A copy of the text prefab to prevent data corruption
+	[HideInInspector] public bool TextLoginActive;
+
+	[Tooltip("The image or text that is shown in the middle of the the screen.")]
     public GameObject CrosshairPrefab;
     [HideInInspector] public GameObject CrosshairPrefabInstance; // A copy of the crosshair prefab to prevent data corruption
 
@@ -42,8 +47,9 @@ public class Detection : MonoBehaviour
         }
 
         if (TextPrefab == null) Debug.Log("<color=yellow><b>No TextPrefab was found.</b></color>"); // Return an error if no text element was specified
+	    if (TextPrefabLogin == null) Debug.Log("<color=yellow><b>No TextPrefabLogin was found.</b></color>"); // Return an error if no text element was specified
 
-        DebugRayColor.a = Opacity; // Set the alpha value of the DebugRayColor
+		DebugRayColor.a = Opacity; // Set the alpha value of the DebugRayColor
     }
 
     void Update()
@@ -80,8 +86,25 @@ public class Detection : MonoBehaviour
                     if (dooropening.RotationPending == false) StartCoroutine(hit.collider.GetComponent<Door>().Move());
                 }
             }
+	        else if (hit.collider.tag == "Login")
+	        {
+		        InReach = true;
 
-            else
+		        // Display the UI element when the player is in reach of the door
+		        if (TextLoginActive == false && TextPrefabLogin != null)
+		        {
+			        TextPrefabLoginInstance = Instantiate(TextPrefabLogin);
+			        TextLoginActive = true;
+			        TextPrefabLoginInstance.transform.SetParent(transform, true); // Make the player the parent object of the text element
+		        }
+
+		        if (Input.GetKey(Character))
+		        {
+			        //TODO: show login screen
+		        }
+	        }
+
+			else
             {
                 InReach = false;
 
@@ -91,7 +114,14 @@ public class Detection : MonoBehaviour
                     DestroyImmediate(TextPrefabInstance);
                     TextActive = false;
                 }
-            }
+
+	            // Destroy the UI element when Player is no longer in reach of the login
+	            if (TextLoginActive == true)
+	            {
+		            DestroyImmediate(TextPrefabLoginInstance);
+		            TextLoginActive = false;
+	            }
+			}
         }
 
         else
@@ -104,7 +134,14 @@ public class Detection : MonoBehaviour
                 DestroyImmediate(TextPrefabInstance);
                 TextActive = false;
             }
-        }
+
+	        // Destroy the UI element when Player is no longer in reach of the login
+	        if (TextLoginActive == true)
+	        {
+		        DestroyImmediate(TextPrefabLoginInstance);
+		        TextLoginActive = false;
+	        }
+		}
 
         //Draw the ray as a colored line for debugging purposes.
         Debug.DrawRay(ray.origin, ray.direction * Reach, DebugRayColor);
