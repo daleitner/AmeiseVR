@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class Detection : MonoBehaviour
 {
@@ -25,15 +27,21 @@ public class Detection : MonoBehaviour
     public GameObject CrosshairPrefab;
     [HideInInspector] public GameObject CrosshairPrefabInstance; // A copy of the crosshair prefab to prevent data corruption
 
-    // DEBUG SETTINGS
-    [Header("Debug Settings")]
+	public GameObject LoginControl;
+	public GameObject FPSController;
+
+	private InputField username;
+	private InputField password;
+
+	// DEBUG SETTINGS
+	[Header("Debug Settings")]
     [Tooltip("The color of the debugray that will be shown in the scene view window when playing the game.")]
     public Color DebugRayColor;
     [Tooltip("The opacity of the debugray.")]
     [Range(0.0F, 1.0F)]
     public float Opacity = 1.0F;
 
-	public GameObject LoginControl;
+
 
     void Start()
     {
@@ -52,9 +60,16 @@ public class Detection : MonoBehaviour
 	    if (TextPrefabLogin == null) Debug.Log("<color=yellow><b>No TextPrefabLogin was found.</b></color>"); // Return an error if no text element was specified
 
 		DebugRayColor.a = Opacity; // Set the alpha value of the DebugRayColor
-    }
 
-    void Update()
+	    username = LoginControl.transform.Find("Username").gameObject.GetComponent<InputField>();
+	    password = LoginControl.transform.Find("Password").gameObject.GetComponent<InputField>();
+	    var button = LoginControl.transform.Find("LoginButton").gameObject.GetComponent<Button>();
+		button.onClick.AddListener(LoginClicked);
+	    var cancelButton = LoginControl.transform.Find("CancelButton").gameObject.GetComponent<Button>();
+	    cancelButton.onClick.AddListener(CancelClicked);
+	}
+
+	void Update()
     {
         // Set origin of ray to 'center of screen' and direction of ray to 'cameraview'
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0F));
@@ -103,6 +118,9 @@ public class Detection : MonoBehaviour
 		        if (Input.GetKey(Character) && !LoginControl.activeSelf)
 		        {
 			        LoginControl.SetActive(true);
+					var controller =  FPSController.GetComponent<FirstPersonController>();
+					controller.LockCursor();
+					controller.enabled = false;
 		        }
 	        }
 
@@ -148,4 +166,22 @@ public class Detection : MonoBehaviour
         //Draw the ray as a colored line for debugging purposes.
         Debug.DrawRay(ray.origin, ray.direction * Reach, DebugRayColor);
     }
+
+	void LoginClicked()
+	{
+
+		Debug.Log("username: " + username.text + "; password: " + password.text);
+		LoginControl.SetActive(false);
+		var controller = FPSController.GetComponent<FirstPersonController>();
+		controller.enabled = true;
+		controller.UnlockCursor();
+	}
+
+	void CancelClicked()
+	{
+		LoginControl.SetActive(false);
+		var controller = FPSController.GetComponent<FirstPersonController>();
+		controller.enabled = true;
+		controller.UnlockCursor();
+	}
 }

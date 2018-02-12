@@ -255,5 +255,15 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
             body.AddForceAtPosition(m_CharacterController.velocity*0.1f, hit.point, ForceMode.Impulse);
         }
-    }
+
+	    public void LockCursor()
+	    {
+			m_MouseLook.SetCursorLock(false);
+	    }
+
+	    public void UnlockCursor()
+	    {
+		    m_MouseLook.SetCursorLock(true);
+	    }
+	}
 }
