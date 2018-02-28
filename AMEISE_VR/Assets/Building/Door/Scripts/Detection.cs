@@ -169,8 +169,10 @@ public class Detection : MonoBehaviour
 
 	void LoginClicked()
 	{
-
-		Debug.Log("username: " + username.text + "; password: " + password.text);
+		var loginString = "username:" + username.text + "; password:" + password.text;
+		var connection = ClientConnection.GetInstance();
+		connection.SendText(loginString);
+		Debug.Log(loginString);
 		LoginControl.SetActive(false);
 		var controller = FPSController.GetComponent<FirstPersonController>();
 		controller.enabled = true;
