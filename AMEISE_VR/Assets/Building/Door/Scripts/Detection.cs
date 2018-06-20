@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.FirstPerson;
@@ -169,10 +170,10 @@ public class Detection : MonoBehaviour
 
 	void LoginClicked()
 	{
-		var loginString = "username:" + username.text + "; password:" + password.text;
+		var message = new MessageObject(MessageTypeEnum.Login, new Dictionary<string, string>{{"username", username.text}, {"password", password.text}});
 		var connection = ClientConnection.GetInstance();
-		connection.SendText(loginString);
-		Debug.Log(loginString);
+		connection.SendText(message);
+		Debug.Log(message.ToString());
 		LoginControl.SetActive(false);
 		var controller = FPSController.GetComponent<FirstPersonController>();
 		controller.enabled = true;
