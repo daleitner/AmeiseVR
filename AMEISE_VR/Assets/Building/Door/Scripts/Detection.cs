@@ -29,10 +29,10 @@ public class Detection : MonoBehaviour
     [HideInInspector] public GameObject CrosshairPrefabInstance; // A copy of the crosshair prefab to prevent data corruption
 
 	public GameObject LoginControl;
+	public GameObject GameSelectionControl;
 	public GameObject FPSController;
 
-	private InputField username;
-	private InputField password;
+	private GameConfiguration config;
 
 	// DEBUG SETTINGS
 	[Header("Debug Settings")]
@@ -62,12 +62,7 @@ public class Detection : MonoBehaviour
 
 		DebugRayColor.a = Opacity; // Set the alpha value of the DebugRayColor
 
-	    username = LoginControl.transform.Find("Username").gameObject.GetComponent<InputField>();
-	    password = LoginControl.transform.Find("Password").gameObject.GetComponent<InputField>();
-	    var button = LoginControl.transform.Find("LoginButton").gameObject.GetComponent<Button>();
-		button.onClick.AddListener(LoginClicked);
-	    var cancelButton = LoginControl.transform.Find("CancelButton").gameObject.GetComponent<Button>();
-	    cancelButton.onClick.AddListener(CancelClicked);
+		config = new GameConfiguration(FPSController, LoginControl, GameSelectionControl);
 	}
 
 	void Update()
@@ -118,10 +113,7 @@ public class Detection : MonoBehaviour
 
 		        if (Input.GetKey(Character) && !LoginControl.activeSelf)
 		        {
-			        LoginControl.SetActive(true);
-					var controller =  FPSController.GetComponent<FirstPersonController>();
-					controller.LockCursor();
-					controller.enabled = false;
+					config.OpenLoginDialog();
 		        }
 	        }
 
@@ -167,24 +159,4 @@ public class Detection : MonoBehaviour
         //Draw the ray as a colored line for debugging purposes.
         Debug.DrawRay(ray.origin, ray.direction * Reach, DebugRayColor);
     }
-
-	void LoginClicked()
-	{
-		var message = new MessageObject(MessageTypeEnum.Login, new Dictionary<string, string>{{"username", username.text}, {"password", password.text}});
-		var connection = ClientConnection.GetInstance();
-		connection.SendText(message);
-		Debug.Log(message.ToString());
-		LoginControl.SetActive(false);
-		var controller = FPSController.GetComponent<FirstPersonController>();
-		controller.enabled = true;
-		controller.UnlockCursor();
-	}
-
-	void CancelClicked()
-	{
-		LoginControl.SetActive(false);
-		var controller = FPSController.GetComponent<FirstPersonController>();
-		controller.enabled = true;
-		controller.UnlockCursor();
-	}
 }
