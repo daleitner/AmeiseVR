@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 using System.Net;
@@ -11,8 +12,11 @@ public class ClientConnection
 	private static ClientConnection client;
 	private readonly BackgroundWorker _worker;
 	private bool _connectionClosed = false;
+	private List<List<MessageObject>> messageLists;
+
 	private ClientConnection()
 	{
+		messageLists = new List<List<MessageObject>>();
 		_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 		_worker = new BackgroundWorker()
 		{
@@ -91,6 +95,10 @@ public class ClientConnection
 
 					} while (stream.DataAvailable);
 					var msgobj = new MessageObject(message.ToString());
+					foreach (var messageList in messageLists)
+					{
+						messageList.Add(msgobj);
+					}
 					// Print out the received message to the console.
 					Debug.Log("You received the following message : " +
 					          msgobj);
@@ -101,5 +109,10 @@ public class ClientConnection
 				}
 			}
 		}
+	}
+
+	public void RegisterList(List<MessageObject> messageObjects)
+	{
+		messageLists.Add(messageObjects);
 	}
 }

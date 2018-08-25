@@ -30,6 +30,7 @@ public class Detection : MonoBehaviour
 
 	public GameObject LoginControl;
 	public GameObject GameSelectionControl;
+	public GameObject LoginFailedControl;
 	public GameObject FPSController;
 
 	private GameConfiguration config;
@@ -62,7 +63,7 @@ public class Detection : MonoBehaviour
 
 		DebugRayColor.a = Opacity; // Set the alpha value of the DebugRayColor
 
-		config = new GameConfiguration(FPSController, LoginControl, GameSelectionControl);
+		config = new GameConfiguration(FPSController, LoginControl, GameSelectionControl, LoginFailedControl);
 	}
 
 	void Update()

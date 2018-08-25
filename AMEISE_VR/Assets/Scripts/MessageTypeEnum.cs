@@ -1,4 +1,5 @@
 ﻿public enum MessageTypeEnum
 {
-	Login
+	Login,
+	Default
 }
