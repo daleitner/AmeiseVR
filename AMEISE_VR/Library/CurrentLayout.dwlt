@@ -20,7 +20,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 7}
-  m_MinSize: {x: 950, y: 300}
+  m_MinSize: {x: 950, y: 392}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -66,8 +66,8 @@ MonoBehaviour:
     y: 30
     width: 1280
     height: 891
-  m_MinSize: {x: 683, y: 492}
-  m_MaxSize: {x: 14004, y: 14042}
+  m_MinSize: {x: 683, y: 342}
+  m_MaxSize: {x: 12008, y: 8042}
   vertical: 1
   controlID: 25
 --- !u!114 &4
@@ -90,8 +90,8 @@ MonoBehaviour:
     y: 0
     width: 1280
     height: 891
-  m_MinSize: {x: 683, y: 492}
-  m_MaxSize: {x: 14004, y: 14042}
+  m_MinSize: {x: 683, y: 342}
+  m_MaxSize: {x: 12008, y: 8042}
   vertical: 0
   controlID: 26
 --- !u!114 &5
@@ -139,15 +139,15 @@ MonoBehaviour:
     y: 479
     width: 981
     height: 412
-  m_MinSize: {x: 232, y: 271}
-  m_MaxSize: {x: 10002, y: 10021}
-  m_ActualView: {fileID: 18}
+  m_MinSize: {x: 102, y: 121}
+  m_MaxSize: {x: 4002, y: 4021}
+  m_ActualView: {fileID: 23}
   m_Panes:
   - {fileID: 18}
   - {fileID: 23}
   - {fileID: 15}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -232,8 +232,8 @@ MonoBehaviour:
     y: 0
     width: 981
     height: 891
-  m_MinSize: {x: 406, y: 492}
-  m_MaxSize: {x: 10002, y: 14042}
+  m_MinSize: {x: 406, y: 342}
+  m_MaxSize: {x: 8006, y: 8042}
   vertical: 1
   controlID: 27
 --- !u!114 &11
@@ -500,9 +500,9 @@ MonoBehaviour:
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 46}
-    m_SelectedIDs: 22270000
-    m_LastClickedID: 10018
-    m_ExpandedIDs: 000000009e260000d8260000e8260000fc26000020270000b62700001c2800002c2800006a2800007e280000f0280000f8280000002900003c290000582900007e290000a0440000a2440000a4440000a6440000a8440000aa440000ac440000ae440000b0440000b2440000b4440000b6440000b8440000ba440000bc440000be440000c0440000c2440000c4440000c6440000c8440000ca440000cc440000ce440000d0440000d2440000d444000000ca9a3bffffff7f
+    m_SelectedIDs: 24270000
+    m_LastClickedID: 10020
+    m_ExpandedIDs: 00000000a0260000da260000ea260000fe26000022270000b82700001e2800002e2800006c28000080280000f2280000fa280000022900003e2900005a29000080290000d2440000d4440000d6440000d8440000da440000dc440000de440000e0440000e2440000e4440000e6440000e8440000ea440000ec440000ee440000f0440000f2440000f4440000f6440000f8440000fa440000fc440000fe4400000045000002450000044500000645000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -530,7 +530,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000009e260000d8260000e8260000fc26000020270000b62700001c2800002c2800006a2800007e280000f0280000f8280000002900003c290000582900007e290000a0440000a2440000a4440000a6440000a8440000aa440000ac440000ae440000b0440000b2440000b4440000b6440000b8440000ba440000bc440000be440000c0440000c2440000c4440000c6440000c8440000ca440000cc440000ce440000d0440000d2440000d4440000
+    m_ExpandedIDs: 00000000a0260000da260000ea260000fe26000022270000b82700001e2800002e2800006c28000080280000f2280000fa280000022900003e2900005a29000080290000d2440000d4440000d6440000d8440000da440000dc440000de440000e0440000e2440000e4440000e6440000e8440000ea440000ec440000ee440000f0440000f2440000f4440000f6440000f8440000fa440000fc440000fe44000000450000024500000445000006450000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -555,9 +555,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 
-    m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_SelectedInstanceIDs: 222b0000
+    m_LastClickedInstanceID: 11042
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: be240000f24f00009a5a0000b24100007a4000003440000094410000587f0000583000002a2b0000ac340000388400005e3e0000b83300004c4b00005c3f00005c4d00006a33000090420000983a00003a3200003c2a0000023500008a33000028320000524800007a320000ec4d0000a23b0000a6930000fa2b0000225e00008e4900000844000002440000022c0000e4530000fe5800007e3f00008eee000070ee0000162f00002eca000000000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -611,7 +611,7 @@ MonoBehaviour:
     y: 92
     width: 297
     height: 870
-  m_ScrollPosition: {x: 0, y: 695.9551}
+  m_ScrollPosition: {x: 0, y: 0}
   m_InspectorMode: 0
   m_PreviewResizer:
     m_CachedPref: 160
@@ -646,23 +646,23 @@ MonoBehaviour:
     height: 458
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 1c2f0000
-    m_LastClickedID: 12060
-    m_ExpandedIDs: 405effff445effff1efcffff000000001c2f000050400000
+    m_SelectedIDs: 222b0000
+    m_LastClickedID: 11042
+    m_ExpandedIDs: 1efcffff00000000222b0000202f0000b0380000223f0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: LoginFailedDialog
-      m_OriginalName: LoginFailedDialog
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: -28004
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 0
       m_ClientGUIView: {fileID: 2}
     m_SearchString: 
@@ -703,9 +703,9 @@ MonoBehaviour:
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 398.71707, y: 236.4291, z: 1104.2137}
+    m_Target: {x: 141.26645, y: -112.8667, z: 1044.4769}
     speed: 2
-    m_Value: {x: 398.71707, y: 236.4291, z: 1104.2137}
+    m_Value: {x: 141.26645, y: -112.8667, z: 1044.4769}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -728,9 +728,9 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: -0.004924681, y: -0.017372612, z: 0.00007726931, w: -0.9998369}
+    m_Target: {x: -0.1242716, y: 0.07199622, z: -0.009049563, w: -0.9895915}
     speed: 2
-    m_Value: {x: -0.0049246815, y: -0.017372614, z: 0.00007726932, w: -0.999837}
+    m_Value: {x: -0.1242716, y: 0.07199622, z: -0.009049563, w: -0.9895915}
   m_Size:
     m_Target: 1471.2837
     speed: 2

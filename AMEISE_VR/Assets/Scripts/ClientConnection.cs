@@ -12,11 +12,11 @@ public class ClientConnection
 	private static ClientConnection client;
 	private readonly BackgroundWorker _worker;
 	private bool _connectionClosed = false;
-	private List<List<MessageObject>> messageLists;
+	private readonly List<List<MessageObject>> _messageLists;
 
 	private ClientConnection()
 	{
-		messageLists = new List<List<MessageObject>>();
+		_messageLists = new List<List<MessageObject>>();
 		_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 		_worker = new BackgroundWorker()
 		{
@@ -93,15 +93,14 @@ public class ClientConnection
 
 						message.AppendFormat("{0}", Encoding.ASCII.GetString(myReadBuffer, 0, numberOfBytesRead));
 
-					} while (stream.DataAvailable);
+					} while (!message.ToString().EndsWith(";"));
+					Debug.Log("You received the following message : " + message);
 					var msgobj = new MessageObject(message.ToString());
-					foreach (var messageList in messageLists)
+					foreach (var messageList in _messageLists)
 					{
 						messageList.Add(msgobj);
 					}
 					// Print out the received message to the console.
-					Debug.Log("You received the following message : " +
-					          msgobj);
 				}
 				else
 				{
@@ -113,6 +112,6 @@ public class ClientConnection
 
 	public void RegisterList(List<MessageObject> messageObjects)
 	{
-		messageLists.Add(messageObjects);
+		_messageLists.Add(messageObjects);
 	}
 }

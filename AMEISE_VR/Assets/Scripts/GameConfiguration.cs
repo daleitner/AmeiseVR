@@ -21,8 +21,9 @@ public class GameConfiguration
 		GameSelectionControl = gameSelectionControl;
 		LoginFailedControl = loginFailedControl;
 		FPSController = fpsController;
-		
-		//_client.ReceivedMessage += ReceivedMessage;
+
+		var messageListener = FPSController.GetComponent<MessageListener>();
+		messageListener.ReceivedMessage += ReceivedMessage;
 
 		username = LoginControl.transform.Find("Username").gameObject.GetComponent<InputField>();
 		password = LoginControl.transform.Find("Password").gameObject.GetComponent<InputField>();
@@ -101,14 +102,14 @@ public class GameConfiguration
 		if (messageObject.Type == MessageTypeEnum.Login)
 		{
 			LoginControl.SetActive(false);
-			var userid = int.Parse(messageObject.GetValueOf("userid"));
-			if (userid == 0)
+			var loginSuccessed = bool.Parse(messageObject.GetValueOf("success"));
+			if (loginSuccessed)
 			{
-				LoginFailedControl.SetActive(true);
+				GameSelectionControl.SetActive(true);
 			}
 			else
 			{
-				GameSelectionControl.SetActive(true);
+				LoginFailedControl.SetActive(true);
 			}
 		}
 	}

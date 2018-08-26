@@ -16,10 +16,12 @@ public class MessageObject
 		if(string.IsNullOrEmpty(message))
 			throw new ArgumentNullException("message is empty!");
 		dictionary = new Dictionary<string, string>();
-		var parts = message.Split('|');
+		var parts = message.Substring(0, message.Length-1).Split('|');
 		Type = (MessageTypeEnum) Enum.Parse(typeof(MessageTypeEnum), parts[0]);
 		for (var i = 1; i < parts.Length; i++)
 		{
+			if (string.IsNullOrEmpty(parts[i]))
+				continue;
 			var property = parts[i].Split(':');
 			dictionary.Add(property[0], property[1]);
 		}
@@ -41,6 +43,6 @@ public class MessageObject
 		}
 
 		str = str.Substring(0, str.Length - 1);
-		return Type + "|" + str;
+		return Type + "|" + str + ";";
 	}
 }
