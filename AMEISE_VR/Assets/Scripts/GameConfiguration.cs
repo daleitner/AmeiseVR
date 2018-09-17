@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityStandardAssets.Characters.FirstPerson;
+using Button = UnityEngine.UI.Button;
 
 public class GameConfiguration
 {
@@ -13,7 +14,8 @@ public class GameConfiguration
 
 	private InputField username;
 	private InputField password;
-	
+
+	private GameObject toggle;
 
 	public GameConfiguration(GameObject fpsController, GameObject loginControl, GameObject gameSelectionControl, GameObject loginFailedControl)
 	{
@@ -36,6 +38,7 @@ public class GameConfiguration
 		startButton.onClick.AddListener(StartClicked);
 		var backButton = GameSelectionControl.transform.Find("BackButton").gameObject.GetComponent<Button>();
 		backButton.onClick.AddListener(BackClicked);
+		toggle = GameSelectionControl.transform.Find("Toggle").gameObject;
 
 		var okButton = LoginFailedControl.transform.Find("OkButton").gameObject.GetComponent<Button>();
 		okButton.onClick.AddListener(OkClicked);
@@ -110,6 +113,20 @@ public class GameConfiguration
 			else
 			{
 				LoginFailedControl.SetActive(true);
+			}
+		}
+		else if (messageObject.Type == MessageTypeEnum.GameChoice)
+		{
+			var count = int.Parse(messageObject.GetValueOf("count"));
+			for (var i = 0; i < count; i++)
+			{
+				var game = messageObject.GetValueOf("game" + i);
+				var newToggle = Object.Instantiate(toggle, new Vector3(0.0f,0.0f,0.0f), Quaternion.identity);
+				newToggle.SetActive(true);
+				newToggle.transform.SetParent(GameSelectionControl.transform);
+				newToggle.GetComponent<Toggle>().isOn = i == 0;
+				newToggle.transform.Find("Label").gameObject.GetComponent<Text>().text = game;
+				newToggle.transform.position = new Vector3(433.0f, 301.0f-(23.0f*i), 0.0f);
 			}
 		}
 	}
