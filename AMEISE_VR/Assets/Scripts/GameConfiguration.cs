@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Linq;
 using UnityStandardAssets.Characters.FirstPerson;
 using Button = UnityEngine.UI.Button;
 
@@ -16,6 +17,7 @@ public class GameConfiguration
 	private InputField password;
 
 	private GameObject toggle;
+	private List<GameObject> toggles;
 
 	public GameConfiguration(GameObject fpsController, GameObject loginControl, GameObject gameSelectionControl, GameObject loginFailedControl)
 	{
@@ -42,6 +44,8 @@ public class GameConfiguration
 
 		var okButton = LoginFailedControl.transform.Find("OkButton").gameObject.GetComponent<Button>();
 		okButton.onClick.AddListener(OkClicked);
+
+		toggles = new List<GameObject>();
 	}
 
 	public void OpenLoginDialog()
@@ -65,7 +69,6 @@ public class GameConfiguration
 		var message = new MessageObject(MessageTypeEnum.Login, new Dictionary<string, string> { { "username", username.text }, { "password", password.text } });
 		var connection = ClientConnection.GetInstance();
 		connection.SendText(message);
-		Debug.Log(message.ToString());
 	}
 
 	void CancelClicked()
@@ -78,10 +81,10 @@ public class GameConfiguration
 
 	void StartClicked()
 	{
-		//var message = new MessageObject(MessageTypeEnum.Login, new Dictionary<string, string> { { "username", username.text }, { "password", password.text } });
-		//var connection = ClientConnection.GetInstance();
-		//connection.SendText(message);
-		//Debug.Log(message.ToString());
+		var selectedGame = toggles.Single(t => t.GetComponent<Toggle>().isOn).transform.Find("Label").gameObject.GetComponent<Text>().text;
+		var message = new MessageObject(MessageTypeEnum.GameChoice, new Dictionary<string, string> { { "game", selectedGame } });
+		var connection = ClientConnection.GetInstance();
+		connection.SendText(message);
 		GameSelectionControl.SetActive(false);
 		var controller = FPSController.GetComponent<FirstPersonController>();
 		controller.enabled = true;
@@ -127,6 +130,7 @@ public class GameConfiguration
 				newToggle.GetComponent<Toggle>().isOn = i == 0;
 				newToggle.transform.Find("Label").gameObject.GetComponent<Text>().text = game;
 				newToggle.transform.position = new Vector3(433.0f, 301.0f-(23.0f*i), 0.0f);
+				toggles.Add(newToggle);
 			}
 		}
 	}
