@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using UnityStandardAssets.Characters.FirstPerson;
 using Button = UnityEngine.UI.Button;
+using Object = UnityEngine.Object;
 
 public class GameConfiguration
 {
@@ -12,6 +15,7 @@ public class GameConfiguration
 	public GameObject GameSelectionControl;
 	public GameObject LoginFailedControl;
 	public GameObject FPSController;
+	public GameObject CanvasControl;
 
 	private InputField username;
 	private InputField password;
@@ -19,12 +23,13 @@ public class GameConfiguration
 	private GameObject toggle;
 	private List<GameObject> toggles;
 
-	public GameConfiguration(GameObject fpsController, GameObject loginControl, GameObject gameSelectionControl, GameObject loginFailedControl)
+	public GameConfiguration(GameObject fpsController, GameObject loginControl, GameObject gameSelectionControl, GameObject loginFailedControl, GameObject canvasControl)
 	{
 		LoginControl = loginControl;
 		GameSelectionControl = gameSelectionControl;
 		LoginFailedControl = loginFailedControl;
 		FPSController = fpsController;
+		CanvasControl = canvasControl;
 
 		var messageListener = FPSController.GetComponent<MessageListener>();
 		messageListener.ReceivedMessage += ReceivedMessage;
@@ -132,6 +137,11 @@ public class GameConfiguration
 				newToggle.transform.position = new Vector3(433.0f, 301.0f-(23.0f*i), 0.0f);
 				toggles.Add(newToggle);
 			}
+		}
+		else if (messageObject.Type == MessageTypeEnum.ContinueGame)
+		{
+			var today = DateTime.Parse(messageObject.GetValueOf("current"));
+			CanvasControl.transform.Find("Today").gameObject.GetComponent<Text>().text = today.ToString(CultureInfo.InvariantCulture);
 		}
 	}
 }

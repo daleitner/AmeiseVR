@@ -2,5 +2,6 @@
 {
 	Login,
 	GameChoice,
+	ContinueGame,
 	Default
 }
