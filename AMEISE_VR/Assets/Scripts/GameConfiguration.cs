@@ -129,12 +129,12 @@ public class GameConfiguration
 			for (var i = 0; i < count; i++)
 			{
 				var game = messageObject.GetValueOf("game" + i);
-				var newToggle = Object.Instantiate(toggle, new Vector3(0.0f,0.0f,0.0f), Quaternion.identity);
+				var newToggle = Object.Instantiate(toggle, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
 				newToggle.SetActive(true);
 				newToggle.transform.SetParent(GameSelectionControl.transform);
 				newToggle.GetComponent<Toggle>().isOn = i == 0;
 				newToggle.transform.Find("Label").gameObject.GetComponent<Text>().text = game;
-				newToggle.transform.position = new Vector3(433.0f, 301.0f-(23.0f*i), 0.0f);
+				newToggle.transform.position = new Vector3(433.0f, 301.0f - (23.0f * i), 0.0f);
 				toggles.Add(newToggle);
 			}
 		}
@@ -142,6 +142,19 @@ public class GameConfiguration
 		{
 			var today = DateTime.Parse(messageObject.GetValueOf("current"));
 			CanvasControl.transform.Find("Today").gameObject.GetComponent<Text>().text = today.ToString(CultureInfo.InvariantCulture);
+			FPSController.transform.position = new Vector3(230.0f, 21.0f, 163.0f);
+		}
+		else if (messageObject.Type == MessageTypeEnum.DictionaryAndParameter)
+		{
+			var commandCount = int.Parse(messageObject.GetValueOf("count"));
+			var commands = new List<string>();
+			for (var i = 0; i < commandCount; i++)
+			{
+				commands.Add(messageObject.GetValueOf("command" + i));
+			}
+			var str = "";
+			commands.ForEach(x => str += x + "\r\n");
+			Debug.Log("commands:\r\n" + str);
 		}
 	}
 }

@@ -3,5 +3,6 @@
 	Login,
 	GameChoice,
 	ContinueGame,
+	DictionaryAndParameter,
 	Default
 }
