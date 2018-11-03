@@ -147,10 +147,37 @@ public class GameConfiguration
 		else if (messageObject.Type == MessageTypeEnum.DictionaryAndParameter)
 		{
 			var commandCount = int.Parse(messageObject.GetValueOf("count"));
-			var commands = new List<string>();
+			var commands = new List<Command>();
+			var paramTypes = new List<string>();
 			for (var i = 0; i < commandCount; i++)
 			{
-				commands.Add(messageObject.GetValueOf("command" + i));
+				var command = new Command();
+
+				command.Name = messageObject.GetValueOf("command" + i);
+				int paramcnt = int.Parse(messageObject.GetValueOf("command" + i + "_paramcnt"));
+				for(var j = 0; j<paramcnt; j++)
+				{
+					var paramName = messageObject.GetValueOf("command" + i + "_param" + j);
+					var paramType = messageObject.GetValueOf("command" + i + "_paramtype" + j);
+					command.ParameterTypes.Add(paramName, paramType);
+					command.ParameterValues.Add(paramName, null);
+
+					if (!paramTypes.Contains(paramType))
+						paramTypes.Add(paramType);
+				}
+				commands.Add(command);
+			}
+
+			var paramDict = new Dictionary<string, List<string>>();
+			foreach(var type in paramTypes)
+			{
+				var parameters = new List<string>();
+				var cnt = int.Parse(messageObject.GetValueOf(type + "_cnt"));
+				for(var i = 0; i<cnt; i++)
+				{
+					parameters.Add(messageObject.GetValueOf(type + i));
+				}
+				paramDict.Add(type, parameters);
 			}
 			var str = "";
 			commands.ForEach(x => str += x + "\r\n");
