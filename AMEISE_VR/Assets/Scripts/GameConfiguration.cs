@@ -16,20 +16,23 @@ public class GameConfiguration
 	public GameObject LoginFailedControl;
 	public GameObject FPSController;
 	public GameObject CanvasControl;
+	public GameObject HistoryControl;
 
 	private InputField username;
 	private InputField password;
 
 	private GameObject toggle;
+	private GameObject listItem;
 	private List<GameObject> toggles;
 
-	public GameConfiguration(GameObject fpsController, GameObject loginControl, GameObject gameSelectionControl, GameObject loginFailedControl, GameObject canvasControl)
+	public GameConfiguration(GameObject fpsController, GameObject loginControl, GameObject gameSelectionControl, GameObject loginFailedControl, GameObject canvasControl, GameObject historyControl)
 	{
 		LoginControl = loginControl;
 		GameSelectionControl = gameSelectionControl;
 		LoginFailedControl = loginFailedControl;
 		FPSController = fpsController;
 		CanvasControl = canvasControl;
+		HistoryControl = historyControl;
 
 		var messageListener = FPSController.GetComponent<MessageListener>();
 		messageListener.ReceivedMessage += ReceivedMessage;
@@ -47,6 +50,7 @@ public class GameConfiguration
 		backButton.onClick.AddListener(BackClicked);
 		toggle = GameSelectionControl.transform.Find("Toggle").gameObject;
 
+		listItem = HistoryControl.transform.Find("TextItem").gameObject;
 		var okButton = LoginFailedControl.transform.Find("OkButton").gameObject.GetComponent<Button>();
 		okButton.onClick.AddListener(OkClicked);
 
@@ -67,6 +71,27 @@ public class GameConfiguration
 		var controller = FPSController.GetComponent<FirstPersonController>();
 		controller.LockCursor();
 		controller.enabled = false;
+	}
+
+	public void OpenHistoryDialog()
+	{
+		if (!HistoryControl.active)
+		{
+			HistoryControl.SetActive(true);
+			var controller = FPSController.GetComponent<FirstPersonController>();
+			controller.LockCursor();
+			controller.enabled = false;
+		}
+		else
+			CloseHistoryDialog();
+	}
+
+	public void CloseHistoryDialog()
+	{
+		HistoryControl.SetActive(false);
+		var controller = FPSController.GetComponent<FirstPersonController>();
+		controller.UnlockCursor();
+		controller.enabled = true;
 	}
 
 	void LoginClicked()
@@ -125,6 +150,7 @@ public class GameConfiguration
 		}
 		else if (messageObject.Type == MessageTypeEnum.GameChoice)
 		{
+			var listbox = GameSelectionControl.transform.Find("Listbox").GetComponent<ListBox>();
 			var count = int.Parse(messageObject.GetValueOf("count"));
 			for (var i = 0; i < count; i++)
 			{
@@ -134,7 +160,8 @@ public class GameConfiguration
 				newToggle.transform.SetParent(GameSelectionControl.transform);
 				newToggle.GetComponent<Toggle>().isOn = i == 0;
 				newToggle.transform.Find("Label").gameObject.GetComponent<Text>().text = game;
-				newToggle.transform.position = new Vector3(433.0f, 301.0f - (23.0f * i), 0.0f);
+				//newToggle.transform.position = new Vector3(433.0f, 301.0f - (23.0f * i), 0.0f);
+				listbox.AddItem(new ListBox.ListItem(newToggle));
 				toggles.Add(newToggle);
 			}
 		}
@@ -143,6 +170,21 @@ public class GameConfiguration
 			var today = DateTime.Parse(messageObject.GetValueOf("current"));
 			CanvasControl.transform.Find("Today").gameObject.GetComponent<Text>().text = today.ToString(CultureInfo.InvariantCulture);
 			FPSController.transform.position = new Vector3(230.0f, 21.0f, 163.0f);
+			HistoryControl.SetActive(true);
+			var listbox = HistoryControl.transform.Find("Listbox").GetComponent<ListBox>();
+			var feedback = messageObject.GetValueOf("feedback");
+			var feedbacks = feedback.Split('\n');
+			for (var i = 0; i < feedbacks.Length; i++)
+			{
+				if (string.IsNullOrEmpty(feedbacks[i]))
+					continue;
+				var newItem = Object.Instantiate(listItem, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+				newItem.SetActive(true);
+				newItem.transform.SetParent(HistoryControl.transform);
+
+				newItem.GetComponent<Text>().text = feedbacks[i];
+				listbox.AddItem(new ListBox.ListItem(newItem));
+			}
 		}
 		else if (messageObject.Type == MessageTypeEnum.DictionaryAndParameter)
 		{

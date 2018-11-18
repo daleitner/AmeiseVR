@@ -33,6 +33,7 @@ public class Detection : MonoBehaviour
 	public GameObject LoginFailedControl;
 	public GameObject FPSController;
 	public GameObject CanvasControl;
+	public GameObject HistoryControl;
 
 	private GameConfiguration config;
 
@@ -64,7 +65,7 @@ public class Detection : MonoBehaviour
 
 		DebugRayColor.a = Opacity; // Set the alpha value of the DebugRayColor
 
-		config = new GameConfiguration(FPSController, LoginControl, GameSelectionControl, LoginFailedControl, CanvasControl);
+		config = new GameConfiguration(FPSController, LoginControl, GameSelectionControl, LoginFailedControl, CanvasControl, HistoryControl);
 	}
 
 	void Update()
@@ -73,9 +74,12 @@ public class Detection : MonoBehaviour
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0F));
 
         RaycastHit hit; // Variable reading information about the collider hit
-
-        // Cast ray from center of the screen towards where the player is looking
-        if (Physics.Raycast(ray, out hit, Reach))
+		if (Input.GetKey("h"))
+		{
+			config.OpenHistoryDialog();
+		}
+		// Cast ray from center of the screen towards where the player is looking
+		if (Physics.Raycast(ray, out hit, Reach))
         {
             if (hit.collider.tag == "Door")
             {

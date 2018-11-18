@@ -23,7 +23,7 @@ public class MessageObject
 			if (string.IsNullOrEmpty(parts[i]))
 				continue;
 			var property = parts[i].Split(':');
-			dictionary.Add(property[0], property[1]);
+			dictionary.Add(property[0], parts[i].Substring(property[0].Length + 1, parts[i].Length - property[0].Length - 1));
 		}
 	}
 
