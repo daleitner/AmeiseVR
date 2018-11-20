@@ -205,8 +205,6 @@ public class ListBox : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public void RefreshListBox()
     {
-        ClearListBox();
-
         float masterHeight = 0f;
         SetToDefaultFont();
 

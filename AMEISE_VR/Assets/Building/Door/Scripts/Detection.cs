@@ -78,6 +78,9 @@ public class Detection : MonoBehaviour
 		{
 			config.OpenHistoryDialog();
 		}
+		else if (Input.GetKey(KeyCode.Escape))
+			config.CloseHistoryDialog();
+
 		// Cast ray from center of the screen towards where the player is looking
 		if (Physics.Raycast(ray, out hit, Reach))
         {

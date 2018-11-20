@@ -22,7 +22,6 @@ public class GameConfiguration
 	private InputField password;
 
 	private GameObject toggle;
-	private GameObject listItem;
 	private List<GameObject> toggles;
 
 	public GameConfiguration(GameObject fpsController, GameObject loginControl, GameObject gameSelectionControl, GameObject loginFailedControl, GameObject canvasControl, GameObject historyControl)
@@ -50,7 +49,6 @@ public class GameConfiguration
 		backButton.onClick.AddListener(BackClicked);
 		toggle = GameSelectionControl.transform.Find("Toggle").gameObject;
 
-		listItem = HistoryControl.transform.Find("TextItem").gameObject;
 		var okButton = LoginFailedControl.transform.Find("OkButton").gameObject.GetComponent<Button>();
 		okButton.onClick.AddListener(OkClicked);
 
@@ -75,15 +73,10 @@ public class GameConfiguration
 
 	public void OpenHistoryDialog()
 	{
-		if (!HistoryControl.active)
-		{
-			HistoryControl.SetActive(true);
-			var controller = FPSController.GetComponent<FirstPersonController>();
-			controller.LockCursor();
-			controller.enabled = false;
-		}
-		else
-			CloseHistoryDialog();
+		HistoryControl.SetActive(true);
+		var controller = FPSController.GetComponent<FirstPersonController>();
+		controller.LockCursor();
+		controller.enabled = false;
 	}
 
 	public void CloseHistoryDialog()
@@ -176,15 +169,11 @@ public class GameConfiguration
 			var feedbacks = feedback.Split('\n');
 			for (var i = 0; i < feedbacks.Length; i++)
 			{
-				if (string.IsNullOrEmpty(feedbacks[i]))
-					continue;
-				var newItem = Object.Instantiate(listItem, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-				newItem.SetActive(true);
-				newItem.transform.SetParent(HistoryControl.transform);
-
-				newItem.GetComponent<Text>().text = feedbacks[i];
-				listbox.AddItem(new ListBox.ListItem(newItem));
+				var newItem = new ListBox.ListItem(feedbacks[i]);
+				listbox.AddItem(newItem);
 			}
+			listbox.AddItem(new ListBox.ListItem("----------------------------------------------------------------------------------------------------"));
+			HistoryControl.SetActive(false);
 		}
 		else if (messageObject.Type == MessageTypeEnum.DictionaryAndParameter)
 		{
