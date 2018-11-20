@@ -34,6 +34,7 @@ public class Detection : MonoBehaviour
 	public GameObject FPSController;
 	public GameObject CanvasControl;
 	public GameObject HistoryControl;
+	public GameObject CommandControl;
 
 	private GameConfiguration config;
 
@@ -65,7 +66,7 @@ public class Detection : MonoBehaviour
 
 		DebugRayColor.a = Opacity; // Set the alpha value of the DebugRayColor
 
-		config = new GameConfiguration(FPSController, LoginControl, GameSelectionControl, LoginFailedControl, CanvasControl, HistoryControl);
+		config = new GameConfiguration(FPSController, LoginControl, GameSelectionControl, LoginFailedControl, CanvasControl, HistoryControl, CommandControl);
 	}
 
 	void Update()
@@ -80,6 +81,10 @@ public class Detection : MonoBehaviour
 		}
 		else if (Input.GetKey(KeyCode.Escape))
 			config.CloseHistoryDialog();
+		else if (Input.GetKey("c"))
+			config.OpenCommandDialog();
+		else if (Input.GetKey("v"))
+			config.CloseCommandDialog();
 
 		// Cast ray from center of the screen towards where the player is looking
 		if (Physics.Raycast(ray, out hit, Reach))

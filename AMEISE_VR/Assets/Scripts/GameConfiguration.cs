@@ -18,13 +18,16 @@ public class GameConfiguration
 	public GameObject CanvasControl;
 	public GameObject HistoryControl;
 
+	private CommandDialog _commandDialog;
+
 	private InputField username;
 	private InputField password;
 
 	private GameObject toggle;
 	private List<GameObject> toggles;
 
-	public GameConfiguration(GameObject fpsController, GameObject loginControl, GameObject gameSelectionControl, GameObject loginFailedControl, GameObject canvasControl, GameObject historyControl)
+	public GameConfiguration(GameObject fpsController, GameObject loginControl, GameObject gameSelectionControl, GameObject loginFailedControl, 
+		GameObject canvasControl, GameObject historyControl, GameObject commandControl)
 	{
 		LoginControl = loginControl;
 		GameSelectionControl = gameSelectionControl;
@@ -32,6 +35,8 @@ public class GameConfiguration
 		FPSController = fpsController;
 		CanvasControl = canvasControl;
 		HistoryControl = historyControl;
+
+		_commandDialog = new CommandDialog(commandControl, FPSController.GetComponent<FirstPersonController>());
 
 		var messageListener = FPSController.GetComponent<MessageListener>();
 		messageListener.ReceivedMessage += ReceivedMessage;
@@ -85,6 +90,16 @@ public class GameConfiguration
 		var controller = FPSController.GetComponent<FirstPersonController>();
 		controller.UnlockCursor();
 		controller.enabled = true;
+	}
+
+	public void OpenCommandDialog()
+	{
+		_commandDialog.OpenDialog();
+	}
+
+	public void CloseCommandDialog()
+	{
+		_commandDialog.CloseDialog();
 	}
 
 	void LoginClicked()
@@ -198,6 +213,7 @@ public class GameConfiguration
 				}
 				commands.Add(command);
 			}
+			_commandDialog.SetCommands(commands);
 
 			var paramDict = new Dictionary<string, List<string>>();
 			foreach(var type in paramTypes)
@@ -210,6 +226,8 @@ public class GameConfiguration
 				}
 				paramDict.Add(type, parameters);
 			}
+			_commandDialog.SetParameters(paramDict);
+
 			var str = "";
 			commands.ForEach(x => str += x + "\r\n");
 			Debug.Log("commands:\r\n" + str);
