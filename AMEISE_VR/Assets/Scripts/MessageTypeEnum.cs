@@ -4,5 +4,7 @@
 	GameChoice,
 	ContinueGame,
 	DictionaryAndParameter,
-	Default
+	Default,
+	Command,
+	CommandResult
 }

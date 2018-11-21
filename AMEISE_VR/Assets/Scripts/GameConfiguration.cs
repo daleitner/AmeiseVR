@@ -16,9 +16,9 @@ public class GameConfiguration
 	public GameObject LoginFailedControl;
 	public GameObject FPSController;
 	public GameObject CanvasControl;
-	public GameObject HistoryControl;
 
 	private CommandDialog _commandDialog;
+	private HistoryDialog _historyDialog;
 
 	private InputField username;
 	private InputField password;
@@ -34,9 +34,9 @@ public class GameConfiguration
 		LoginFailedControl = loginFailedControl;
 		FPSController = fpsController;
 		CanvasControl = canvasControl;
-		HistoryControl = historyControl;
 
-		_commandDialog = new CommandDialog(commandControl, FPSController.GetComponent<FirstPersonController>());
+		_historyDialog = new HistoryDialog(historyControl, FPSController.GetComponent<FirstPersonController>());
+		_commandDialog = new CommandDialog(commandControl, FPSController.GetComponent<FirstPersonController>(), _historyDialog);
 
 		var messageListener = FPSController.GetComponent<MessageListener>();
 		messageListener.ReceivedMessage += ReceivedMessage;
@@ -78,18 +78,12 @@ public class GameConfiguration
 
 	public void OpenHistoryDialog()
 	{
-		HistoryControl.SetActive(true);
-		var controller = FPSController.GetComponent<FirstPersonController>();
-		controller.LockCursor();
-		controller.enabled = false;
+		_historyDialog.OpenDialog();
 	}
 
 	public void CloseHistoryDialog()
 	{
-		HistoryControl.SetActive(false);
-		var controller = FPSController.GetComponent<FirstPersonController>();
-		controller.UnlockCursor();
-		controller.enabled = true;
+		_historyDialog.CloseDialog();
 	}
 
 	public void OpenCommandDialog()
@@ -178,17 +172,24 @@ public class GameConfiguration
 			var today = DateTime.Parse(messageObject.GetValueOf("current"));
 			CanvasControl.transform.Find("Today").gameObject.GetComponent<Text>().text = today.ToString(CultureInfo.InvariantCulture);
 			FPSController.transform.position = new Vector3(230.0f, 21.0f, 163.0f);
-			HistoryControl.SetActive(true);
-			var listbox = HistoryControl.transform.Find("Listbox").GetComponent<ListBox>();
+
 			var feedback = messageObject.GetValueOf("feedback");
 			var feedbacks = feedback.Split('\n');
 			for (var i = 0; i < feedbacks.Length; i++)
 			{
-				var newItem = new ListBox.ListItem(feedbacks[i]);
-				listbox.AddItem(newItem);
+				_historyDialog.Add(feedbacks[i]);
 			}
-			listbox.AddItem(new ListBox.ListItem("----------------------------------------------------------------------------------------------------"));
-			HistoryControl.SetActive(false);
+			_historyDialog.Add("----------------------------------------------------------------------------------------------------");
+		}
+		else if(messageObject.Type == MessageTypeEnum.CommandResult)
+		{
+			var feedback = messageObject.GetValueOf("feedback");
+			var feedbacks = feedback.Split('\n');
+			for (var i = 0; i < feedbacks.Length; i++)
+			{
+				_historyDialog.Add(feedbacks[i]);
+			}
+			_historyDialog.Add("----------------------------------------------------------------------------------------------------");
 		}
 		else if (messageObject.Type == MessageTypeEnum.DictionaryAndParameter)
 		{
