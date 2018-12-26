@@ -172,16 +172,8 @@ public class GameConfiguration
 			var today = DateTime.Parse(messageObject.GetValueOf("current"));
 			CanvasControl.transform.Find("Today").gameObject.GetComponent<Text>().text = today.ToString(CultureInfo.InvariantCulture);
 			FPSController.transform.position = new Vector3(230.0f, 21.0f, 163.0f);
-
-			var feedback = messageObject.GetValueOf("feedback");
-			var feedbacks = feedback.Split('\n');
-			for (var i = 0; i < feedbacks.Length; i++)
-			{
-				_historyDialog.Add(feedbacks[i]);
-			}
-			_historyDialog.Add("----------------------------------------------------------------------------------------------------");
 		}
-		else if(messageObject.Type == MessageTypeEnum.CommandResult)
+		else if(messageObject.Type == MessageTypeEnum.Feedback)
 		{
 			var feedback = messageObject.GetValueOf("feedback");
 			var feedbacks = feedback.Split('\n');

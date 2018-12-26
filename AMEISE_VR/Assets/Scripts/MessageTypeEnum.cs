@@ -6,5 +6,5 @@
 	DictionaryAndParameter,
 	Default,
 	Command,
-	CommandResult
+	Feedback
 }
