@@ -6,5 +6,6 @@
 	DictionaryAndParameter,
 	Default,
 	Command,
-	Feedback
+	Feedback,
+	Proceed
 }

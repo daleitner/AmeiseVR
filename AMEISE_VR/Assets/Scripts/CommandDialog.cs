@@ -39,26 +39,35 @@ public class CommandDialog
 
 	public void Send()
 	{
+		MessageObject message;
 		if (!_commands.Select(x => x.Name).ToList().Contains(_command.text))
-			return;
-		var paramList = new List<string> { _param1.text, _param2.text, _param3.text};
-		var command = _commands.Where(x => x.Name == _command.text).First();
-		var dict = new Dictionary<string, string>();
-		var historyEntry = command.Name;
-		dict.Add("command", command.Name);
-		var i = 0;
-		foreach(var param in command.ParameterTypes.Keys)
 		{
-			if (string.IsNullOrEmpty(paramList[i]))
+			int steps;
+			if (!int.TryParse(_command.text, out steps))
 				return;
-			dict.Add("param" + (i+1), paramList[i]);
-			historyEntry += " " + paramList[i];
-			i++;
+			message = new MessageObject(MessageTypeEnum.Proceed, new Dictionary<string, string> { { "steps", steps.ToString()} });
 		}
-		var message = new MessageObject(MessageTypeEnum.Command, dict);
+		else
+		{
+			var paramList = new List<string> { _param1.text, _param2.text, _param3.text };
+			var command = _commands.Where(x => x.Name == _command.text).First();
+			var dict = new Dictionary<string, string>();
+			//var historyEntry = command.Name;
+			dict.Add("command", command.Name);
+			var i = 0;
+			foreach (var param in command.ParameterTypes.Keys)
+			{
+				if (string.IsNullOrEmpty(paramList[i]))
+					return;
+				dict.Add("param" + (i + 1), paramList[i]);
+				//historyEntry += " " + paramList[i];
+				i++;
+			}
+			message = new MessageObject(MessageTypeEnum.Command, dict);
+		}
 		var connection = ClientConnection.GetInstance();
 		connection.SendText(message);
-		_historyDialog.Add(historyEntry);
+		//_historyDialog.Add(historyEntry);
 	}
 
 	public void CloseDialog()

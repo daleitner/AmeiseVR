@@ -75,15 +75,15 @@ public class Detection : MonoBehaviour
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0F));
 
         RaycastHit hit; // Variable reading information about the collider hit
-		if (Input.GetKey("1"))
+		if (Input.GetKey("7"))
 		{
 			config.OpenHistoryDialog();
 		}
 		else if (Input.GetKey(KeyCode.Escape))
 			config.CloseHistoryDialog();
-		else if (Input.GetKey("2"))
+		else if (Input.GetKey("8"))
 			config.OpenCommandDialog();
-		else if (Input.GetKey("3"))
+		else if (Input.GetKey("9"))
 			config.CloseCommandDialog();
 
 		// Cast ray from center of the screen towards where the player is looking
