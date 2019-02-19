@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using TMPro;
+using System;
 
 public class SmartPhoneManager : MonoBehaviour
 {
@@ -9,6 +11,11 @@ public class SmartPhoneManager : MonoBehaviour
 		MainScreen,
 		ChatListScreen
 	}
+	private const string ChatTag = "Chat";
+	private const string PersonChatTag = "PersonChat";
+
+	private List<GameObject> _chatEntries;
+
 	public GameObject SmartPhone;
 	public float Reach = 4.0F;
 	[HideInInspector] public bool InReach;
@@ -23,6 +30,8 @@ public class SmartPhoneManager : MonoBehaviour
 		_views.Add(ScreenEnum.MainScreen, SmartPhone.transform.Find(ScreenEnum.MainScreen.ToString()).gameObject);
 		_views.Add(ScreenEnum.ChatListScreen, SmartPhone.transform.Find(ScreenEnum.ChatListScreen.ToString()).gameObject);
 		_activeView = _views[ScreenEnum.MainScreen];
+		CreateChatEntries();
+		Show(ScreenEnum.MainScreen);
 	}
 
 	private void Update()
@@ -31,7 +40,7 @@ public class SmartPhoneManager : MonoBehaviour
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit, Reach))
 		{
-			if (hit.collider.tag == "Chat")
+			if (hit.collider.tag == ChatTag)
 			{
 				InReach = true;
 				if(Input.GetMouseButton(0))
@@ -39,6 +48,10 @@ public class SmartPhoneManager : MonoBehaviour
 					LoadChatList();
 					Show(ScreenEnum.ChatListScreen);
 				}
+			}
+			else if(hit.collider.tag == PersonChatTag)
+			{
+				//Open chat of person
 			}
 			else
 			{
@@ -59,12 +72,32 @@ public class SmartPhoneManager : MonoBehaviour
 		}
 	}
 
-	private void LoadChatList()
+	private void CreateChatEntries()
 	{
+		_chatEntries = new List<GameObject>();
 		var chatListScreen = _views[ScreenEnum.ChatListScreen];
-		foreach (var employee in KnowledgeBase.Instance.Employees)
+		var entry = chatListScreen.transform.Find("Entry").gameObject;
+		var yOffset = 0.31f;
+		for (var i = 0; i<6; i++)
 		{
-
+			var newEntry = Instantiate(entry);
+			newEntry.transform.SetParent(chatListScreen.transform);
+			newEntry.transform.localScale = new Vector3(1, 0.15f, 1);
+			newEntry.transform.localPosition = new Vector3(0.06f, yOffset, 0);
+			yOffset -= 0.15f;
+			newEntry.transform.rotation = new Quaternion(0, 0, 0, 0);
+			newEntry.SetActive(true);
+			_chatEntries.Add(newEntry);
 		}
 	}
+
+	private void LoadChatList()
+	{
+		for(var i = 0; i< _chatEntries.Count; i++)
+		{
+			var nameObject = _chatEntries[i].transform.Find("LblName").gameObject;
+			nameObject.GetComponent<TextMeshPro>().text = KnowledgeBase.Instance.Employees[i];
+		}
+	}
+
 }
