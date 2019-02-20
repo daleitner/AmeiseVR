@@ -3,13 +3,15 @@ using UnityEditor;
 using System.Collections.Generic;
 using TMPro;
 using System;
+using System.Linq;
 
 public class SmartPhoneManager : MonoBehaviour
 {
 	private enum ScreenEnum
 	{
 		MainScreen,
-		ChatListScreen
+		ChatListScreen,
+		ChatScreen
 	}
 	private const string ChatTag = "Chat";
 	private const string PersonChatTag = "PersonChat";
@@ -22,14 +24,14 @@ public class SmartPhoneManager : MonoBehaviour
 
 	private Dictionary<ScreenEnum, GameObject> _views;
 	private GameObject _activeView;
+	private bool alreadyClicked = false;
 
 	private void Start()
 	{
 		KnowledgeBase.Instance.Employees.AddRange(new []{ "Alex", "Richard", "Stefanie", "Christine", "Thomas", "Daniel"});
 		_views = new Dictionary<ScreenEnum, GameObject>();
-		_views.Add(ScreenEnum.MainScreen, SmartPhone.transform.Find(ScreenEnum.MainScreen.ToString()).gameObject);
-		_views.Add(ScreenEnum.ChatListScreen, SmartPhone.transform.Find(ScreenEnum.ChatListScreen.ToString()).gameObject);
-		_activeView = _views[ScreenEnum.MainScreen];
+		var values = Enum.GetValues(typeof(ScreenEnum)).Cast<ScreenEnum>().ToList();
+		values.ForEach(x => _views.Add(x, SmartPhone.transform.Find(x.ToString()).gameObject));
 		CreateChatEntries();
 		Show(ScreenEnum.MainScreen);
 	}
@@ -40,22 +42,31 @@ public class SmartPhoneManager : MonoBehaviour
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit, Reach))
 		{
-			if (hit.collider.tag == ChatTag)
+			if (Input.GetMouseButton(0))
 			{
-				InReach = true;
-				if(Input.GetMouseButton(0))
+				if (alreadyClicked)
+					return;
+				alreadyClicked = true;
+				if (hit.collider.tag == ChatTag)
 				{
+					InReach = true;
 					LoadChatList();
 					Show(ScreenEnum.ChatListScreen);
+
 				}
-			}
-			else if(hit.collider.tag == PersonChatTag)
-			{
-				//Open chat of person
+				else if (hit.collider.tag == PersonChatTag)
+				{
+					InReach = true;
+					Show(ScreenEnum.ChatScreen);
+				}
+				else
+				{
+					InReach = false;
+				}
 			}
 			else
 			{
-				InReach = false;
+				alreadyClicked = false;
 			}
 		}
 		else
@@ -70,6 +81,7 @@ public class SmartPhoneManager : MonoBehaviour
 		{
 			_views[key].SetActive(screenName == key);
 		}
+		_activeView = _views[screenName];
 	}
 
 	private void CreateChatEntries()
