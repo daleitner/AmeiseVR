@@ -9,5 +9,5 @@ public abstract class ControllerBase
 	}
 	protected SmartPhoneManager Manager { get; }
 	public abstract bool Accepts(string tag);
-	public abstract void Execute(string tag);
+	public abstract void Execute(GameObject gameObject);
 }

@@ -14,7 +14,7 @@ public class ChatController : ControllerBase
 		return false;
 	}
 
-	public override void Execute(string tag)
+	public override void Execute(GameObject gameObject)
 	{
 		
 	}

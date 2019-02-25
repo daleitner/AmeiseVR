@@ -44,7 +44,7 @@ public class SmartPhoneManager : MonoBehaviour
 				if (_activeController.Accepts(hit.collider.tag))
 				{
 					InReach = true;
-					_activeController.Execute(hit.collider.tag);
+					_activeController.Execute(hit.transform.gameObject);
 				}
 				else
 				{

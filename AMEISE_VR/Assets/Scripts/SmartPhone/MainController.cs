@@ -14,9 +14,9 @@ public class MainController : ControllerBase
 		return tag == Tags.ChatTag;
 	}
 
-	public override void Execute(string tag)
+	public override void Execute(GameObject gameObject)
 	{
-		if (tag == Tags.ChatTag)
+		if (gameObject.tag == Tags.ChatTag)
 			OpenChat();
 	}
 

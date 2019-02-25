@@ -19,9 +19,9 @@ public class ChatListController : ControllerBase
 		return tag == Tags.PersonChatTag;
 	}
 
-	public override void Execute(string tag)
+	public override void Execute(GameObject gameObject)
 	{
-		if(tag == Tags.PersonChatTag)
+		if(gameObject.tag == Tags.PersonChatTag)
 		{
 			Manager.Show(ScreenEnum.ChatScreen);
 		}
