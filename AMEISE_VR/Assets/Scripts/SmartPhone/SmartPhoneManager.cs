@@ -46,6 +46,16 @@ public class SmartPhoneManager : MonoBehaviour
 					InReach = true;
 					_activeController.Execute(hit.transform.gameObject);
 				}
+				else if (hit.collider.tag == Tags.BackTag)
+				{
+					InReach = true;
+					_activeController.Back();
+				}
+				else if(hit.collider.tag == Tags.HomeTag)
+				{
+					InReach = true;
+					_activeController.Home();
+				}
 				else
 				{
 					InReach = false;
@@ -63,13 +73,14 @@ public class SmartPhoneManager : MonoBehaviour
 	}
 
 	#region public methods
-	public void Show(ScreenEnum screenName)
+	public void Show(ScreenEnum screenName, object payload = null)
 	{
 		foreach (var key in _views.Keys)
 		{
 			_views[key].SetActive(screenName == key);
 		}
 		_activeController = _controllers[screenName];
+		_activeController.Activate(payload);
 	}
 
 	public GameObject Create(GameObject gameObject)

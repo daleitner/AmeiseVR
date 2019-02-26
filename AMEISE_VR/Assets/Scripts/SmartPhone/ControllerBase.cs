@@ -7,7 +7,14 @@ public abstract class ControllerBase
 	{
 		Manager = manager;
 	}
-	protected SmartPhoneManager Manager { get; }
+	protected SmartPhoneManager Manager { get; private set; }
 	public abstract bool Accepts(string tag);
 	public abstract void Execute(GameObject gameObject);
+	public abstract void Activate(object payload);
+	public abstract void Back();
+
+	public void Home()
+	{
+		Manager.Show(ScreenEnum.MainScreen);
+	}
 }

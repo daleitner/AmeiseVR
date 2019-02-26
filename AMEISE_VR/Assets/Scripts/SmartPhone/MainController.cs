@@ -20,6 +20,14 @@ public class MainController : ControllerBase
 			OpenChat();
 	}
 
+	public override void Activate(object payload)
+	{
+	}
+
+	public override void Back()
+	{
+	}
+
 	private void OpenChat()
 	{
 		Manager.Show(ScreenEnum.ChatListScreen);

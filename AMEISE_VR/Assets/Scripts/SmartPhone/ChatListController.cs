@@ -23,8 +23,17 @@ public class ChatListController : ControllerBase
 	{
 		if(gameObject.tag == Tags.PersonChatTag)
 		{
-			Manager.Show(ScreenEnum.ChatScreen);
+			Manager.Show(ScreenEnum.ChatScreen, gameObject);
 		}
+	}
+
+	public override void Activate(object payload)
+	{
+	}
+
+	public override void Back()
+	{
+		Manager.Show(ScreenEnum.MainScreen);
 	}
 
 	private void CreateChatEntries()
