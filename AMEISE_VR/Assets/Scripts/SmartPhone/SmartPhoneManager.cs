@@ -21,6 +21,16 @@ public class SmartPhoneManager : MonoBehaviour
 		_views = new Dictionary<ScreenEnum, GameObject>();
 		_controllers = new Dictionary<ScreenEnum, ControllerBase>();
 		KnowledgeBase.Instance.Employees.AddRange(new[] { "Alex", "Richard", "Stefanie", "Christine", "Thomas", "Daniel" });
+		KnowledgeBase.Instance.Commands.AddRange(new[]
+		{
+			new Command{Name = "Hire"},
+			new Command { Name = "Release" },
+			new Command { Name = "Code" },
+			new Command { Name = "Write Doc" },
+			new Command { Name = "Do Sth" },
+			new Command { Name = "Stop" },
+			new Command { Name = "Go" }
+		});
 		var values = Enum.GetValues(typeof(ScreenEnum)).Cast<ScreenEnum>().ToList();
 		values.ForEach(x => 
 		{

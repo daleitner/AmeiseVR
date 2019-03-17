@@ -7,6 +7,7 @@ public class KnowledgeBase
 	private KnowledgeBase()
 	{
 		Employees = new List<string>();
+		Commands = new List<Command>();
 	}
 
 	public static KnowledgeBase Instance
@@ -20,4 +21,5 @@ public class KnowledgeBase
 	}
 
 	public List<string> Employees { get; set; }
+	public List<Command> Commands { get; set; }
 }
