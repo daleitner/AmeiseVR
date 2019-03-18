@@ -5,4 +5,6 @@
 	public const string BackTag = "Back";
 	public const string HomeTag = "Home";
 	public const string SendCommandTag = "SendCommand";
+	public const string UpTag = "Up";
+	public const string DownTag = "Down";
 }
