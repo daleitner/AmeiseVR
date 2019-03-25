@@ -78,4 +78,15 @@ public class ListControl
 			nameObject.GetComponent<TextMeshPro>().text = i + _startIndex < Items.Count ? Items[i + _startIndex].ToString() : string.Empty;
 		}
 	}
+
+	public object GetSelectedItem(GameObject listItem)
+	{
+		for (var i = 0; i < _listItems.Count; i++)
+		{
+			if (_listItems[i] == listItem && i + _startIndex < Items.Count)
+				return Items[i + _startIndex];
+		}
+
+		return null;
+	}
 }

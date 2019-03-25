@@ -11,6 +11,7 @@ public class ChatController : ControllerBase
 	private readonly ListControl _historyList;
 	private readonly ListControl _commandList;
 	private List<GameObject> _commands;
+	private CommandInstance _selectedCommand;
 
 	private static readonly Vector3 CommandBarPositionBottom = new Vector3(0.061f, -0.4375f, 0.0f);
 	private static readonly Vector3 CommandBarPositionTop = new Vector3(0.061f, 0.3125f, 0.0f);
@@ -32,7 +33,8 @@ public class ChatController : ControllerBase
 	{
 		return tag == Tags.SendCommandTag ||
 			tag == Tags.UpTag ||
-			tag == Tags.DownTag;
+			tag == Tags.DownTag ||
+			tag == Tags.CommandListItemTag;
 	}
 
 	public override void Execute(GameObject gameObject)
@@ -59,6 +61,28 @@ public class ChatController : ControllerBase
 			else
 				_historyList.Down();
 			return;
+		}
+
+		if (gameObject.tag == Tags.CommandListItemTag)
+		{
+			SelectCommand(gameObject);
+			var nextParam = _selectedCommand.GetNextEmptyParameter();
+			if(nextParam != null)
+				_commandList.Items = KnowledgeBase.Instance.GetValuesOfParameterType(nextParam.Parameter.Type).Select(x => (object)x).ToList();
+			return;
+		}
+	}
+
+	private void SelectCommand(GameObject listItem)
+	{
+		var commandText = _commandList.GetSelectedItem(listItem);
+		var command = KnowledgeBase.Instance.Commands.FirstOrDefault(x => x.Name == commandText.ToString());
+		_selectedCommand = new CommandInstance(command);
+
+		var firstEmployee = _selectedCommand.ParameterValues.FirstOrDefault(x => x.Parameter.Type == KnowledgeBase.EmployeeType);
+		if (firstEmployee != null)
+		{
+			firstEmployee.Value = _lblName.text;
 		}
 	}
 

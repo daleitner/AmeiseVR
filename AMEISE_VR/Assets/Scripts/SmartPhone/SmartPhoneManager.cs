@@ -20,12 +20,13 @@ public class SmartPhoneManager : MonoBehaviour
 	{
 		_views = new Dictionary<ScreenEnum, GameObject>();
 		_controllers = new Dictionary<ScreenEnum, ControllerBase>();
-		KnowledgeBase.Instance.Employees.AddRange(new[] { "Alex", "Richard", "Stefanie", "Christine", "Thomas", "Daniel" });
+		KnowledgeBase.Instance.AddParameterType("E", new List<string>{ "Alex", "Richard", "Stefanie", "Christine", "Thomas", "Daniel" });
+		KnowledgeBase.Instance.AddParameterType("D", new List<string> { "Document1", "Code", "Specification", "Something", "Design", "Manual", "Another document" });
 		KnowledgeBase.Instance.Commands.AddRange(new[]
 		{
-			new Command{Name = "Hire"},
-			new Command { Name = "Release" },
-			new Command { Name = "Code" },
+			new Command { Name = "Hire", Parameters = new List<Parameter>{new Parameter("Employee", "E")}},
+			new Command { Name = "Release", Parameters = new List<Parameter>{new Parameter("Employee", "E")}},
+			new Command { Name = "Code", Parameters = new List<Parameter>{new Parameter("Employee", "E"), new Parameter("Document", "D")} },
 			new Command { Name = "Write Doc" },
 			new Command { Name = "Do Sth" },
 			new Command { Name = "Stop" },

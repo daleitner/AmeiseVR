@@ -198,8 +198,7 @@ public class GameConfiguration
 				{
 					var paramName = messageObject.GetValueOf("command" + i + "_param" + j);
 					var paramType = messageObject.GetValueOf("command" + i + "_paramtype" + j);
-					command.ParameterTypes.Add(paramName, paramType);
-					command.ParameterValues.Add(paramName, null);
+					command.Parameters.Add(new Parameter(paramName, paramType));
 
 					if (!paramTypes.Contains(paramType))
 						paramTypes.Add(paramType);

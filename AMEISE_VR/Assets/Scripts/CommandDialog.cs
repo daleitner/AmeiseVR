@@ -55,7 +55,7 @@ public class CommandDialog
 			//var historyEntry = command.Name;
 			dict.Add("command", command.Name);
 			var i = 0;
-			foreach (var param in command.ParameterTypes.Keys)
+			foreach (var param in command.Parameters)
 			{
 				if (string.IsNullOrEmpty(paramList[i]))
 					return;
@@ -91,11 +91,11 @@ public class CommandDialog
 		foreach(var command in _commands)
 		{
 			var cmdstring = command.Name + "(";
-			foreach(var param in command.ParameterTypes.Keys)
+			foreach(var param in command.Parameters)
 			{
-				cmdstring += command.ParameterTypes[param].Substring(0, 1) + ", ";
+				cmdstring += param.Type.Substring(0, 1) + ", ";
 			}
-			if(command.ParameterTypes.Keys.Count > 0)
+			if(command.Parameters.Count > 0)
 				cmdstring = cmdstring.Substring(0, cmdstring.Length - 2);
 			cmdstring += ")";
 			var item = new ListBox.ListItem(cmdstring);
