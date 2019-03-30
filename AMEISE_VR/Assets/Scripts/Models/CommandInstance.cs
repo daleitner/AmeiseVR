@@ -20,4 +20,18 @@ public class CommandInstance
 	{
 		return ParameterValues.FirstOrDefault(x => string.IsNullOrEmpty(x.Value));
 	}
+
+	public override string ToString()
+	{
+		var cmd = Command.Name + " ";
+		foreach (var parameter in ParameterValues)
+		{
+			if (string.IsNullOrEmpty(parameter.Value))
+				cmd += "@" + parameter.Parameter.Name + " ";
+			else
+				cmd += parameter.Value + " ";
+		}
+
+		return cmd;
+	}
 }

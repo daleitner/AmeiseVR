@@ -8,4 +8,5 @@
 	public const string UpTag = "Up";
 	public const string DownTag = "Down";
 	public const string CommandListItemTag = "CommandListItem";
+	public const string MessageBoxTag = "MessageBox";
 }

@@ -7,6 +7,7 @@ public class ChatController : ControllerBase
 {
 	private GameObject _view;
 	private readonly TextMeshPro _lblName;
+	private readonly TextMeshPro _tbMessage;
 	private readonly GameObject _commandBar;
 	private readonly ListControl _historyList;
 	private readonly ListControl _commandList;
@@ -17,12 +18,14 @@ public class ChatController : ControllerBase
 	private static readonly Vector3 CommandBarPositionTop = new Vector3(0.061f, 0.3125f, 0.0f);
 
 	private bool _isCommandsVisible;
+	private bool _isCommandSelected;
 	public ChatController(GameObject view, SmartPhoneManager manager)
 		: base(manager)
 	{
 		_view = view;
 		_lblName = _view.transform.Find("LblName").gameObject.GetComponent<TextMeshPro>();
 		_commandBar = _view.transform.Find("CommandBar").gameObject;
+		_tbMessage = _commandBar.transform.Find("MessageBox").Find("TextMeshPro").gameObject.GetComponent<TextMeshPro>();
 		var history = _view.transform.Find("History").gameObject;
 		_historyList = new ListControl(history, 6, Manager);
 		var commandList = _view.transform.Find("CommandList").gameObject;
@@ -34,15 +37,27 @@ public class ChatController : ControllerBase
 		return tag == Tags.SendCommandTag ||
 			tag == Tags.UpTag ||
 			tag == Tags.DownTag ||
-			tag == Tags.CommandListItemTag;
+			tag == Tags.CommandListItemTag ||
+			tag == Tags.MessageBoxTag;
 	}
 
 	public override void Execute(GameObject gameObject)
 	{
-		if (gameObject.tag == Tags.SendCommandTag)
+		if (gameObject.tag == Tags.MessageBoxTag)
 		{
 			if (!_isCommandsVisible)
+			{
+				_selectedCommand = null;
+				_isCommandSelected = false;
 				OpenCommandList();
+			}
+
+			return;
+		}
+		if (gameObject.tag == Tags.SendCommandTag)
+		{
+			if (_selectedCommand != null && _selectedCommand.GetNextEmptyParameter() == null)
+				SendCommand();
 			return;
 		}
 		if (gameObject.tag == Tags.UpTag)
@@ -65,12 +80,38 @@ public class ChatController : ControllerBase
 
 		if (gameObject.tag == Tags.CommandListItemTag)
 		{
-			SelectCommand(gameObject);
+			if (!_isCommandSelected)
+			{
+				_isCommandSelected = true;
+				SelectCommand(gameObject);
+			}
+			else
+			{
+				SelectParameter(gameObject);
+			}
 			var nextParam = _selectedCommand.GetNextEmptyParameter();
-			if(nextParam != null)
-				_commandList.Items = KnowledgeBase.Instance.GetValuesOfParameterType(nextParam.Parameter.Type).Select(x => (object)x).ToList();
+			if (nextParam != null)
+				_commandList.Items = KnowledgeBase.Instance.GetValuesOfParameterType(nextParam.Parameter.Type)
+					.Select(x => (object) x).ToList();
+			else
+				CloseCommandList();
 			return;
 		}
+	}
+
+	private void SendCommand()
+	{
+		var dict = new Dictionary<string, string>();
+		dict.Add("command", _selectedCommand.Command.Name);
+		var i = 0;
+		foreach (var param in _selectedCommand.ParameterValues)
+		{
+			dict.Add("param" + (i + 1), param.Value);
+			i++;
+		}
+		var message = new MessageObject(MessageTypeEnum.Command, dict);
+		var connection = ClientConnection.GetInstance();
+		connection.SendText(message);
 	}
 
 	private void SelectCommand(GameObject listItem)
@@ -84,6 +125,15 @@ public class ChatController : ControllerBase
 		{
 			firstEmployee.Value = _lblName.text;
 		}
+
+		_tbMessage.text = _selectedCommand.ToString();
+	}
+
+	private void SelectParameter(GameObject listItem)
+	{
+		var nextParam = _selectedCommand.GetNextEmptyParameter();
+		nextParam.Value = _commandList.GetSelectedItem(listItem).ToString();
+		_tbMessage.text = _selectedCommand.ToString();
 	}
 
 	public override void Activate(object payload)
@@ -98,7 +148,10 @@ public class ChatController : ControllerBase
 	public override void Back()
 	{
 		if (_isCommandsVisible)
+		{
 			CloseCommandList();
+			_isCommandSelected = false;
+		}
 		else
 			Manager.Show(ScreenEnum.ChatListScreen);
 	}
