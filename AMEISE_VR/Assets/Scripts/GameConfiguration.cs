@@ -180,6 +180,7 @@ public class GameConfiguration
 			for (var i = 0; i < feedbacks.Length; i++)
 			{
 				_historyDialog.Add(feedbacks[i]);
+				KnowledgeBase.Instance.AddMessage(feedbacks[i]);
 			}
 			_historyDialog.Add("----------------------------------------------------------------------------------------------------");
 		}
@@ -206,6 +207,7 @@ public class GameConfiguration
 				commands.Add(command);
 			}
 			_commandDialog.SetCommands(commands);
+			KnowledgeBase.Instance.Commands = commands;
 
 			var paramDict = new Dictionary<string, List<string>>();
 			foreach(var type in paramTypes)
@@ -217,6 +219,7 @@ public class GameConfiguration
 					parameters.Add(messageObject.GetValueOf(type + i));
 				}
 				paramDict.Add(type, parameters);
+				KnowledgeBase.Instance.AddParameterType(type, parameters);
 			}
 			_commandDialog.SetParameters(paramDict);
 

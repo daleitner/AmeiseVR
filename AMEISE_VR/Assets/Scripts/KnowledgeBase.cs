@@ -9,6 +9,7 @@ public class KnowledgeBase
 	{
 		Employees = new List<string>();
 		Commands = new List<Command>();
+		History = new List<string>();
 		_parameterTypes = new Dictionary<string, List<string>>();
 	}
 
@@ -22,9 +23,10 @@ public class KnowledgeBase
 		}
 	}
 
+	public List<string> History { get; private set; }
 	public List<string> Employees { get; private set; }
 	public List<Command> Commands { get; set; }
-	public const string EmployeeType = "E";
+	public const string EmployeeType = "Entwickler";
 
 	public void AddParameterType(string parameterType, List<string> values)
 	{
@@ -37,5 +39,10 @@ public class KnowledgeBase
 	public List<string> GetValuesOfParameterType(string parameterType)
 	{
 		return _parameterTypes[parameterType];
+	}
+
+	public void AddMessage(string message)
+	{
+		History.Add(message);
 	}
 }

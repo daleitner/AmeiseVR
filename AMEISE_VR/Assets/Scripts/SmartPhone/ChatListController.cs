@@ -11,7 +11,6 @@ public class ChatListController : ControllerBase
 	{
 		_view = view;
 		CreateChatEntries();
-		LoadChatList();
 	}
 
 	public override bool Accepts(string tag)
@@ -29,6 +28,7 @@ public class ChatListController : ControllerBase
 
 	public override void Activate(object payload)
 	{
+		LoadChatList();
 	}
 
 	public override void Back()
