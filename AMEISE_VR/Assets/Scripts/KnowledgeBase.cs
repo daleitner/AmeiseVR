@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Linq;
 
 public class KnowledgeBase
 {
@@ -26,6 +27,27 @@ public class KnowledgeBase
 	public List<string> History { get; private set; }
 	public List<string> Employees { get; private set; }
 	public List<Command> Commands { get; set; }
+
+	public List<Command> EmployeeCommands
+	{
+		get
+		{
+			return Commands != null
+				? Commands.Where(cmd => cmd.Parameters.Any(param => param.Type == EmployeeType)).ToList()
+				: null;
+		}
+	}
+
+	public List<Command> SystemCommands
+	{
+		get
+		{
+			return Commands != null
+				? Commands.Where(cmd => !EmployeeCommands.Contains(cmd)).ToList()
+				: null;
+		}
+	}
+
 	public const string EmployeeType = "Entwickler";
 
 	public void AddParameterType(string parameterType, List<string> values)

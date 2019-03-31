@@ -117,7 +117,7 @@ public class ChatController : ControllerBase
 	private void SelectCommand(GameObject listItem)
 	{
 		var commandText = _commandList.GetSelectedItem(listItem);
-		var command = KnowledgeBase.Instance.Commands.FirstOrDefault(x => x.Name == commandText.ToString());
+		var command = KnowledgeBase.Instance.EmployeeCommands.FirstOrDefault(x => x.Name == commandText.ToString());
 		_selectedCommand = new CommandInstance(command);
 
 		var firstEmployee = _selectedCommand.ParameterValues.FirstOrDefault(x => x.Parameter.Type == KnowledgeBase.EmployeeType);
@@ -143,6 +143,7 @@ public class ChatController : ControllerBase
 			return;
 		var helper = new EntryHelper(gameObject);
 		_lblName.text = helper.GetName();
+		_historyList.Items = KnowledgeBase.Instance.History.Select(x => (object)x).ToList();
 	}
 
 	public override void Back()
@@ -153,7 +154,10 @@ public class ChatController : ControllerBase
 			_isCommandSelected = false;
 		}
 		else
+		{
 			Manager.Show(ScreenEnum.ChatListScreen);
+			_tbMessage.text = string.Empty;
+		}
 	}
 
 	private void OpenCommandList()
@@ -162,7 +166,7 @@ public class ChatController : ControllerBase
 		_historyList.SetActive(false);
 		_commandList.SetActive(true);
 		_isCommandsVisible = true;
-		_commandList.Items = KnowledgeBase.Instance.Commands.Select(x => (object)x.Name).ToList();
+		_commandList.Items = KnowledgeBase.Instance.EmployeeCommands.Select(x => (object)x.Name).ToList();
 	}
 
 
