@@ -1,9 +1,7 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using UnityStandardAssets.Characters.FirstPerson;
 using Button = UnityEngine.UI.Button;
@@ -15,7 +13,6 @@ public class GameConfiguration
 	public GameObject GameSelectionControl;
 	public GameObject LoginFailedControl;
 	public GameObject FPSController;
-	public GameObject CanvasControl;
 
 	private CommandDialog _commandDialog;
 	private HistoryDialog _historyDialog;
@@ -27,13 +24,12 @@ public class GameConfiguration
 	private List<GameObject> toggles;
 
 	public GameConfiguration(GameObject fpsController, GameObject loginControl, GameObject gameSelectionControl, GameObject loginFailedControl, 
-		GameObject canvasControl, GameObject historyControl, GameObject commandControl)
+		GameObject historyControl, GameObject commandControl)
 	{
 		LoginControl = loginControl;
 		GameSelectionControl = gameSelectionControl;
 		LoginFailedControl = loginFailedControl;
 		FPSController = fpsController;
-		CanvasControl = canvasControl;
 
 		_historyDialog = new HistoryDialog(historyControl, FPSController.GetComponent<FirstPersonController>());
 		_commandDialog = new CommandDialog(commandControl, FPSController.GetComponent<FirstPersonController>(), _historyDialog);
@@ -170,7 +166,7 @@ public class GameConfiguration
 		else if (messageObject.Type == MessageTypeEnum.ContinueGame)
 		{
 			var today = DateTime.Parse(messageObject.GetValueOf("current"));
-			CanvasControl.transform.Find("Today").gameObject.GetComponent<Text>().text = today.ToString(CultureInfo.InvariantCulture);
+			KnowledgeBase.Instance.Date = today;
 			FPSController.transform.position = new Vector3(230.0f, 21.0f, 163.0f);
 		}
 		else if(messageObject.Type == MessageTypeEnum.Feedback)

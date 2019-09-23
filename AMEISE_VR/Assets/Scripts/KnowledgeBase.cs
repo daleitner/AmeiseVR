@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,6 +28,7 @@ public class KnowledgeBase
 	public List<string> History { get; private set; }
 	public List<string> Employees { get; private set; }
 	public List<Command> Commands { get; set; }
+	public DateTime Date { get; set; }
 
 	public List<Command> EmployeeCommands
 	{
