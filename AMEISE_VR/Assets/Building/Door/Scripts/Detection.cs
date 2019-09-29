@@ -1,7 +1,4 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityStandardAssets.Characters.FirstPerson;
 
 public class Detection : MonoBehaviour
 {
@@ -10,7 +7,6 @@ public class Detection : MonoBehaviour
     [Tooltip("How close the player has to be in order to be able to open/close the door.")]
     public float Reach = 4.0F;
     [HideInInspector] public bool InReach;
-    public string Character = "e";
 
     // UI SETTINGS
     [Header("UI Settings")]
@@ -106,7 +102,7 @@ public class Detection : MonoBehaviour
                 // Get access to the 'Door' script attached to the object that was hit
                 Door dooropening = Door.GetComponent<Door>();
 
-                if (Input.GetKey(Character))
+                if (Input.GetMouseButton(0))
                 {
                     // Open/close the door by running the 'Open' function found in the 'Door' script
                     if (dooropening.RotationPending == false) StartCoroutine(hit.collider.GetComponent<Door>().Move());
@@ -124,7 +120,7 @@ public class Detection : MonoBehaviour
 			        TextPrefabLoginInstance.transform.SetParent(transform, true); // Make the player the parent object of the text element
 		        }
 
-		        if (Input.GetKey(Character) && !LoginControl.activeSelf)
+		        if (Input.GetMouseButton(0) && !LoginControl.activeSelf)
 		        {
 					config.OpenLoginDialog();
 		        }
