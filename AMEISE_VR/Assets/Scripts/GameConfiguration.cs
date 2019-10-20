@@ -1,75 +1,36 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
-using System.Linq;
-using UnityStandardAssets.Characters.FirstPerson;
-using Button = UnityEngine.UI.Button;
-using Object = UnityEngine.Object;
+using Assets.Scripts;
 
 public class GameConfiguration
 {
-	public GameObject LoginControl;
-	public GameObject GameSelectionControl;
-	public GameObject LoginFailedControl;
-	public GameObject FPSController;
+	private readonly LoginDialog _loginDialog;
+	private readonly LoginFailedDialog _loginFailedDialog;
+	private readonly GameSelectionDialog _gameSelectionDialog;
+	private readonly CommandDialog _commandDialog;
+	private readonly HistoryDialog _historyDialog;
 
-	private CommandDialog _commandDialog;
-	private HistoryDialog _historyDialog;
-
-	private InputField username;
-	private InputField password;
-
-	private GameObject toggle;
-	private List<GameObject> toggles;
-
-	public GameConfiguration(GameObject fpsController, GameObject loginControl, GameObject gameSelectionControl, GameObject loginFailedControl, 
-		GameObject historyControl, GameObject commandControl)
+	public GameConfiguration()
 	{
-		LoginControl = loginControl;
-		GameSelectionControl = gameSelectionControl;
-		LoginFailedControl = loginFailedControl;
-		FPSController = fpsController;
 
-		_historyDialog = new HistoryDialog(historyControl, FPSController.GetComponent<FirstPersonController>());
-		_commandDialog = new CommandDialog(commandControl, FPSController.GetComponent<FirstPersonController>(), _historyDialog);
-
-		var messageListener = FPSController.GetComponent<MessageListener>();
+		_loginDialog = GameObjectCollection.LoginDialog;
+		_loginFailedDialog = GameObjectCollection.LoginFailedDialog;
+		_gameSelectionDialog = GameObjectCollection.GameSelectionDialog;
+		_historyDialog = GameObjectCollection.HistoryDialog;
+		_commandDialog = GameObjectCollection.CommandDialog;
+		var messageListener = GameObjectCollection.MessageListener;
 		messageListener.ReceivedMessage += ReceivedMessage;
 
-		username = LoginControl.transform.Find("Username").gameObject.GetComponent<InputField>();
-		password = LoginControl.transform.Find("Password").gameObject.GetComponent<InputField>();
-		var loginButton = LoginControl.transform.Find("LoginButton").gameObject.GetComponent<Button>();
-		loginButton.onClick.AddListener(LoginClicked);
-		var cancelButton = LoginControl.transform.Find("CancelButton").gameObject.GetComponent<Button>();
-		cancelButton.onClick.AddListener(CancelClicked);
-
-		var startButton = GameSelectionControl.transform.Find("StartButton").gameObject.GetComponent<Button>();
-		startButton.onClick.AddListener(StartClicked);
-		var backButton = GameSelectionControl.transform.Find("BackButton").gameObject.GetComponent<Button>();
-		backButton.onClick.AddListener(BackClicked);
-		toggle = GameSelectionControl.transform.Find("Toggle").gameObject;
-
-		var okButton = LoginFailedControl.transform.Find("OkButton").gameObject.GetComponent<Button>();
-		okButton.onClick.AddListener(OkClicked);
-
-		toggles = new List<GameObject>();
+		_loginFailedDialog.AddOkClickedListener(OkClicked);
+		_gameSelectionDialog.AddBackClickedListener(BackClicked);
 	}
+
+	public bool LoggedIn { get; private set; }
 
 	public void OpenLoginDialog()
 	{
-		LoginControl.SetActive(true);
-		var controller = FPSController.GetComponent<FirstPersonController>();
-		controller.LockCursor();
-		controller.enabled = false;
-	}
-
-	public void OpenGameSelectionDialog()
-	{
-		GameSelectionControl.SetActive(true);
-		var controller = FPSController.GetComponent<FirstPersonController>();
-		controller.LockCursor();
-		controller.enabled = false;
+		_loginDialog.OpenDialog();
 	}
 
 	public void OpenHistoryDialog()
@@ -92,82 +53,48 @@ public class GameConfiguration
 		_commandDialog.CloseDialog();
 	}
 
-	void LoginClicked()
+	private void BackClicked()
 	{
-		var message = new MessageObject(MessageTypeEnum.Login, new Dictionary<string, string> { { "username", username.text }, { "password", password.text } });
-		var connection = ClientConnection.GetInstance();
-		connection.SendText(message);
+		_loginDialog.OpenDialog();
 	}
 
-	void CancelClicked()
+	private void OkClicked()
 	{
-		LoginControl.SetActive(false);
-		var controller = FPSController.GetComponent<FirstPersonController>();
-		controller.enabled = true;
-		controller.UnlockCursor();
-	}
-
-	void StartClicked()
-	{
-		var selectedGame = toggles.Single(t => t.GetComponent<Toggle>().isOn).transform.Find("Label").gameObject.GetComponent<Text>().text;
-		var message = new MessageObject(MessageTypeEnum.GameChoice, new Dictionary<string, string> { { "game", selectedGame } });
-		var connection = ClientConnection.GetInstance();
-		connection.SendText(message);
-		GameSelectionControl.SetActive(false);
-		var controller = FPSController.GetComponent<FirstPersonController>();
-		controller.enabled = true;
-		controller.UnlockCursor();
-	}
-
-	void BackClicked()
-	{
-		GameSelectionControl.SetActive(false);
-		LoginControl.SetActive(true);
-	}
-
-	void OkClicked()
-	{
-		LoginFailedControl.SetActive(false);
-		LoginControl.SetActive(true);
+		_loginDialog.OpenDialog();
 	}
 
 	void ReceivedMessage(MessageObject messageObject)
 	{
 		if (messageObject.Type == MessageTypeEnum.Login)
 		{
-			LoginControl.SetActive(false);
+			_loginDialog.CloseDialog();
 			var loginSuccessed = bool.Parse(messageObject.GetValueOf("success"));
 			if (loginSuccessed)
 			{
-				GameSelectionControl.SetActive(true);
+				_gameSelectionDialog.OpenDialog();
+				LoggedIn = true;
 			}
 			else
 			{
-				LoginFailedControl.SetActive(true);
+				_loginFailedDialog.OpenDialog();
 			}
 		}
 		else if (messageObject.Type == MessageTypeEnum.GameChoice)
 		{
-			var listbox = GameSelectionControl.transform.Find("Listbox").GetComponent<ListBox>();
 			var count = int.Parse(messageObject.GetValueOf("count"));
+			var games = new List<string>();
 			for (var i = 0; i < count; i++)
 			{
 				var game = messageObject.GetValueOf("game" + i);
-				var newToggle = Object.Instantiate(toggle, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-				newToggle.SetActive(true);
-				newToggle.transform.SetParent(GameSelectionControl.transform);
-				newToggle.GetComponent<Toggle>().isOn = i == 0;
-				newToggle.transform.Find("Label").gameObject.GetComponent<Text>().text = game;
-				//newToggle.transform.position = new Vector3(433.0f, 301.0f - (23.0f * i), 0.0f);
-				listbox.AddItem(new ListBox.ListItem(newToggle));
-				toggles.Add(newToggle);
+				games.Add(game);
 			}
+			_gameSelectionDialog.AddListItems(games);
 		}
 		else if (messageObject.Type == MessageTypeEnum.ContinueGame)
 		{
 			var today = DateTime.Parse(messageObject.GetValueOf("current"));
 			KnowledgeBase.Instance.Date = today;
-			FPSController.transform.position = new Vector3(230.0f, 21.0f, 163.0f);
+			GameObjectCollection.MovePlayer(new Vector3(230.0f, 21.0f, 163.0f));
 		}
 		else if(messageObject.Type == MessageTypeEnum.Feedback)
 		{

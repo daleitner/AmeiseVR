@@ -1,3 +1,5 @@
+using System.Linq;
+using Assets.Scripts;
 using UnityEngine;
 
 public class Detection : MonoBehaviour
@@ -30,6 +32,7 @@ public class Detection : MonoBehaviour
 	public GameObject FPSController;
 	public GameObject HistoryControl;
 	public GameObject CommandControl;
+	public GameObject Book;
 
 	private GameConfiguration config;
 
@@ -41,7 +44,7 @@ public class Detection : MonoBehaviour
     [Range(0.0F, 1.0F)]
     public float Opacity = 1.0F;
 
-
+    private bool _mouseClicked = false;
 
     void Start()
     {
@@ -60,8 +63,14 @@ public class Detection : MonoBehaviour
 	    if (TextPrefabLogin == null) Debug.Log("<color=yellow><b>No TextPrefabLogin was found.</b></color>"); // Return an error if no text element was specified
 
 		DebugRayColor.a = Opacity; // Set the alpha value of the DebugRayColor
-
-		config = new GameConfiguration(FPSController, LoginControl, GameSelectionControl, LoginFailedControl, HistoryControl, CommandControl);
+		GameObjectCollection.AddGameObject(FPSController, GameObjectEnum.FPSController);
+		GameObjectCollection.AddGameObject(LoginControl, GameObjectEnum.LoginControl);
+		GameObjectCollection.AddGameObject(GameSelectionControl, GameObjectEnum.GameSelectionControl);
+		GameObjectCollection.AddGameObject(LoginFailedControl, GameObjectEnum.LoginFailedControl);
+		GameObjectCollection.AddGameObject(HistoryControl, GameObjectEnum.HistoryControl);
+		GameObjectCollection.AddGameObject(CommandControl, GameObjectEnum.CommandControl);
+		GameObjectCollection.AddGameObject(Book, GameObjectEnum.Book);
+		config = new GameConfiguration();
 	}
 
 	void Update()
@@ -120,12 +129,32 @@ public class Detection : MonoBehaviour
 			        TextPrefabLoginInstance.transform.SetParent(transform, true); // Make the player the parent object of the text element
 		        }
 
-		        if (Input.GetMouseButton(0) && !LoginControl.activeSelf)
+		        if (Input.GetMouseButton(0) && !LoginControl.activeSelf && !config.LoggedIn)
 		        {
 					config.OpenLoginDialog();
 		        }
 	        }
+            else if (hit.collider.tag == "Book")
+            {
+	            InReach = true;
 
+	            if (Input.GetMouseButton(0))
+	            {
+		            if (!_mouseClicked)
+		            {
+			            _mouseClicked = true;
+			            var book = GameObjectCollection.GetBookByGameObject(hit.transform.gameObject);
+			            if (book.IsOpen())
+				            book.Close();
+			            else if (book.IsClosed())
+				            book.Open();
+		            }
+	            }
+	            else
+	            {
+		            _mouseClicked = false;
+	            }
+            }
 			else
             {
                 InReach = false;

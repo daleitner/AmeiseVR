@@ -3,7 +3,20 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Up
+  - PersonChat
+  - CommandListItem
+  - Back
+  - Down
+  - SendCommand
+  - Login
+  - Chat
+  - MessageBox
+  - Home
+  - Door
+  - Arrow
+  - Book
   layers:
   - Default
   - TransparentFX

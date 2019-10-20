@@ -50,6 +50,8 @@ public class KnowledgeBase
 		}
 	}
 
+	public Command DeveloperInformationCommand => EmployeeCommands.Single(x => x.Name == "information about developer");
+
 	public const string EmployeeType = "Entwickler";
 
 	public void AddParameterType(string parameterType, List<string> values)

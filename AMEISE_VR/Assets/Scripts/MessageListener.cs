@@ -20,8 +20,7 @@ public class MessageListener : MonoBehaviour
 	void Update () {
 		if (_receivedObjects.Count > 0)
 		{
-			if (ReceivedMessage != null)
-				ReceivedMessage(_receivedObjects.First());
+			ReceivedMessage?.Invoke(_receivedObjects.First());
 			_receivedObjects.RemoveAt(0);
 		}
 		//if(Input.GetKey(KeyCode.Return) && sendDict)

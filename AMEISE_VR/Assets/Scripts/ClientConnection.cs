@@ -71,6 +71,24 @@ public class ClientConnection
 		}
 	}
 
+	public void SendCommand(Command command, params string[] parameters)
+	{
+		if (command.Parameters.Count != parameters.Length)
+			throw new ArgumentException("number of parameters is wrong!");
+		var dict = new Dictionary<string, string>();
+		dict.Add("command", command.Name);
+		var i = 0;
+		foreach (var param in parameters)
+		{
+			if (string.IsNullOrEmpty(param))
+				return;
+			dict.Add("param" + (i + 1), param);
+			i++;
+		}
+		var message = new MessageObject(MessageTypeEnum.Command, dict);
+		SendText(message);
+	}
+
 	public void ReceiveText()
 	{
 		using (var stream = new NetworkStream(_socket))
