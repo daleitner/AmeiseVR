@@ -96,7 +96,7 @@ public class GameConfiguration
 			KnowledgeBase.Instance.Date = today;
 			GameObjectCollection.MovePlayer(new Vector3(230.0f, 21.0f, 163.0f));
 		}
-		else if(messageObject.Type == MessageTypeEnum.Feedback)
+		else if(messageObject.Type == MessageTypeEnum.Feedback || messageObject.Type == MessageTypeEnum.Callback)
 		{
 			var feedback = messageObject.GetValueOf("feedback");
 			var feedbacks = feedback.Split('\n');

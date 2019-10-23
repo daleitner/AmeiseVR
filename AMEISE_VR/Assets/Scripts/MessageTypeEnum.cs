@@ -7,5 +7,6 @@
 	Default,
 	Command,
 	Feedback,
-	Proceed
+	Proceed,
+	Callback
 }
