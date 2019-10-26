@@ -36,6 +36,9 @@ namespace Assets.Scripts
 			_listener.ReceivedMessage += _listener_ReceivedMessage;
 			ClientConnection.GetInstance().SendCommand(KnowledgeBase.Instance.DeveloperInformationCommand,
 				KnowledgeBase.Instance.Employees.First());
+			_text.text = "Loading...";
+
+			_anim.SetTrigger("Open");
 		}
 
 		private void _listener_ReceivedMessage(MessageObject messageObject)
@@ -44,8 +47,6 @@ namespace Assets.Scripts
 			{
 				_listener.ReceivedMessage -= _listener_ReceivedMessage;
 				_text.text = messageObject.GetValueOf("feedback");
-				
-				_anim.SetTrigger("Open");
 			}
 		}
 
