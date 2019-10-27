@@ -14,8 +14,8 @@ namespace Assets.Scripts
 		{
 			GameObject = book;
 			_anim = book.GetComponent<Animator>();
-			_title = book.transform.Find("DeveloperInformationBookFront").Find("BookTitle").GetComponent<TextMeshPro>();
-			_text = book.transform.Find("DeveloperInformationSheet").Find("Content").GetComponent<TextMeshPro>();
+			_title = book.transform.Find("BookFront").Find("BookTitleField").Find("BookTitle").GetComponent<TextMeshPro>();
+			_text = book.transform.Find("BookSheet").Find("Content").GetComponent<TextMeshPro>();
 			_listener = listener;
 		}
 
