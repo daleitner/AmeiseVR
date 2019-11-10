@@ -29,6 +29,7 @@ public class KnowledgeBase
 	public List<string> Employees { get; private set; }
 	public List<Command> Commands { get; set; }
 	public DateTime Date { get; set; }
+	public bool LoadingCommandsFinished { get; private set; }
 
 	public List<Command> EmployeeCommands
 	{
@@ -70,5 +71,10 @@ public class KnowledgeBase
 	public void AddMessage(string message)
 	{
 		History.Add(message);
+	}
+
+	public void SetLoadingCommandsFinished()
+	{
+		LoadingCommandsFinished = true;
 	}
 }

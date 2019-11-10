@@ -100,24 +100,33 @@ public class ClientConnection
 			{
 				if (stream.CanRead)
 				{
-					byte[] myReadBuffer = new byte[1024];
-					StringBuilder message = new StringBuilder();
-					int numberOfBytesRead = 0;
-
-					// Incoming message may be larger than the buffer size.
-					do
+					try
 					{
-						numberOfBytesRead = stream.Read(myReadBuffer, 0, myReadBuffer.Length);
+						byte[] myReadBuffer = new byte[1024];
+						StringBuilder message = new StringBuilder();
+						int numberOfBytesRead = 0;
 
-						message.AppendFormat("{0}", Encoding.ASCII.GetString(myReadBuffer, 0, numberOfBytesRead));
+						// Incoming message may be larger than the buffer size.
+						do
+						{
+							numberOfBytesRead = stream.Read(myReadBuffer, 0, myReadBuffer.Length);
 
-					} while (!message.ToString().EndsWith(";"));
-					Debug.Log("You received the following message : " + message);
-					var msgobj = new MessageObject(message.ToString());
-					foreach (var messageList in _messageLists)
-					{
-						messageList.Add(msgobj);
+							message.AppendFormat("{0}", Encoding.ASCII.GetString(myReadBuffer, 0, numberOfBytesRead));
+
+						} while (!message.ToString().EndsWith(";"));
+
+						Debug.Log("You received the following message : " + message);
+						var msgobj = new MessageObject(message.ToString());
+						foreach (var messageList in _messageLists)
+						{
+							messageList.Add(msgobj);
+						}
 					}
+					catch (Exception e)
+					{
+						Debug.Log("Exception occurs");
+					}
+
 					// Print out the received message to the console.
 				}
 				else

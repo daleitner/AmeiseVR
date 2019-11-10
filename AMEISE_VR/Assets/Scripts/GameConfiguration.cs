@@ -145,6 +145,7 @@ public class GameConfiguration
 				KnowledgeBase.Instance.AddParameterType(type, parameters);
 			}
 			_commandDialog.SetParameters(paramDict);
+			KnowledgeBase.Instance.SetLoadingCommandsFinished();
 
 			var str = "";
 			commands.ForEach(x => str += x + "\r\n");

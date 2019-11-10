@@ -1,6 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Numerics;
 using TMPro;
 using UnityEngine;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Assets.Scripts
 {
@@ -36,7 +40,7 @@ namespace Assets.Scripts
 			_listener.ReceivedMessage += _listener_ReceivedMessage;
 			ClientConnection.GetInstance().SendCommand(KnowledgeBase.Instance.DeveloperInformationCommand,
 				KnowledgeBase.Instance.Employees.First());
-			_text.text = "Loading...";
+			SetText("Loading...");
 
 			_anim.SetTrigger("Open");
 		}
@@ -46,13 +50,38 @@ namespace Assets.Scripts
 			if (messageObject.Type == MessageTypeEnum.Feedback)
 			{
 				_listener.ReceivedMessage -= _listener_ReceivedMessage;
-				_text.text = messageObject.GetValueOf("feedback");
+				SetText(messageObject.GetValueOf("feedback"));
 			}
 		}
 
 		public void Close()
 		{
 			_anim.SetTrigger("Close");
+		}
+
+		public void SetText(string text)
+		{
+			_text.text = text;
+		}
+
+		public void SetTitle(string title)
+		{
+			_title.text = title;
+		}
+
+		public void MoveTo(Vector3 position)
+		{
+			GameObject.transform.localPosition = position;
+		}
+
+		public void Rotate(Quaternion rotation)
+		{
+			GameObject.transform.localRotation = rotation;
+		}
+
+		public void Scale(Vector3 scale)
+		{
+			GameObject.transform.localScale = scale;
 		}
 	}
 }
