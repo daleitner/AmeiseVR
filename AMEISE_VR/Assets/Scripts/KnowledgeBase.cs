@@ -52,6 +52,7 @@ public class KnowledgeBase
 	}
 
 	public Command DeveloperInformationCommand => EmployeeCommands.Single(x => x.Name == "information about developer");
+	public Command ResourceCommand => SystemCommands.Single(x => x.Name == "information about spent resources");
 
 	public const string EmployeeType = "Entwickler";
 

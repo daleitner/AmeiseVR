@@ -31,6 +31,8 @@ namespace Assets.Scripts
 		public static GameObject Office { get; set; }
 		public static GameObject Book { get; private set; }
 		private static BookCollection Shelf;
+		private static GameObject MyOfficeDesk;
+		private static List<Book> AllBooks = new List<Book>();
 
 		public static void AddGameObject(GameObject gameObject, GameObjectEnum type)
 		{
@@ -61,6 +63,7 @@ namespace Assets.Scripts
 					break;
 				case GameObjectEnum.Office:
 					Office = gameObject;
+					MyOfficeDesk = Office.transform.Find("MyOffice").Find("Desk").gameObject;
 					var shelf = Office.transform.Find("MyOffice").Find("Shelf_05").Find("Shelf").gameObject;
 					Shelf = new BookCollection(shelf);
 					break;
@@ -74,22 +77,33 @@ namespace Assets.Scripts
 			FPSController.transform.position = position;
 		}
 
-		public static void AddBook(GameObject newBookObject, string title, Command command, string[] parameters)
+		public static void AddBookToShelf(GameObject newBookObject, string title, Command command, string[] parameters)
 		{
 			var newBook = new Book(newBookObject, MessageListener);
 			newBook.SetTitle(title);
 			newBook.SetCommand(command, parameters);
 			Shelf.AddBook(newBook);
+			AllBooks.Add(newBook);
+		}
 
+		public static void AddResourceBook(GameObject newBookObject)
+		{
+			var newBook = new Book(newBookObject, MessageListener);
+			newBook.SetTitle("Resources");
+			newBook.SetCommand(KnowledgeBase.Instance.ResourceCommand, new string[]{});
+			newBookObject.transform.parent = MyOfficeDesk.transform;
+			newBook.MoveTo(new Vector3(0.7f, 0.814f, 0.0f));
+			newBook.Rotate(Quaternion.Euler(0.0f, 0.0f, 0.0f));
+			AllBooks.Add(newBook);
 		}
 
 		public static Book GetBookByGameObject(GameObject gameObject)
 		{
-			var book = Shelf.Books.SingleOrDefault(b => b.GameObject == gameObject);
+			var book = AllBooks.SingleOrDefault(b => b.GameObject == gameObject);
 			if (book == null)
-				book = Shelf.Books.SingleOrDefault(b => b.GameObject == gameObject.transform.parent.gameObject);
+				book = AllBooks.SingleOrDefault(b => b.GameObject == gameObject.transform.parent.gameObject);
 			if (book == null)
-				book = Shelf.Books.SingleOrDefault(b => b.GameObject == gameObject.transform.parent.parent.gameObject);
+				book = AllBooks.SingleOrDefault(b => b.GameObject == gameObject.transform.parent.parent.gameObject);
 			return book;
 		}
 	}

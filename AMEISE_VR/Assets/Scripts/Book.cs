@@ -21,6 +21,7 @@ namespace Assets.Scripts
 			_title = book.transform.Find("BookFront").Find("BookTitleField").Find("BookTitle").GetComponent<TextMeshPro>();
 			_text = book.transform.Find("BookSheet").Find("Content").GetComponent<TextMeshPro>();
 			_listener = listener;
+			_anim.SetTrigger("Take");
 		}
 
 		public GameObject GameObject { get; }
@@ -115,6 +116,7 @@ namespace Assets.Scripts
 			GameObject.transform.parent = shelf.transform;
 			IsInShelf = true;
 			BelongsToAShelf = true;
+			_anim.SetTrigger("Put");
 		}
 
 		public void Rotate(Quaternion rotation)
