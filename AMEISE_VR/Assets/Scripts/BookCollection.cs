@@ -22,7 +22,7 @@ namespace Assets.Scripts
 
 		public void AddBook(Book book)
 		{
-			book.GameObject.transform.parent = _shelf.transform;
+			book.SetShelf(_shelf);
 			var position = DefaultPosition;
 			position.x += x_offset * Books.Count;
 			book.MoveTo(position);

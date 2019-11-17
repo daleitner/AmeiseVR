@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Numerics;
+﻿using System.Linq;
 using TMPro;
 using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
@@ -14,6 +12,8 @@ namespace Assets.Scripts
 		private readonly MessageListener _listener;
 		private readonly TextMeshPro _text;
 		private readonly TextMeshPro _title;
+		private Command _command;
+		private string[] _parameters;
 		public Book(GameObject book, MessageListener listener)
 		{
 			GameObject = book;
@@ -35,11 +35,13 @@ namespace Assets.Scripts
 			return _anim.GetCurrentAnimatorStateInfo(0).IsName("BookIdle");
 		}
 
+		public bool IsInShelf { get; private set; }
+		public bool BelongsToAShelf { get; private set; }
+
 		public void Open()
 		{
 			_listener.ReceivedMessage += _listener_ReceivedMessage;
-			ClientConnection.GetInstance().SendCommand(KnowledgeBase.Instance.DeveloperInformationCommand,
-				KnowledgeBase.Instance.Employees.First());
+			ClientConnection.GetInstance().SendCommand(_command, _parameters);
 			SetText("Loading...");
 
 			_anim.SetTrigger("Open");
@@ -69,9 +71,50 @@ namespace Assets.Scripts
 			_title.text = title;
 		}
 
+		public void SetCommand(Command command, string[] parameters)
+		{
+			_command = command;
+			_parameters = parameters;
+		}
+
 		public void MoveTo(Vector3 position)
 		{
 			GameObject.transform.localPosition = position;
+		}
+
+		private void PullOutFromShelf()
+		{
+			if (!IsInShelf)
+				return;
+			GameObject.transform.localPosition = new Vector3(GameObject.transform.localPosition.x, GameObject.transform.localPosition.y, GameObject.transform.localPosition.z - 0.5f);
+			IsInShelf = false;
+			_anim.SetTrigger("Take");
+		}
+
+		private void PushInToShelf()
+		{
+			if (IsInShelf)
+				return;
+			GameObject.transform.localPosition = new Vector3(GameObject.transform.localPosition.x, GameObject.transform.localPosition.y, GameObject.transform.localPosition.z + 0.5f);
+			IsInShelf = true;
+			_anim.SetTrigger("Put");
+		}
+
+		public void TriggerShelfMove()
+		{
+			if(IsInShelf)
+				PullOutFromShelf();
+			else if(IsClosed())
+			{
+				PushInToShelf();
+			}
+		}
+
+		public void SetShelf(GameObject shelf)
+		{
+			GameObject.transform.parent = shelf.transform;
+			IsInShelf = true;
+			BelongsToAShelf = true;
 		}
 
 		public void Rotate(Quaternion rotation)

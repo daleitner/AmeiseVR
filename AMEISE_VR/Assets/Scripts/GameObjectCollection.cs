@@ -74,10 +74,11 @@ namespace Assets.Scripts
 			FPSController.transform.position = position;
 		}
 
-		public static void AddBook(GameObject newBookObject, string title)
+		public static void AddBook(GameObject newBookObject, string title, Command command, string[] parameters)
 		{
 			var newBook = new Book(newBookObject, MessageListener);
 			newBook.SetTitle(title);
+			newBook.SetCommand(command, parameters);
 			Shelf.AddBook(newBook);
 
 		}

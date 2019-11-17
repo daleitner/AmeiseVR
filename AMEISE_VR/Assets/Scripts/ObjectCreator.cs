@@ -22,7 +22,7 @@ public class ObjectCreator : MonoBehaviour
 		    foreach (var employee in KnowledgeBase.Instance.Employees)
 		    {
 			    var gameObject = Instantiate(bookTemplate);
-			    GameObjectCollection.AddBook(gameObject, employee);
+			    GameObjectCollection.AddBook(gameObject, employee, KnowledgeBase.Instance.DeveloperInformationCommand, new []{employee});
 		    }
 	    }
     }

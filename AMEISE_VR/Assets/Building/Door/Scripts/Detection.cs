@@ -152,6 +152,15 @@ public class Detection : MonoBehaviour
 				            book.Open();
 		            }
 	            }
+	            else if (Input.GetMouseButton(1))
+	            {
+		            var book = GameObjectCollection.GetBookByGameObject(hit.transform.gameObject);
+		            if (!_mouseClicked && book.BelongsToAShelf)
+		            {
+			            _mouseClicked = true;
+			            book.TriggerShelfMove();
+					}
+	            }
 	            else
 	            {
 		            _mouseClicked = false;
