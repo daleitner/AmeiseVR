@@ -34,6 +34,7 @@ public class Detection : MonoBehaviour
 	public GameObject CommandControl;
 	public GameObject Book;
 	public GameObject Office;
+	public GameObject Avatar;
 
 	private GameConfiguration config;
 
@@ -71,6 +72,7 @@ public class Detection : MonoBehaviour
 		GameObjectCollection.AddGameObject(HistoryControl, GameObjectEnum.HistoryControl);
 		GameObjectCollection.AddGameObject(CommandControl, GameObjectEnum.CommandControl);
 		GameObjectCollection.AddGameObject(Book, GameObjectEnum.Book);
+		GameObjectCollection.AddGameObject(Avatar, GameObjectEnum.Avatar);
 		GameObjectCollection.AddGameObject(Office, GameObjectEnum.Office);
 		config = new GameConfiguration();
 	}

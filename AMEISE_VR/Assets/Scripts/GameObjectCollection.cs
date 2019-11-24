@@ -15,7 +15,8 @@ namespace Assets.Scripts
 		Book,
 		HistoryControl,
 		CommandControl,
-		Office
+		Office,
+		Avatar
 	}
 	public static class GameObjectCollection
 	{
@@ -30,9 +31,11 @@ namespace Assets.Scripts
 		public static MessageListener MessageListener { get; private set; }
 		public static GameObject Office { get; set; }
 		public static GameObject Book { get; private set; }
+		public static GameObject Avatar { get; private set; }
 		private static BookCollection Shelf;
 		private static GameObject MyOfficeDesk;
 		private static List<Book> AllBooks = new List<Book>();
+		private static AvatarsCollection AvatarsCollection;
 
 		public static void AddGameObject(GameObject gameObject, GameObjectEnum type)
 		{
@@ -55,6 +58,9 @@ namespace Assets.Scripts
 				case GameObjectEnum.Book:
 					Book = gameObject;
 					break;
+				case GameObjectEnum.Avatar:
+					Avatar = gameObject;
+					break;
 				case GameObjectEnum.HistoryControl:
 					HistoryDialog = new HistoryDialog(gameObject, player);
 					break;
@@ -64,6 +70,7 @@ namespace Assets.Scripts
 				case GameObjectEnum.Office:
 					Office = gameObject;
 					MyOfficeDesk = Office.transform.Find("MyOffice").Find("Desk").gameObject;
+					AvatarsCollection = new AvatarsCollection(Office.transform.Find("Avatars").gameObject);
 					var shelf = Office.transform.Find("MyOffice").Find("Shelf_05").Find("Shelf").gameObject;
 					Shelf = new BookCollection(shelf);
 					break;
