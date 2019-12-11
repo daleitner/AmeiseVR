@@ -35,6 +35,7 @@ public class Detection : MonoBehaviour
 	public GameObject Book;
 	public GameObject Office;
 	public GameObject Avatar;
+	public GameObject Task;
 
 	private GameConfiguration config;
 
@@ -74,6 +75,7 @@ public class Detection : MonoBehaviour
 		GameObjectCollection.AddGameObject(Book, GameObjectEnum.Book);
 		GameObjectCollection.AddGameObject(Avatar, GameObjectEnum.Avatar);
 		GameObjectCollection.AddGameObject(Office, GameObjectEnum.Office);
+		GameObjectCollection.AddGameObject(Task, GameObjectEnum.Task);
 		config = new GameConfiguration();
 	}
 
@@ -166,6 +168,15 @@ public class Detection : MonoBehaviour
 	            else
 	            {
 		            _mouseClicked = false;
+	            }
+            }
+			else if (hit.collider.tag == "Task")
+            {
+	            InReach = true;
+	            if (Input.GetMouseButtonDown(1))
+	            {
+		            var task = GameObjectCollection.GetTaskByGameObject(hit.transform.gameObject);
+					task.ChangeParameter();
 	            }
             }
 			else

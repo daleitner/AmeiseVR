@@ -6,10 +6,14 @@ using UnityEngine;
 public class ObjectCreator : MonoBehaviour
 {
 	private bool _booksCreated;
+	private bool _avatarsCreated;
+	private bool _tasksCreated;
     // Start is called before the first frame update
     void Start()
     {
 	    _booksCreated = false;
+	    _avatarsCreated = false;
+	    _tasksCreated = false;
     }
 
     // Update is called once per frame
@@ -27,6 +31,29 @@ public class ObjectCreator : MonoBehaviour
 
 		    var resourceBook = Instantiate(bookTemplate);
 			GameObjectCollection.AddResourceBook(resourceBook);
+	    }
+
+	    if (!_avatarsCreated && GameObjectCollection.AvatarsCollection != null)
+	    {
+		    _avatarsCreated = true;
+		    var collection = GameObjectCollection.AvatarsCollection;
+		    var avatarTemplate = GameObjectCollection.Avatar;
+		    for (int i = 0; i < AvatarsCollection.MaxAvatars; i++)
+		    {
+			    var gameObject = Instantiate(avatarTemplate);
+				collection.AddAvatar(gameObject);
+		    }
+	    }
+
+	    if (!_tasksCreated && KnowledgeBase.Instance.LoadingCommandsFinished)
+	    {
+		    _tasksCreated = true;
+		    var taskTemplate = GameObjectCollection.Task;
+		    foreach (var command in KnowledgeBase.Instance.EmployeeCommands)
+		    {
+			    var gameObject = Instantiate(taskTemplate);
+			    GameObjectCollection.AddTaskToWhiteBoard(gameObject, command);
+		    }
 	    }
     }
 }

@@ -22,6 +22,7 @@ namespace Assets.Scripts
 			avatar.transform.parent = _avatarsContainer.transform;
 			avatar.transform.localPosition = OfficePlaces[_avatars.Count];
 			_avatars.Add(new Avatar(avatar));
+			avatar.SetActive(true);
 		}
 
 		public static int MaxAvatars => OfficePlaces.Length;

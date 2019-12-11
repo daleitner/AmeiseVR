@@ -1,12 +1,10 @@
-﻿using System.Linq;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
-using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
 namespace Assets.Scripts
 {
-	public class Book
+	public class Book : GameObjectModelBase
 	{
 		private readonly Animator _anim;
 		private readonly MessageListener _listener;
@@ -15,17 +13,15 @@ namespace Assets.Scripts
 		private Command _command;
 		private string[] _parameters;
 		public Book(GameObject book, MessageListener listener)
+			:base(book)
 		{
-			GameObject = book;
 			_anim = book.GetComponent<Animator>();
 			_title = book.transform.Find("BookFront").Find("BookTitleField").Find("BookTitle").GetComponent<TextMeshPro>();
 			_text = book.transform.Find("BookSheet").Find("Content").GetComponent<TextMeshPro>();
 			_listener = listener;
 			_anim.SetTrigger("Take");
 		}
-
-		public GameObject GameObject { get; }
-
+		
 		public bool IsOpen()
 		{
 			return _anim.GetCurrentAnimatorStateInfo(0).IsName("BookOpen");
@@ -78,11 +74,6 @@ namespace Assets.Scripts
 			_parameters = parameters;
 		}
 
-		public void MoveTo(Vector3 position)
-		{
-			GameObject.transform.localPosition = position;
-		}
-
 		private void PullOutFromShelf()
 		{
 			if (!IsInShelf)
@@ -113,20 +104,10 @@ namespace Assets.Scripts
 
 		public void SetShelf(GameObject shelf)
 		{
-			GameObject.transform.parent = shelf.transform;
+			SetParent(shelf);
 			IsInShelf = true;
 			BelongsToAShelf = true;
 			_anim.SetTrigger("Put");
-		}
-
-		public void Rotate(Quaternion rotation)
-		{
-			GameObject.transform.localRotation = rotation;
-		}
-
-		public void Scale(Vector3 scale)
-		{
-			GameObject.transform.localScale = scale;
 		}
 	}
 }

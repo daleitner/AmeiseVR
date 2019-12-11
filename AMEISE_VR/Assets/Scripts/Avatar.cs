@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts
 {
-	public class Avatar
+	public class Avatar : GameObjectModelBase
 	{
-		private GameObject _avatar;
-
 		public Avatar(GameObject avatar)
+			:base(avatar)
 		{
-			_avatar = avatar;
 		}
 	}
 }

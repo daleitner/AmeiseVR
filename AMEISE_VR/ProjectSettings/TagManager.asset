@@ -18,6 +18,7 @@ TagManager:
   - Arrow
   - Book
   - Avatar
+  - Task
   layers:
   - Default
   - TransparentFX

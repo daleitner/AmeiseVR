@@ -16,7 +16,8 @@ namespace Assets.Scripts
 		HistoryControl,
 		CommandControl,
 		Office,
-		Avatar
+		Avatar,
+		Task
 	}
 	public static class GameObjectCollection
 	{
@@ -31,11 +32,13 @@ namespace Assets.Scripts
 		public static MessageListener MessageListener { get; private set; }
 		public static GameObject Office { get; set; }
 		public static GameObject Book { get; private set; }
+		public static GameObject Task { get; private set; }
 		public static GameObject Avatar { get; private set; }
 		private static BookCollection Shelf;
 		private static GameObject MyOfficeDesk;
 		private static List<Book> AllBooks = new List<Book>();
-		private static AvatarsCollection AvatarsCollection;
+		public static AvatarsCollection AvatarsCollection { get; private set; }
+		public static TaskBoard TaskBoard { get; private set; }
 
 		public static void AddGameObject(GameObject gameObject, GameObjectEnum type)
 		{
@@ -73,6 +76,10 @@ namespace Assets.Scripts
 					AvatarsCollection = new AvatarsCollection(Office.transform.Find("Avatars").gameObject);
 					var shelf = Office.transform.Find("MyOffice").Find("Shelf_05").Find("Shelf").gameObject;
 					Shelf = new BookCollection(shelf);
+					TaskBoard = new TaskBoard(Office.transform.Find("MyOffice").Find("WhiteBoard").Find("TaskBoard").gameObject);
+					break;
+				case GameObjectEnum.Task:
+					Task = gameObject;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type), type, null);
@@ -91,6 +98,12 @@ namespace Assets.Scripts
 			newBook.SetCommand(command, parameters);
 			Shelf.AddBook(newBook);
 			AllBooks.Add(newBook);
+		}
+
+		public static void AddTaskToWhiteBoard(GameObject newTask, Command command)
+		{
+			var task = new Task(newTask, command);
+			TaskBoard.AddTask(task);
 		}
 
 		public static void AddResourceBook(GameObject newBookObject)
@@ -112,6 +125,14 @@ namespace Assets.Scripts
 			if (book == null)
 				book = AllBooks.SingleOrDefault(b => b.GameObject == gameObject.transform.parent.parent.gameObject);
 			return book;
+		}
+
+		public static Task GetTaskByGameObject(GameObject gameObject)
+		{
+			var task = TaskBoard.Tasks.SingleOrDefault(t => t.GameObject == gameObject);
+			if (task == null)
+				task = TaskBoard.Tasks.SingleOrDefault(t => t.GameObject == gameObject.transform.parent.gameObject);
+			return task;
 		}
 	}
 }
