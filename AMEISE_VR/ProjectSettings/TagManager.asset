@@ -19,6 +19,7 @@ TagManager:
   - Book
   - Avatar
   - Task
+  - PlayerBoard
   layers:
   - Default
   - TransparentFX

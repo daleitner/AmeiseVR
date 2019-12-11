@@ -21,6 +21,8 @@ namespace Assets.Scripts
 
 		public List<Task> Tasks { get; }
 
+		public Task SelectedTask { get; private set; }
+
 		public void AddTask(Task task)
 		{
 			task.SetParent(GameObject);
@@ -28,6 +30,19 @@ namespace Assets.Scripts
 			task.MoveTo(position);
 			task.Rotate(new Quaternion(0,0,0,0));
 			Tasks.Add(task);
+		}
+
+		public void SelectTask(Task task)
+		{
+			foreach (var currentTask in Tasks)
+			{
+				if(currentTask == task)
+					currentTask.SetSelection(true);
+				else
+					currentTask.SetSelection(false);
+			}
+
+			SelectedTask = task;
 		}
 
 		private Vector3 CalculatePosition(int index)

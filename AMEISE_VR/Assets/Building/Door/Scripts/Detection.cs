@@ -36,6 +36,7 @@ public class Detection : MonoBehaviour
 	public GameObject Office;
 	public GameObject Avatar;
 	public GameObject Task;
+	public GameObject PlayerBoard;
 
 	private GameConfiguration config;
 
@@ -76,6 +77,7 @@ public class Detection : MonoBehaviour
 		GameObjectCollection.AddGameObject(Avatar, GameObjectEnum.Avatar);
 		GameObjectCollection.AddGameObject(Office, GameObjectEnum.Office);
 		GameObjectCollection.AddGameObject(Task, GameObjectEnum.Task);
+		GameObjectCollection.AddGameObject(PlayerBoard, GameObjectEnum.PlayerBoard);
 		config = new GameConfiguration();
 	}
 
@@ -173,10 +175,39 @@ public class Detection : MonoBehaviour
 			else if (hit.collider.tag == "Task")
             {
 	            InReach = true;
-	            if (Input.GetMouseButtonDown(1))
+	            if (Input.GetMouseButtonDown(0))
+	            {
+					var task = GameObjectCollection.GetTaskByGameObject(hit.transform.gameObject);
+					var playerBoards = GameObjectCollection.PlayerBoardCollection;
+					var playerBoard = playerBoards.PlayerBoards.SingleOrDefault(p => p.Tasks.Contains(task));
+					if (playerBoard != null)
+					{
+						playerBoard.RemoveTask(task);
+						Destroy(task.GameObject);
+					}
+					else
+					{
+						GameObjectCollection.TaskBoard.SelectTask(task);
+					}
+	            }
+	            else if (Input.GetMouseButtonDown(1))
 	            {
 		            var task = GameObjectCollection.GetTaskByGameObject(hit.transform.gameObject);
 					task.ChangeParameter();
+	            }
+            }
+            else if(hit.collider.tag == "PlayerBoard")
+            {
+	            if (Input.GetMouseButtonDown(0))
+	            {
+		            var selectedTask = GameObjectCollection.TaskBoard.SelectedTask;
+		            if (selectedTask != null)
+		            {
+			            var playerBoard = GameObjectCollection.GetPlayerBoardByGameObject(hit.transform.gameObject);
+			            var newTaskGameObject = Instantiate(GameObjectCollection.Task);
+			            var newTask = selectedTask.Clone(newTaskGameObject);
+						playerBoard.AddTask(newTask);
+		            }
 	            }
             }
 			else

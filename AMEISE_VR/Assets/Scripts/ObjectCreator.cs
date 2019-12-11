@@ -23,10 +23,14 @@ public class ObjectCreator : MonoBehaviour
 	    {
 		    _booksCreated = true;
 		    var bookTemplate = GameObjectCollection.Book;
+		    var playerBoardTemplate = GameObjectCollection.PlayerBoard;
 		    foreach (var employee in KnowledgeBase.Instance.Employees)
 		    {
 			    var gameObject = Instantiate(bookTemplate);
 			    GameObjectCollection.AddBookToShelf(gameObject, employee, KnowledgeBase.Instance.DeveloperInformationCommand, new []{employee});
+
+			    var newPlayerBoard = Instantiate(playerBoardTemplate);
+				GameObjectCollection.AddPlayerBoardToWhiteBoard(newPlayerBoard, employee);
 		    }
 
 		    var resourceBook = Instantiate(bookTemplate);

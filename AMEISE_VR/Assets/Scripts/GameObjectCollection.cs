@@ -17,8 +17,10 @@ namespace Assets.Scripts
 		CommandControl,
 		Office,
 		Avatar,
-		Task
+		Task,
+		PlayerBoard
 	}
+
 	public static class GameObjectCollection
 	{
 		private static GameObject FPSController;
@@ -34,11 +36,13 @@ namespace Assets.Scripts
 		public static GameObject Book { get; private set; }
 		public static GameObject Task { get; private set; }
 		public static GameObject Avatar { get; private set; }
+		public static GameObject PlayerBoard { get; private set; }
 		private static BookCollection Shelf;
 		private static GameObject MyOfficeDesk;
 		private static List<Book> AllBooks = new List<Book>();
 		public static AvatarsCollection AvatarsCollection { get; private set; }
 		public static TaskBoard TaskBoard { get; private set; }
+		public static PlayerBoardCollection PlayerBoardCollection { get; private set; }
 
 		public static void AddGameObject(GameObject gameObject, GameObjectEnum type)
 		{
@@ -76,10 +80,15 @@ namespace Assets.Scripts
 					AvatarsCollection = new AvatarsCollection(Office.transform.Find("Avatars").gameObject);
 					var shelf = Office.transform.Find("MyOffice").Find("Shelf_05").Find("Shelf").gameObject;
 					Shelf = new BookCollection(shelf);
-					TaskBoard = new TaskBoard(Office.transform.Find("MyOffice").Find("WhiteBoard").Find("TaskBoard").gameObject);
+					var whiteBoard = Office.transform.Find("MyOffice").Find("WhiteBoard");
+					PlayerBoardCollection = new PlayerBoardCollection(whiteBoard.gameObject);
+					TaskBoard = new TaskBoard(whiteBoard.Find("TaskBoard").gameObject);
 					break;
 				case GameObjectEnum.Task:
 					Task = gameObject;
+					break;
+				case GameObjectEnum.PlayerBoard:
+					PlayerBoard = gameObject;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type), type, null);
@@ -106,6 +115,12 @@ namespace Assets.Scripts
 			TaskBoard.AddTask(task);
 		}
 
+		public static void AddPlayerBoardToWhiteBoard(GameObject newPlayerboard, string employee)
+		{
+			var playerBoard = new PlayerBoard(newPlayerboard, employee);
+			PlayerBoardCollection.AddPlayerBoard(playerBoard);
+		}
+
 		public static void AddResourceBook(GameObject newBookObject)
 		{
 			var newBook = new Book(newBookObject, MessageListener);
@@ -129,10 +144,32 @@ namespace Assets.Scripts
 
 		public static Task GetTaskByGameObject(GameObject gameObject)
 		{
-			var task = TaskBoard.Tasks.SingleOrDefault(t => t.GameObject == gameObject);
+			var allTasks = new List<Task>();
+			foreach (var currentTask in TaskBoard.Tasks)
+			{
+				allTasks.Add(currentTask);
+			}
+
+			foreach (var playerBoard in PlayerBoardCollection.PlayerBoards)
+			{
+				foreach (var currentTask in playerBoard.Tasks)
+				{
+					allTasks.Add(currentTask);
+				}
+			}
+
+			var task = allTasks.SingleOrDefault(t => t.GameObject == gameObject);
 			if (task == null)
-				task = TaskBoard.Tasks.SingleOrDefault(t => t.GameObject == gameObject.transform.parent.gameObject);
+				task = allTasks.SingleOrDefault(t => t.GameObject == gameObject.transform.parent.gameObject);
 			return task;
+		}
+
+		public static PlayerBoard GetPlayerBoardByGameObject(GameObject gameObject)
+		{
+			var board = PlayerBoardCollection.PlayerBoards.SingleOrDefault(b => b.GameObject == gameObject);
+			if (board == null)
+				board = PlayerBoardCollection.PlayerBoards.SingleOrDefault(b => b.GameObject == gameObject.transform.parent.gameObject);
+			return board;
 		}
 	}
 }
