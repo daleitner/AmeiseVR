@@ -15,11 +15,13 @@ namespace Assets.Scripts
 		private readonly TextMeshPro _text;
 		private readonly Material _material;
 		private int _currentParameterIndex = -1;
-		private List<string> _variableParameterValues;
+		private readonly List<string> _variableParameterValues;
+		private int _employees;
 		public Task(GameObject task, Command command)
 			:base(task)
 		{
 			Command = command;
+			_employees = Command.Parameters.Count(p => p.Type == KnowledgeBase.EmployeeType);
 			var variableParameterType = Command.Parameters.Select(p => p.Type).FirstOrDefault(t => t != KnowledgeBase.EmployeeType);
 			if (!string.IsNullOrEmpty(variableParameterType))
 			{
@@ -32,6 +34,7 @@ namespace Assets.Scripts
 
 			_material = task.transform.Find("Paper").GetComponent<Renderer>().material;
 			IsSelected = false;
+			RelatedTasks = new List<Task>();
 		}
 		
 		public Command Command { get; }
@@ -43,6 +46,8 @@ namespace Assets.Scripts
 		public bool IsSelected { get; private set; }
 
 		public string CurrentVariableParameter => _variableParameterValues?[_currentParameterIndex];
+
+		public List<Task> RelatedTasks { get; }
 
 		public void ChangeParameter()
 		{
@@ -90,10 +95,19 @@ namespace Assets.Scripts
 			_material.color = IncompleteColor;
 		}
 
-		public void SetComplete()
+		private void SetComplete()
 		{
 			IsIncomplete = false;
 			_material.color = DefaultColor;
+		}
+
+		public void AddRelatedTasks(List<Task> newRelatedTasks)
+		{
+			RelatedTasks.AddRange(newRelatedTasks);
+			if(RelatedTasks.Count + 1 ==_employees)
+				SetComplete();
+			else 
+				SetIncomplete();
 		}
 
 		private void SetText()
@@ -101,6 +115,17 @@ namespace Assets.Scripts
 			_text.text = Command.Name;
 			if (_variableParameterValues != null)
 				_text.text += " " + CurrentVariableParameter;
+			if (_employees > 1)
+				_text.text += " (" + _employees + ")";
+		}
+
+		public void RemoveRelatedTask(Task task)
+		{
+			RelatedTasks.Remove(task);
+			if (RelatedTasks.Count + 1 == _employees)
+				SetComplete();
+			else
+				SetIncomplete();
 		}
 	}
 }

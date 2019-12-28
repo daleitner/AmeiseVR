@@ -183,6 +183,7 @@ public class Detection : MonoBehaviour
 					if (playerBoard != null)
 					{
 						playerBoard.RemoveTask(task);
+						task.RelatedTasks.ForEach(t => t.RemoveRelatedTask(task));
 						Destroy(task.GameObject);
 					}
 					else
@@ -193,7 +194,8 @@ public class Detection : MonoBehaviour
 	            else if (Input.GetMouseButtonDown(1))
 	            {
 		            var task = GameObjectCollection.GetTaskByGameObject(hit.transform.gameObject);
-					task.ChangeParameter();
+		            task.ChangeParameter();
+					task.RelatedTasks.ForEach(t => t.ChangeParameter());
 	            }
             }
             else if(hit.collider.tag == "PlayerBoard")
@@ -204,10 +206,10 @@ public class Detection : MonoBehaviour
 		            var selectedTask = GameObjectCollection.TaskBoard.SelectedTask;
 		            if (selectedTask != null)
 		            {
-			            var playerBoard = GameObjectCollection.GetPlayerBoardByGameObject(hit.transform.gameObject);
+			            var playerBoards = GameObjectCollection.PlayerBoardCollection;
 			            var newTaskGameObject = Instantiate(GameObjectCollection.Task);
 			            var newTask = selectedTask.Clone(newTaskGameObject);
-						playerBoard.AddTask(newTask);
+						playerBoards.AddTask(newTask, hit.transform.gameObject);
 		            }
 	            }
             }

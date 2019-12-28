@@ -45,6 +45,35 @@ namespace Assets.Scripts
 			PlayerBoards.Add(newPlayerBoard);
 		}
 
+		public void AddTask(Task newTask, GameObject playerBoardGameObject)
+		{
+			var playerBoard = GetPlayerBoardByGameObject(playerBoardGameObject);
+			playerBoard.AddTask(newTask);
+			if (newTask.Command.Parameters.Count(p => p.Type == KnowledgeBase.EmployeeType) == 1)
+				return;
+
+			newTask.SetIncomplete();
+			var incompleteTasks = GetIncompleteTasks(playerBoard);
+			var relatedTasks = incompleteTasks.Where(x => x.Command == newTask.Command).ToList();
+			if (!relatedTasks.Any())
+				return;
+			
+			newTask.AddRelatedTasks(relatedTasks);
+			relatedTasks.ForEach(rt =>rt.AddRelatedTasks(new List<Task>{newTask}));
+		}
+
+		private List<Task> GetIncompleteTasks(PlayerBoard skippedPlayerBoard)
+		{
+			var tasks = new List<Task>();
+			foreach (var playerBoard in PlayerBoards)
+			{
+				if(playerBoard == skippedPlayerBoard)
+					continue;
+				tasks.AddRange(playerBoard.Tasks.Where(x => x.IsIncomplete).ToList());
+			}
+			return tasks;
+		}
+
 		public void SendCommands()
 		{
 			if (_isBusy)
@@ -127,6 +156,14 @@ namespace Assets.Scripts
 		{
 			var x = first_x + diff_x * PlayerBoards.Count;
 			return new Vector3(x, y, z);
+		}
+
+		private PlayerBoard GetPlayerBoardByGameObject(GameObject gameObject)
+		{
+			var board = PlayerBoards.SingleOrDefault(b => b.GameObject == gameObject);
+			if (board == null)
+				board = PlayerBoards.SingleOrDefault(b => b.GameObject == gameObject.transform.parent.gameObject);
+			return board;
 		}
 	}
 }

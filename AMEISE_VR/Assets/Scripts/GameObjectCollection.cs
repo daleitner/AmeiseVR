@@ -164,12 +164,7 @@ namespace Assets.Scripts
 			return task;
 		}
 
-		public static PlayerBoard GetPlayerBoardByGameObject(GameObject gameObject)
 		{
-			var board = PlayerBoardCollection.PlayerBoards.SingleOrDefault(b => b.GameObject == gameObject);
-			if (board == null)
-				board = PlayerBoardCollection.PlayerBoards.SingleOrDefault(b => b.GameObject == gameObject.transform.parent.gameObject);
-			return board;
 		}
 	}
 }
