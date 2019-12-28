@@ -81,7 +81,7 @@ namespace Assets.Scripts
 					var shelf = Office.transform.Find("MyOffice").Find("Shelf_05").Find("Shelf").gameObject;
 					Shelf = new BookCollection(shelf);
 					var whiteBoard = Office.transform.Find("MyOffice").Find("WhiteBoard");
-					PlayerBoardCollection = new PlayerBoardCollection(whiteBoard.gameObject);
+					PlayerBoardCollection = new PlayerBoardCollection(whiteBoard.gameObject, MessageListener);
 					TaskBoard = new TaskBoard(whiteBoard.Find("TaskBoard").gameObject);
 					break;
 				case GameObjectEnum.Task:

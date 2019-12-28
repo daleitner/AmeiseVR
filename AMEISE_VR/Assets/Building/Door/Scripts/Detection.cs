@@ -198,6 +198,7 @@ public class Detection : MonoBehaviour
             }
             else if(hit.collider.tag == "PlayerBoard")
             {
+	            InReach = true;
 	            if (Input.GetMouseButtonDown(0))
 	            {
 		            var selectedTask = GameObjectCollection.TaskBoard.SelectedTask;
@@ -208,6 +209,14 @@ public class Detection : MonoBehaviour
 			            var newTask = selectedTask.Clone(newTaskGameObject);
 						playerBoard.AddTask(newTask);
 		            }
+	            }
+            }
+			else if (hit.collider.tag == "SendCommand")
+            {
+	            InReach = true;
+	            if (Input.GetMouseButtonDown(0))
+	            {
+		            GameObjectCollection.PlayerBoardCollection.SendCommands();
 	            }
             }
 			else

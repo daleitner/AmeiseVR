@@ -37,9 +37,12 @@ namespace Assets.Scripts
 		public Command Command { get; }
 
 		public bool IsSent { get; private set; }
+		public bool IsError { get; private set; }
 		public bool IsIncomplete { get; private set; }
 
 		public bool IsSelected { get; private set; }
+
+		public string CurrentVariableParameter => _variableParameterValues?[_currentParameterIndex];
 
 		public void ChangeParameter()
 		{
@@ -77,6 +80,7 @@ namespace Assets.Scripts
 		public void TaskSentError()
 		{
 			IsSent = true;
+			IsError = true;
 			_material.color = ErrorColor;
 		}
 
@@ -96,7 +100,7 @@ namespace Assets.Scripts
 		{
 			_text.text = Command.Name;
 			if (_variableParameterValues != null)
-				_text.text += " " + _variableParameterValues[_currentParameterIndex];
+				_text.text += " " + CurrentVariableParameter;
 		}
 	}
 }
