@@ -163,8 +163,5 @@ namespace Assets.Scripts
 				task = allTasks.SingleOrDefault(t => t.GameObject == gameObject.transform.parent.gameObject);
 			return task;
 		}
-
-		{
-		}
 	}
 }

@@ -84,15 +84,30 @@ namespace Assets.Scripts
 			_tasks = new List<Task>();
 			foreach (var playerBoard in PlayerBoards)
 			{
-				foreach (var task in playerBoard.Tasks.Where(x => !x.IsSent))
+				foreach (var task in playerBoard.Tasks.Where(x => !x.IsSent && !x.IsIncomplete))
 				{
 					//ClientConnection.GetInstance().SendCommand(task.Command, parameters.ToArray());
 					var command = new CommandInstance(task.Command);
 					var parameter = command.GetNextEmptyParameter();
+					var employee = 0;
 					while (parameter != null)
 					{
 						if (parameter.Parameter.Type == KnowledgeBase.EmployeeType)
-							parameter.Value = playerBoard.Name;
+						{
+							if (employee == 0)
+							{
+								parameter.Value = playerBoard.Name;
+							}
+							else
+							{
+								var relatedPlayerBoard = PlayerBoards.Single(x =>
+									x.Tasks.Contains(task.RelatedTasks[employee - 1]));
+								parameter.Value = relatedPlayerBoard.Name;
+								task.RelatedTasks[employee - 1].TaskSentSuccessful();
+							}
+
+							employee++;
+						}
 						else
 							parameter.Value = task.CurrentVariableParameter;
 						parameter = command.GetNextEmptyParameter();
