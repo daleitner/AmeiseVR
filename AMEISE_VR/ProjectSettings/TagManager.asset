@@ -20,6 +20,8 @@ TagManager:
   - Avatar
   - Task
   - PlayerBoard
+  - BookNext
+  - BookBack
   layers:
   - Default
   - TransparentFX

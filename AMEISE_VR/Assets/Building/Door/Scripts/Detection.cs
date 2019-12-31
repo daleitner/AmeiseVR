@@ -146,31 +146,44 @@ public class Detection : MonoBehaviour
             {
 	            InReach = true;
 
-	            if (Input.GetMouseButton(0))
+	            if (Input.GetMouseButtonDown(0))
 	            {
-		            if (!_mouseClicked)
-		            {
-			            _mouseClicked = true;
 			            var book = GameObjectCollection.GetBookByGameObject(hit.transform.gameObject);
 			            if (book.IsOpen())
 				            book.Close();
 			            else if (book.IsClosed())
 				            book.Open();
-		            }
 	            }
-	            else if (Input.GetMouseButton(1))
+	            else if (Input.GetMouseButtonDown(1))
 	            {
 		            var book = GameObjectCollection.GetBookByGameObject(hit.transform.gameObject);
-		            if (!_mouseClicked && book.BelongsToAShelf)
+		            if (book.BelongsToAShelf)
 		            {
-			            _mouseClicked = true;
 			            book.TriggerShelfMove();
 					}
 	            }
-	            else
+            }
+            else if (hit.collider.tag == "BookNext")
+            {
+	            InReach = true;
+
+	            if (Input.GetMouseButtonDown(0))
 	            {
-		            _mouseClicked = false;
+		            var book = GameObjectCollection.GetBookByGameObject(hit.transform.gameObject);
+			        book.NextPage();
 	            }
+	           
+            }
+            else if (hit.collider.tag == "BookBack")
+            {
+	            InReach = true;
+
+	            if (Input.GetMouseButtonDown(0))
+	            {
+		            var book = GameObjectCollection.GetBookByGameObject(hit.transform.gameObject);
+		            book.PreviousPage();
+	            }
+
             }
 			else if (hit.collider.tag == "Task")
             {

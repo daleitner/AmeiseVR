@@ -114,7 +114,7 @@ namespace Assets.Scripts
 		{
 			_text.text = Command.Name;
 			if (_variableParameterValues != null)
-				_text.text += " " + CurrentVariableParameter;
+				_text.text += " [" + CurrentVariableParameter + "]";
 			if (_employees > 1)
 				_text.text += " (" + _employees + ")";
 		}

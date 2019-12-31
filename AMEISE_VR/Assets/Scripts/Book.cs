@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Boo.Lang;
+using TMPro;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 
@@ -6,20 +7,30 @@ namespace Assets.Scripts
 {
 	public class Book : GameObjectModelBase
 	{
+		private const int PageSize = 100;
 		private readonly Animator _anim;
 		private readonly MessageListener _listener;
 		private readonly TextMeshPro _text;
 		private readonly TextMeshPro _title;
+		private readonly GameObject _nextButton;
+		private readonly GameObject _backButton;
 		private Command _command;
 		private string[] _parameters;
+		private List<string> _pages;
+		private int _currentPage = 0;
 		public Book(GameObject book, MessageListener listener)
 			:base(book)
 		{
 			_anim = book.GetComponent<Animator>();
 			_title = book.transform.Find("BookFront").Find("BookTitleField").Find("BookTitle").GetComponent<TextMeshPro>();
 			_text = book.transform.Find("BookSheet").Find("Content").GetComponent<TextMeshPro>();
+			_nextButton = book.transform.Find("NextField").gameObject;
+			_backButton = book.transform.Find("BackField").gameObject;
+			_nextButton.SetActive(false);
+			_backButton.SetActive(false);
 			_listener = listener;
 			_anim.SetTrigger("Take");
+			_pages = new List<string>();
 		}
 		
 		public bool IsOpen()
@@ -60,7 +71,32 @@ namespace Assets.Scripts
 
 		public void SetText(string text)
 		{
-			_text.text = text;
+			FillPages(text);
+			_nextButton.SetActive(_pages.Count > 1);
+			_backButton.SetActive(false);
+			SetText();
+		}
+
+		public void NextPage()
+		{
+			if (_currentPage < _pages.Count - 1)
+			{
+				_currentPage++;
+				_backButton.SetActive(true);
+				_nextButton.SetActive(_currentPage < _pages.Count - 1);
+				SetText();
+			}
+		}
+
+		public void PreviousPage()
+		{
+			if (_currentPage > 0)
+			{
+				_currentPage--;
+				_backButton.SetActive(_currentPage > 0);
+				_nextButton.SetActive(true);
+				SetText();
+			}
 		}
 
 		public void SetTitle(string title)
@@ -108,6 +144,26 @@ namespace Assets.Scripts
 			IsInShelf = true;
 			BelongsToAShelf = true;
 			_anim.SetTrigger("Put");
+		}
+
+		private void FillPages(string text)
+		{
+			_pages = new List<string>();
+			var pageCount = text.Length / PageSize;
+			for (int i = 0; i < pageCount; i++)
+			{
+				_pages.Add(text.Substring(i * PageSize, PageSize));
+			}
+
+			var lastPageSize = text.Length % PageSize;
+			if (lastPageSize > 0)
+				_pages.Add(text.Substring(pageCount * PageSize));
+			_currentPage = 0;
+		}
+
+		private void SetText()
+		{
+			_text.text = _pages[_currentPage];
 		}
 	}
 }
