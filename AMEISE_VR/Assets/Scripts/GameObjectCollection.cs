@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityStandardAssets.Characters.FirstPerson;
 
@@ -17,7 +18,8 @@ namespace Assets.Scripts
 		Office,
 		Avatar,
 		Task,
-		PlayerBoard
+		PlayerBoard,
+		LoginText
 	}
 
 	public static class GameObjectCollection
@@ -38,6 +40,7 @@ namespace Assets.Scripts
 		private static BookCollection Shelf;
 		private static GameObject MyOfficeDesk;
 		private static List<Book> AllBooks = new List<Book>();
+		private static TextMeshPro LoginText;
 		public static AvatarsCollection AvatarsCollection { get; private set; }
 		public static TaskBoard TaskBoard { get; private set; }
 		public static PlayerBoardCollection PlayerBoardCollection { get; private set; }
@@ -85,6 +88,9 @@ namespace Assets.Scripts
 					break;
 				case GameObjectEnum.PlayerBoard:
 					PlayerBoard = gameObject;
+					break;
+				case GameObjectEnum.LoginText:
+					LoginText = gameObject.GetComponent<TextMeshPro>();
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type), type, null);
@@ -170,6 +176,11 @@ namespace Assets.Scripts
 			if (task == null)
 				task = allTasks.SingleOrDefault(t => t.GameObject == gameObject.transform.parent.gameObject);
 			return task;
+		}
+
+		public static void SetLoginText(string text)
+		{
+			LoginText.text = text;
 		}
 	}
 }

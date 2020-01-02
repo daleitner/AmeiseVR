@@ -79,6 +79,7 @@ public class GameConfiguration
 				games.Add(game);
 			}
 			_gameSelectionDialog.AddListItems(games);
+			GameObjectCollection.SetLoginText("Loading...");
 		}
 		else if (messageObject.Type == MessageTypeEnum.ContinueGame)
 		{
@@ -140,6 +141,7 @@ public class GameConfiguration
 			var str = "";
 			commands.ForEach(x => str += x + "\r\n");
 			Debug.Log("commands:\r\n" + str);
+			GameObjectCollection.SetLoginText("Login Succeeded");
 		}
 	}
 }

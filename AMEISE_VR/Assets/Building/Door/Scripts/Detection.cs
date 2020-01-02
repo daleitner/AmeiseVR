@@ -31,6 +31,7 @@ public class Detection : MonoBehaviour
 	public GameObject LoginFailedControl;
 	public GameObject FPSController;
 	public GameObject CommandControl;
+	public GameObject LoginText;
 	public GameObject Book;
 	public GameObject Office;
 	public GameObject Avatar;
@@ -76,6 +77,7 @@ public class Detection : MonoBehaviour
 		GameObjectCollection.AddGameObject(Office, GameObjectEnum.Office);
 		GameObjectCollection.AddGameObject(Task, GameObjectEnum.Task);
 		GameObjectCollection.AddGameObject(PlayerBoard, GameObjectEnum.PlayerBoard);
+		GameObjectCollection.AddGameObject(LoginText, GameObjectEnum.LoginText);
 		var historyBook = Instantiate(Book);
 		GameObjectCollection.AddHistoryBook(historyBook);
 		config = new GameConfiguration();
@@ -114,13 +116,13 @@ public class Detection : MonoBehaviour
                 // Get access to the 'Door' script attached to the object that was hit
                 Door dooropening = Door.GetComponent<Door>();
 
-                if (Input.GetMouseButton(0))
+                if (Input.GetMouseButtonDown(0))
                 {
                     // Open/close the door by running the 'Open' function found in the 'Door' script
                     if (dooropening.RotationPending == false) StartCoroutine(hit.collider.GetComponent<Door>().Move());
                 }
             }
-	        else if (hit.collider.tag == "Login")
+	        else if (hit.collider.tag == "Login" && !config.LoggedIn)
 	        {
 		        InReach = true;
 
@@ -132,7 +134,7 @@ public class Detection : MonoBehaviour
 			        TextPrefabLoginInstance.transform.SetParent(transform, true); // Make the player the parent object of the text element
 		        }
 
-		        if (Input.GetMouseButton(0) && !LoginControl.activeSelf && !config.LoggedIn)
+		        if (Input.GetMouseButtonDown(0) && !LoginControl.activeSelf && !LoginFailedControl.activeSelf)
 		        {
 					config.OpenLoginDialog();
 		        }
