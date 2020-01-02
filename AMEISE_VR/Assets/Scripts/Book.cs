@@ -1,4 +1,5 @@
-﻿using Boo.Lang;
+﻿using System.Linq;
+using Boo.Lang;
 using TMPro;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
@@ -7,7 +8,8 @@ namespace Assets.Scripts
 {
 	public class Book : GameObjectModelBase
 	{
-		private const int PageSize = 100;
+		private const int LineLength = 26;
+		private const int PageSize = 286;
 		private readonly Animator _anim;
 		private readonly MessageListener _listener;
 		private readonly TextMeshPro _text;
@@ -17,10 +19,13 @@ namespace Assets.Scripts
 		private Command _command;
 		private string[] _parameters;
 		private List<string> _pages;
+		private string _fullText = string.Empty;
 		private int _currentPage = 0;
-		public Book(GameObject book, MessageListener listener)
+		private bool _isHistoryBook;
+		public Book(GameObject book, MessageListener listener, bool isHistoryBook = false)
 			:base(book)
 		{
+			_isHistoryBook = isHistoryBook;
 			_anim = book.GetComponent<Animator>();
 			_title = book.transform.Find("BookFront").Find("BookTitleField").Find("BookTitle").GetComponent<TextMeshPro>();
 			_text = book.transform.Find("BookSheet").Find("Content").GetComponent<TextMeshPro>();
@@ -48,9 +53,12 @@ namespace Assets.Scripts
 
 		public void Open()
 		{
-			_listener.ReceivedMessage += _listener_ReceivedMessage;
-			ClientConnection.GetInstance().SendCommand(_command, _parameters);
-			SetText("Loading...");
+			if (_command != null)
+			{
+				_listener.ReceivedMessage += _listener_ReceivedMessage;
+				ClientConnection.GetInstance().SendCommand(_command, _parameters);
+				SetText("Loading...");
+			}
 
 			_anim.SetTrigger("Open");
 		}
@@ -71,10 +79,25 @@ namespace Assets.Scripts
 
 		public void SetText(string text)
 		{
+			_fullText = text;
 			FillPages(text);
-			_nextButton.SetActive(_pages.Count > 1);
-			_backButton.SetActive(false);
+			if (_isHistoryBook)
+			{
+				_nextButton.SetActive(false);
+				_backButton.SetActive(_pages.Count > 1);
+			}
+			else
+			{
+				_nextButton.SetActive(_pages.Count > 1);
+				_backButton.SetActive(false);
+			}
+
 			SetText();
+		}
+
+		public void AppendText(string text)
+		{
+			SetText(_fullText + " " + text);
 		}
 
 		public void NextPage()
@@ -149,16 +172,32 @@ namespace Assets.Scripts
 		private void FillPages(string text)
 		{
 			_pages = new List<string>();
-			var pageCount = text.Length / PageSize;
-			for (int i = 0; i < pageCount; i++)
+			
+			var currentPage = "";
+			var count = 0;
+			for (int i = 0; i < text.Length; i++)
 			{
-				_pages.Add(text.Substring(i * PageSize, PageSize));
-			}
+				currentPage += text[i];
+				if (text[i] == '\n')
+					count += LineLength;
+				else
+					count++;
 
-			var lastPageSize = text.Length % PageSize;
-			if (lastPageSize > 0)
-				_pages.Add(text.Substring(pageCount * PageSize));
-			_currentPage = 0;
+				if (count >= PageSize)
+				{
+					var lastWord = currentPage.Split(' ').Last();
+					
+					_pages.Add(currentPage.Substring(0, currentPage.Length - lastWord.Length - 1).Trim());
+					currentPage = lastWord;
+					count = lastWord.Length;
+				}
+			}
+			if(count > 0)
+				_pages.Add(currentPage);
+			if (_isHistoryBook)
+				_currentPage = _pages.Count - 1;
+			else
+				_currentPage = 0;
 		}
 
 		private void SetText()

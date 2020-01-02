@@ -8,7 +8,6 @@ public class CommandDialog
 {
 	private GameObject _commandControl;
 	private FirstPersonController _player;
-	private HistoryDialog _historyDialog;
 	private InputField _command;
 	private InputField _param1;
 	private InputField _param2;
@@ -17,11 +16,10 @@ public class CommandDialog
 	private ListBox _lbEmployees;
 
 	private List<Command> _commands;
-	public CommandDialog(GameObject commandControl, FirstPersonController player, HistoryDialog historyDialog)
+	public CommandDialog(GameObject commandControl, FirstPersonController player)
 	{
 		_commandControl = commandControl;
 		_player = player;
-		_historyDialog = historyDialog;
 		_command = _commandControl.transform.Find("TbCommand").gameObject.GetComponent<InputField>();
 		_param1 = _commandControl.transform.Find("TbParam1").gameObject.GetComponent<InputField>();
 		_param2 = _commandControl.transform.Find("TbParam2").gameObject.GetComponent<InputField>();

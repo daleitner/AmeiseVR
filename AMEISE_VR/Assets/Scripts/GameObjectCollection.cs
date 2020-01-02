@@ -13,7 +13,6 @@ namespace Assets.Scripts
 		LoginFailedControl,
 		FPSController,
 		Book,
-		HistoryControl,
 		CommandControl,
 		Office,
 		Avatar,
@@ -29,7 +28,6 @@ namespace Assets.Scripts
 		public static LoginDialog LoginDialog { get; private set; }
 		public static LoginFailedDialog LoginFailedDialog { get; private set; }
 		public static GameSelectionDialog GameSelectionDialog { get; private set; }
-		public static HistoryDialog HistoryDialog { get; private set; }
 		public static CommandDialog CommandDialog { get; private set; }
 		public static MessageListener MessageListener { get; private set; }
 		public static GameObject Office { get; set; }
@@ -43,6 +41,7 @@ namespace Assets.Scripts
 		public static AvatarsCollection AvatarsCollection { get; private set; }
 		public static TaskBoard TaskBoard { get; private set; }
 		public static PlayerBoardCollection PlayerBoardCollection { get; private set; }
+		public static Book HistoryBook { get; private set; }
 
 		public static void AddGameObject(GameObject gameObject, GameObjectEnum type)
 		{
@@ -68,11 +67,8 @@ namespace Assets.Scripts
 				case GameObjectEnum.Avatar:
 					Avatar = gameObject;
 					break;
-				case GameObjectEnum.HistoryControl:
-					HistoryDialog = new HistoryDialog(gameObject, player);
-					break;
 				case GameObjectEnum.CommandControl:
-					CommandDialog = new CommandDialog(gameObject, player, HistoryDialog);
+					CommandDialog = new CommandDialog(gameObject, player);
 					break;
 				case GameObjectEnum.Office:
 					Office = gameObject;
@@ -126,10 +122,22 @@ namespace Assets.Scripts
 			var newBook = new Book(newBookObject, MessageListener);
 			newBook.SetTitle("Resources");
 			newBook.SetCommand(KnowledgeBase.Instance.ResourceCommand, new string[]{});
-			newBookObject.transform.parent = MyOfficeDesk.transform;
-			newBook.MoveTo(new Vector3(0.7f, 0.814f, 0.0f));
+			var bookContainer = MyOfficeDesk.transform.Find("BookContainer").gameObject;
+			newBookObject.transform.parent = bookContainer.transform;
+			newBook.MoveTo(new Vector3(-0.2f, 0.0f, -0.3f));
 			newBook.Rotate(Quaternion.Euler(0.0f, 0.0f, 0.0f));
 			AllBooks.Add(newBook);
+		}
+
+		public static void AddHistoryBook(GameObject newBookObject)
+		{
+			HistoryBook = new Book(newBookObject, MessageListener, true);
+			HistoryBook.SetTitle("History");
+			var bookContainer = MyOfficeDesk.transform.Find("BookContainer").gameObject;
+			newBookObject.transform.parent = bookContainer.transform;
+			HistoryBook.MoveTo(new Vector3(-1.6f, 0.0f, -0.3f));
+			HistoryBook.Rotate(Quaternion.Euler(0.0f, 0.0f, 0.0f));
+			AllBooks.Add(HistoryBook);
 		}
 
 		public static Book GetBookByGameObject(GameObject gameObject)

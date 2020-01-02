@@ -30,7 +30,6 @@ public class Detection : MonoBehaviour
 	public GameObject GameSelectionControl;
 	public GameObject LoginFailedControl;
 	public GameObject FPSController;
-	public GameObject HistoryControl;
 	public GameObject CommandControl;
 	public GameObject Book;
 	public GameObject Office;
@@ -71,13 +70,14 @@ public class Detection : MonoBehaviour
 		GameObjectCollection.AddGameObject(LoginControl, GameObjectEnum.LoginControl);
 		GameObjectCollection.AddGameObject(GameSelectionControl, GameObjectEnum.GameSelectionControl);
 		GameObjectCollection.AddGameObject(LoginFailedControl, GameObjectEnum.LoginFailedControl);
-		GameObjectCollection.AddGameObject(HistoryControl, GameObjectEnum.HistoryControl);
 		GameObjectCollection.AddGameObject(CommandControl, GameObjectEnum.CommandControl);
 		GameObjectCollection.AddGameObject(Book, GameObjectEnum.Book);
 		GameObjectCollection.AddGameObject(Avatar, GameObjectEnum.Avatar);
 		GameObjectCollection.AddGameObject(Office, GameObjectEnum.Office);
 		GameObjectCollection.AddGameObject(Task, GameObjectEnum.Task);
 		GameObjectCollection.AddGameObject(PlayerBoard, GameObjectEnum.PlayerBoard);
+		var historyBook = Instantiate(Book);
+		GameObjectCollection.AddHistoryBook(historyBook);
 		config = new GameConfiguration();
 	}
 
@@ -87,13 +87,8 @@ public class Detection : MonoBehaviour
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0F));
 
         RaycastHit hit; // Variable reading information about the collider hit
-		if (Input.GetKey("7"))
-		{
-			config.OpenHistoryDialog();
-		}
-		else if (Input.GetKey(KeyCode.Escape))
-			config.CloseHistoryDialog();
-		else if (Input.GetKey("8"))
+
+		if (Input.GetKey("8"))
 			config.OpenCommandDialog();
 		else if (Input.GetKey("9"))
 			config.CloseCommandDialog();

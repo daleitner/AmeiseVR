@@ -9,7 +9,7 @@ public class GameConfiguration
 	private readonly LoginFailedDialog _loginFailedDialog;
 	private readonly GameSelectionDialog _gameSelectionDialog;
 	private readonly CommandDialog _commandDialog;
-	private readonly HistoryDialog _historyDialog;
+	private readonly Book _historyBook;
 
 	public GameConfiguration()
 	{
@@ -17,8 +17,8 @@ public class GameConfiguration
 		_loginDialog = GameObjectCollection.LoginDialog;
 		_loginFailedDialog = GameObjectCollection.LoginFailedDialog;
 		_gameSelectionDialog = GameObjectCollection.GameSelectionDialog;
-		_historyDialog = GameObjectCollection.HistoryDialog;
 		_commandDialog = GameObjectCollection.CommandDialog;
+		_historyBook = GameObjectCollection.HistoryBook;
 		var messageListener = GameObjectCollection.MessageListener;
 		messageListener.ReceivedMessage += ReceivedMessage;
 
@@ -31,16 +31,6 @@ public class GameConfiguration
 	public void OpenLoginDialog()
 	{
 		_loginDialog.OpenDialog();
-	}
-
-	public void OpenHistoryDialog()
-	{
-		_historyDialog.OpenDialog();
-	}
-
-	public void CloseHistoryDialog()
-	{
-		_historyDialog.CloseDialog();
 	}
 
 	public void OpenCommandDialog()
@@ -102,10 +92,10 @@ public class GameConfiguration
 			var feedbacks = feedback.Split('\n');
 			for (var i = 0; i < feedbacks.Length; i++)
 			{
-				_historyDialog.Add(feedbacks[i]);
 				KnowledgeBase.Instance.AddMessage(feedbacks[i]);
+				_historyBook.AppendText(feedbacks[i]);
 			}
-			_historyDialog.Add("----------------------------------------------------------------------------------------------------");
+			_historyBook.AppendText("\n------------------------\n");
 		}
 		else if (messageObject.Type == MessageTypeEnum.DictionaryAndParameter)
 		{
