@@ -25,7 +25,7 @@ namespace Assets.Scripts
 	public static class GameObjectCollection
 	{
 		private static GameObject FPSController;
-		private static FirstPersonController player;
+		public static FirstPersonController Player { get; private set; }
 		
 		public static LoginDialog LoginDialog { get; private set; }
 		public static LoginFailedDialog LoginFailedDialog { get; private set; }
@@ -51,17 +51,17 @@ namespace Assets.Scripts
 			switch (type)
 			{
 				case GameObjectEnum.LoginControl:
-					LoginDialog = new LoginDialog(gameObject, player);
+					LoginDialog = new LoginDialog(gameObject, Player);
 					break;
 				case GameObjectEnum.GameSelectionControl:
-					GameSelectionDialog = new GameSelectionDialog(gameObject, player);
+					GameSelectionDialog = new GameSelectionDialog(gameObject, Player);
 					break;
 				case GameObjectEnum.LoginFailedControl:
-					LoginFailedDialog = new LoginFailedDialog(gameObject, player);
+					LoginFailedDialog = new LoginFailedDialog(gameObject, Player);
 					break;
 				case GameObjectEnum.FPSController:
 					FPSController = gameObject;
-					player = FPSController.GetComponent<FirstPersonController>();
+					Player = FPSController.GetComponent<FirstPersonController>();
 					MessageListener = FPSController.GetComponent<MessageListener>();
 					break;
 				case GameObjectEnum.Book:
@@ -71,7 +71,7 @@ namespace Assets.Scripts
 					Avatar = gameObject;
 					break;
 				case GameObjectEnum.CommandControl:
-					CommandDialog = new CommandDialog(gameObject, player);
+					CommandDialog = new CommandDialog(gameObject, Player);
 					break;
 				case GameObjectEnum.Office:
 					Office = gameObject;

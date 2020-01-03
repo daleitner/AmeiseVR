@@ -94,7 +94,8 @@ public class Detection : MonoBehaviour
 			config.OpenCommandDialog();
 		else if (Input.GetKey("9"))
 			config.CloseCommandDialog();
-
+		else if (Input.GetKey(KeyCode.X))
+			KnowledgeBase.Instance.ContinueTime = true;
 		// Cast ray from center of the screen towards where the player is looking
 		if (Physics.Raycast(ray, out hit, Reach))
         {

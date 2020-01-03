@@ -30,6 +30,7 @@ public class KnowledgeBase
 	public List<Command> Commands { get; set; }
 	public DateTime Date { get; set; }
 	public bool LoadingCommandsFinished { get; private set; }
+	public bool ContinueTime { get; set; }
 
 	public List<Command> EmployeeCommands
 	{
