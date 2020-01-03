@@ -124,7 +124,7 @@ public class ClientConnection
 					}
 					catch (Exception e)
 					{
-						Debug.Log("Exception occurs");
+						Debug.Log("Exception occurs. " + e.Message);
 					}
 
 					// Print out the received message to the console.

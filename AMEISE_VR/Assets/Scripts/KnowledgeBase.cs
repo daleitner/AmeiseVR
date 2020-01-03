@@ -72,6 +72,10 @@ public class KnowledgeBase
 
 	public void AddMessage(string message)
 	{
+		if (message.Length >= 10 && DateTime.TryParse(message.Substring(0, 10), out var newDate))
+		{
+			Date = newDate;
+		}
 		History.Add(message);
 	}
 

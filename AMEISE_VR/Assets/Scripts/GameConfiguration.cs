@@ -83,9 +83,9 @@ public class GameConfiguration
 		}
 		else if (messageObject.Type == MessageTypeEnum.ContinueGame)
 		{
-			var today = DateTime.Parse(messageObject.GetValueOf("current"));
-			KnowledgeBase.Instance.Date = today;
-			GameObjectCollection.MovePlayer(new Vector3(230.0f, 21.0f, 163.0f));
+			//var today = DateTime.Parse(messageObject.GetValueOf("current"));
+			//KnowledgeBase.Instance.Date = today;
+			//GameObjectCollection.MovePlayer(new Vector3(230.0f, 21.0f, 163.0f));
 		}
 		else if(messageObject.Type == MessageTypeEnum.Feedback || messageObject.Type == MessageTypeEnum.Callback)
 		{
