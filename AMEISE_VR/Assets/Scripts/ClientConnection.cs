@@ -73,6 +73,9 @@ public class ClientConnection
 
 	public void SendCommand(Command command, params string[] parameters)
 	{
+		if(KnowledgeBase.Instance.ProjectDelivered)
+			throw new Exception("Project is already delivered! You cannot send commands any more.");
+
 		if (command.Parameters.Count != parameters.Length)
 			throw new ArgumentException("number of parameters is wrong!");
 		var dict = new Dictionary<string, string>();

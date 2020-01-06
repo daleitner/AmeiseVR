@@ -228,6 +228,13 @@ public class Detection : MonoBehaviour
 					if (Input.GetMouseButtonDown(0))
 					{
 						ClientConnection.GetInstance().SendCommand(KnowledgeBase.Instance.CustomerAcceptanceTestCommand);
+						GameObjectCollection.HistoryBook.Open();
+					}
+					break;
+				case CommandTagEnum.PostBox:
+					if (Input.GetMouseButtonDown(0))
+					{
+						ClientConnection.GetInstance().SendCommand(KnowledgeBase.Instance.FinishProjectCommand);
 					}
 					break;
 				default:
@@ -260,7 +267,8 @@ public class Detection : MonoBehaviour
 		Task,
 		PlayerBoard,
 		SendCommand,
-		Phone
+		Phone,
+		PostBox
 	}
 
 	private static readonly Dictionary<string, CommandTagEnum> Tags = new Dictionary<string, CommandTagEnum>
@@ -273,7 +281,8 @@ public class Detection : MonoBehaviour
 		{"Task", CommandTagEnum.Task},
 		{"PlayerBoard", CommandTagEnum.PlayerBoard},
 		{"SendCommand", CommandTagEnum.SendCommand},
-		{"Phone", CommandTagEnum.Phone}
+		{"Phone", CommandTagEnum.Phone},
+		{"PostBox", CommandTagEnum.PostBox}
 	};
 
 	private static readonly Dictionary<CommandTagEnum, string> ToolTips = new Dictionary<CommandTagEnum, string>
@@ -286,6 +295,7 @@ public class Detection : MonoBehaviour
 		{CommandTagEnum.Task, "" },
 		{CommandTagEnum.PlayerBoard, "" },
 		{CommandTagEnum.SendCommand, "Assign Tasks from Whiteboard" },
-		{CommandTagEnum.Phone, "Call customer to perform acceptance tests" }
+		{CommandTagEnum.Phone, "Call customer to perform acceptance tests" },
+		{CommandTagEnum.PostBox, "Deliver System" }
 	};
 }

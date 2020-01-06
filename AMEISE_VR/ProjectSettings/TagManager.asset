@@ -23,6 +23,7 @@ TagManager:
   - BookNext
   - BookBack
   - Phone
+  - PostBox
   layers:
   - Default
   - TransparentFX
