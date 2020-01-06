@@ -96,7 +96,7 @@ public class Detection : MonoBehaviour
 		{
 			var isKnownTag = Tags.ContainsKey(hit.collider.tag);
 
-			if (!isKnownTag)
+			if (!isKnownTag || Tags[hit.collider.tag] == CommandTagEnum.Door && !KnowledgeBase.Instance.LoadingCommandsFinished)
 			{
 				InReach = false;
 
