@@ -237,6 +237,12 @@ public class Detection : MonoBehaviour
 						ClientConnection.GetInstance().SendCommand(KnowledgeBase.Instance.FinishProjectCommand);
 					}
 					break;
+				case CommandTagEnum.WasteBin:
+					if (Input.GetMouseButtonDown(0))
+					{
+						ClientConnection.GetInstance().SendCommand(KnowledgeBase.Instance.CancelProjectCommand);
+					}
+					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
@@ -268,7 +274,8 @@ public class Detection : MonoBehaviour
 		PlayerBoard,
 		SendCommand,
 		Phone,
-		PostBox
+		PostBox,
+		WasteBin
 	}
 
 	private static readonly Dictionary<string, CommandTagEnum> Tags = new Dictionary<string, CommandTagEnum>
@@ -282,7 +289,8 @@ public class Detection : MonoBehaviour
 		{"PlayerBoard", CommandTagEnum.PlayerBoard},
 		{"SendCommand", CommandTagEnum.SendCommand},
 		{"Phone", CommandTagEnum.Phone},
-		{"PostBox", CommandTagEnum.PostBox}
+		{"PostBox", CommandTagEnum.PostBox},
+		{"WasteBin", CommandTagEnum.WasteBin}
 	};
 
 	private static readonly Dictionary<CommandTagEnum, string> ToolTips = new Dictionary<CommandTagEnum, string>
@@ -296,6 +304,7 @@ public class Detection : MonoBehaviour
 		{CommandTagEnum.PlayerBoard, "" },
 		{CommandTagEnum.SendCommand, "Assign Tasks from Whiteboard" },
 		{CommandTagEnum.Phone, "Call customer to perform acceptance tests" },
-		{CommandTagEnum.PostBox, "Deliver System" }
+		{CommandTagEnum.PostBox, "Deliver System" },
+		{CommandTagEnum.WasteBin, "Cancel Project" }
 	};
 }

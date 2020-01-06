@@ -24,6 +24,7 @@ TagManager:
   - BookBack
   - Phone
   - PostBox
+  - WasteBin
   layers:
   - Default
   - TransparentFX
