@@ -54,6 +54,9 @@ public class KnowledgeBase
 
 	public Command DeveloperInformationCommand => EmployeeCommands.Single(x => x.Name == "information about developer");
 	public Command ResourceCommand => SystemCommands.Single(x => x.Name == "information about spent resources");
+	public Command CancelProjectCommand => SystemCommands.Single(x => x.Name == "finish project");
+	public Command FinishProjectCommand => SystemCommands.Single(x => x.Name == "deliver system");
+	public Command CustomerAcceptanceTestCommand => SystemCommands.Single(x => x.Name == "customer perform acceptance test");
 
 	public const string EmployeeType = "Entwickler";
 

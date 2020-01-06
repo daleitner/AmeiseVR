@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Detection : MonoBehaviour
 {
@@ -16,11 +19,6 @@ public class Detection : MonoBehaviour
     public GameObject TextPrefab; // A text element to display when the player is in reach of the door
     [HideInInspector] public GameObject TextPrefabInstance; // A copy of the text prefab to prevent data corruption
     [HideInInspector] public bool TextActive;
-
-	[Tooltip("The image or text that will be shown whenever the player is in reach of the login.")]
-	public GameObject TextPrefabLogin; // A text element to display when the player is in reach of the login
-	[HideInInspector] public GameObject TextPrefabLoginInstance; // A copy of the text prefab to prevent data corruption
-	[HideInInspector] public bool TextLoginActive;
 
 	[Tooltip("The image or text that is shown in the middle of the the screen.")]
     public GameObject CrosshairPrefab;
@@ -64,7 +62,6 @@ public class Detection : MonoBehaviour
         }
 
         if (TextPrefab == null) Debug.Log("<color=yellow><b>No TextPrefab was found.</b></color>"); // Return an error if no text element was specified
-	    if (TextPrefabLogin == null) Debug.Log("<color=yellow><b>No TextPrefabLogin was found.</b></color>"); // Return an error if no text element was specified
 
 		DebugRayColor.a = Opacity; // Set the alpha value of the DebugRayColor
 		GameObjectCollection.AddGameObject(FPSController, GameObjectEnum.FPSController);
@@ -94,164 +91,149 @@ public class Detection : MonoBehaviour
 			config.OpenCommandDialog();
 		else if (Input.GetKey("9"))
 			config.CloseCommandDialog();
-		else if (Input.GetKey(KeyCode.X))
-			KnowledgeBase.Instance.ContinueTime = true;
 		// Cast ray from center of the screen towards where the player is looking
 		if (Physics.Raycast(ray, out hit, Reach))
-        {
-            if (hit.collider.tag == "Door")
-            {
-                InReach = true;
+		{
+			var isKnownTag = Tags.ContainsKey(hit.collider.tag);
 
-                // Display the UI element when the player is in reach of the door
-                if (TextActive == false && TextPrefab != null)
-                {
-                    TextPrefabInstance = Instantiate(TextPrefab);
-                    TextActive = true;
-                    TextPrefabInstance.transform.SetParent(transform, true); // Make the player the parent object of the text element
-                }
+			if (!isKnownTag)
+			{
+				InReach = false;
 
-                // Give the object that was hit the name 'Door'
-                GameObject Door = hit.transform.gameObject;
+				// Destroy the UI element when Player is no longer in reach of the door
+				if (TextActive)
+				{
+					DestroyImmediate(TextPrefabInstance);
+					TextActive = false;
+				}
+				//Draw the ray as a colored line for debugging purposes.
+				Debug.DrawRay(ray.origin, ray.direction * Reach, DebugRayColor);
+				return;
+			}
 
-                // Get access to the 'Door' script attached to the object that was hit
-                Door dooropening = Door.GetComponent<Door>();
+			var currentTag = Tags[hit.collider.tag];
+			InReach = true;
 
-                if (Input.GetMouseButtonDown(0))
-                {
-                    // Open/close the door by running the 'Open' function found in the 'Door' script
-                    if (dooropening.RotationPending == false) StartCoroutine(hit.collider.GetComponent<Door>().Move());
-                }
-            }
-	        else if (hit.collider.tag == "Login" && !config.LoggedIn)
-	        {
-		        InReach = true;
+			// Display the UI element when the player is in reach of the door
+			if (TextActive == false && TextPrefab != null)
+			{
+				TextPrefabInstance = Instantiate(TextPrefab);
+				TextActive = true;
+				TextPrefabInstance.transform.SetParent(transform, true); // Make the player the parent object of the text element
+				TextPrefabInstance.transform.Find("Text 1").GetComponent<Text>().text = ToolTips[currentTag];
+			}
 
-		        // Display the UI element when the player is in reach of the door
-		        if (TextLoginActive == false && TextPrefabLogin != null)
-		        {
-			        TextPrefabLoginInstance = Instantiate(TextPrefabLogin);
-			        TextLoginActive = true;
-			        TextPrefabLoginInstance.transform.SetParent(transform, true); // Make the player the parent object of the text element
-		        }
+			switch (currentTag)
+			{
+				case CommandTagEnum.Door:
+					
 
-		        if (Input.GetMouseButtonDown(0) && !LoginControl.activeSelf && !LoginFailedControl.activeSelf)
-		        {
-					config.OpenLoginDialog();
-		        }
-	        }
-            else if (hit.collider.tag == "Book")
-            {
-	            InReach = true;
+					// Give the object that was hit the name 'Door'
+					GameObject Door = hit.transform.gameObject;
 
-	            if (Input.GetMouseButtonDown(0))
-	            {
-			            var book = GameObjectCollection.GetBookByGameObject(hit.transform.gameObject);
-			            if (book.IsOpen())
-				            book.Close();
-			            else if (book.IsClosed())
-				            book.Open();
-	            }
-	            else if (Input.GetMouseButtonDown(1))
-	            {
-		            var book = GameObjectCollection.GetBookByGameObject(hit.transform.gameObject);
-		            if (book.BelongsToAShelf)
-		            {
-			            book.TriggerShelfMove();
-					}
-	            }
-            }
-            else if (hit.collider.tag == "BookNext")
-            {
-	            InReach = true;
+					// Get access to the 'Door' script attached to the object that was hit
+					Door dooropening = Door.GetComponent<Door>();
 
-	            if (Input.GetMouseButtonDown(0))
-	            {
-		            var book = GameObjectCollection.GetBookByGameObject(hit.transform.gameObject);
-			        book.NextPage();
-	            }
-	           
-            }
-            else if (hit.collider.tag == "BookBack")
-            {
-	            InReach = true;
-
-	            if (Input.GetMouseButtonDown(0))
-	            {
-		            var book = GameObjectCollection.GetBookByGameObject(hit.transform.gameObject);
-		            book.PreviousPage();
-	            }
-
-            }
-			else if (hit.collider.tag == "Task")
-            {
-	            InReach = true;
-	            if (Input.GetMouseButtonDown(0))
-	            {
-					var task = GameObjectCollection.GetTaskByGameObject(hit.transform.gameObject);
-					var playerBoards = GameObjectCollection.PlayerBoardCollection;
-					var playerBoard = playerBoards.PlayerBoards.SingleOrDefault(p => p.Tasks.Contains(task));
-					if (playerBoard != null)
+					if (Input.GetMouseButtonDown(0))
 					{
-						playerBoard.RemoveTask(task);
-						task.RelatedTasks.ForEach(t => t.RemoveRelatedTask(task));
-						Destroy(task.GameObject);
+						// Open/close the door by running the 'Open' function found in the 'Door' script
+						if (dooropening.RotationPending == false) StartCoroutine(hit.collider.GetComponent<Door>().Move());
 					}
-					else
+					break;
+				case CommandTagEnum.Login:
+					if (config.LoggedIn)
+						break;
+					
+					if (Input.GetMouseButtonDown(0) && !LoginControl.activeSelf && !LoginFailedControl.activeSelf)
 					{
-						GameObjectCollection.TaskBoard.SelectTask(task);
+						config.OpenLoginDialog();
 					}
-	            }
-	            else if (Input.GetMouseButtonDown(1))
-	            {
-		            var task = GameObjectCollection.GetTaskByGameObject(hit.transform.gameObject);
-		            task.ChangeParameter();
-					task.RelatedTasks.ForEach(t => t.ChangeParameter());
-	            }
-            }
-            else if(hit.collider.tag == "PlayerBoard")
-            {
-	            InReach = true;
-	            if (Input.GetMouseButtonDown(0))
-	            {
-		            var selectedTask = GameObjectCollection.TaskBoard.SelectedTask;
-		            if (selectedTask != null)
-		            {
-			            var playerBoards = GameObjectCollection.PlayerBoardCollection;
-			            var newTaskGameObject = Instantiate(GameObjectCollection.Task);
-			            var newTask = selectedTask.Clone(newTaskGameObject);
-						playerBoards.AddTask(newTask, hit.transform.gameObject);
-		            }
-	            }
-            }
-			else if (hit.collider.tag == "SendCommand")
-            {
-	            InReach = true;
-	            if (Input.GetMouseButtonDown(0))
-	            {
-		            GameObjectCollection.PlayerBoardCollection.SendCommands();
-	            }
-            }
-			else
-            {
-                InReach = false;
-
-                // Destroy the UI element when Player is no longer in reach of the door
-                if (TextActive == true)
-                {
-                    DestroyImmediate(TextPrefabInstance);
-                    TextActive = false;
-                }
-
-	            // Destroy the UI element when Player is no longer in reach of the login
-	            if (TextLoginActive == true)
-	            {
-		            DestroyImmediate(TextPrefabLoginInstance);
-		            TextLoginActive = false;
-	            }
+					break;
+				case CommandTagEnum.Book:
+					if (Input.GetMouseButtonDown(0))
+					{
+						var book = GameObjectCollection.GetBookByGameObject(hit.transform.gameObject);
+						if (book.IsOpen())
+							book.Close();
+						else if (book.IsClosed())
+							book.Open();
+					}
+					else if (Input.GetMouseButtonDown(1))
+					{
+						var book = GameObjectCollection.GetBookByGameObject(hit.transform.gameObject);
+						if (book.BelongsToAShelf)
+						{
+							book.TriggerShelfMove();
+						}
+					}
+					break;
+				case CommandTagEnum.BookNext:
+					if (Input.GetMouseButtonDown(0))
+					{
+						var book = GameObjectCollection.GetBookByGameObject(hit.transform.gameObject);
+						book.NextPage();
+					}
+					break;
+				case CommandTagEnum.BookPrevious:
+					if (Input.GetMouseButtonDown(0))
+					{
+						var book = GameObjectCollection.GetBookByGameObject(hit.transform.gameObject);
+						book.PreviousPage();
+					}
+					break;
+				case CommandTagEnum.Task:
+					if (Input.GetMouseButtonDown(0))
+					{
+						var task = GameObjectCollection.GetTaskByGameObject(hit.transform.gameObject);
+						var playerBoards = GameObjectCollection.PlayerBoardCollection;
+						var playerBoard = playerBoards.PlayerBoards.SingleOrDefault(p => p.Tasks.Contains(task));
+						if (playerBoard != null)
+						{
+							playerBoard.RemoveTask(task);
+							task.RelatedTasks.ForEach(t => t.RemoveRelatedTask(task));
+							Destroy(task.GameObject);
+						}
+						else
+						{
+							GameObjectCollection.TaskBoard.SelectTask(task);
+						}
+					}
+					else if (Input.GetMouseButtonDown(1))
+					{
+						var task = GameObjectCollection.GetTaskByGameObject(hit.transform.gameObject);
+						task.ChangeParameter();
+						task.RelatedTasks.ForEach(t => t.ChangeParameter());
+					}
+					break;
+				case CommandTagEnum.PlayerBoard:
+					if (Input.GetMouseButtonDown(0))
+					{
+						var selectedTask = GameObjectCollection.TaskBoard.SelectedTask;
+						if (selectedTask != null)
+						{
+							var playerBoards = GameObjectCollection.PlayerBoardCollection;
+							var newTaskGameObject = Instantiate(GameObjectCollection.Task);
+							var newTask = selectedTask.Clone(newTaskGameObject);
+							playerBoards.AddTask(newTask, hit.transform.gameObject);
+						}
+					}
+					break;
+				case CommandTagEnum.SendCommand:
+					if (Input.GetMouseButtonDown(0))
+					{
+						GameObjectCollection.PlayerBoardCollection.SendCommands();
+					}
+					break;
+				case CommandTagEnum.Phone:
+					if (Input.GetMouseButtonDown(0))
+					{
+						ClientConnection.GetInstance().SendCommand(KnowledgeBase.Instance.CustomerAcceptanceTestCommand);
+					}
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
 			}
         }
-
         else
         {
             InReach = false;
@@ -262,16 +244,48 @@ public class Detection : MonoBehaviour
                 DestroyImmediate(TextPrefabInstance);
                 TextActive = false;
             }
-
-	        // Destroy the UI element when Player is no longer in reach of the login
-	        if (TextLoginActive == true)
-	        {
-		        DestroyImmediate(TextPrefabLoginInstance);
-		        TextLoginActive = false;
-	        }
 		}
 
         //Draw the ray as a colored line for debugging purposes.
         Debug.DrawRay(ray.origin, ray.direction * Reach, DebugRayColor);
     }
+
+	public enum CommandTagEnum
+	{
+		Door,
+		Login,
+		Book,
+		BookNext,
+		BookPrevious,
+		Task,
+		PlayerBoard,
+		SendCommand,
+		Phone
+	}
+
+	private static readonly Dictionary<string, CommandTagEnum> Tags = new Dictionary<string, CommandTagEnum>
+	{
+		{"Door", CommandTagEnum.Door},
+		{"Login", CommandTagEnum.Login},
+		{"Book", CommandTagEnum.Book},
+		{"BookNext", CommandTagEnum.BookNext},
+		{"BookBack", CommandTagEnum.BookPrevious},
+		{"Task", CommandTagEnum.Task},
+		{"PlayerBoard", CommandTagEnum.PlayerBoard},
+		{"SendCommand", CommandTagEnum.SendCommand},
+		{"Phone", CommandTagEnum.Phone}
+	};
+
+	private static readonly Dictionary<CommandTagEnum, string> ToolTips = new Dictionary<CommandTagEnum, string>
+	{
+		{CommandTagEnum.Door, "Open Door" },
+		{CommandTagEnum.Login, "" },
+		{CommandTagEnum.Book, "" },
+		{CommandTagEnum.BookNext, "" },
+		{CommandTagEnum.BookPrevious, "" },
+		{CommandTagEnum.Task, "" },
+		{CommandTagEnum.PlayerBoard, "" },
+		{CommandTagEnum.SendCommand, "Assign Tasks from Whiteboard" },
+		{CommandTagEnum.Phone, "Call customer to perform acceptance tests" }
+	};
 }
