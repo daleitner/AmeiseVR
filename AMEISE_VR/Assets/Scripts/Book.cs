@@ -36,6 +36,7 @@ namespace Assets.Scripts
 			_listener = listener;
 			_anim.SetTrigger("Take");
 			_pages = new List<string>();
+			IsDefaultPosition = true;
 		}
 		
 		public bool IsOpen()
@@ -48,7 +49,7 @@ namespace Assets.Scripts
 			return _anim.GetCurrentAnimatorStateInfo(0).IsName("BookIdle");
 		}
 
-		public bool IsInShelf { get; private set; }
+		public bool IsDefaultPosition { get; private set; }
 		public bool BelongsToAShelf { get; private set; }
 
 		public void Open()
@@ -135,25 +136,25 @@ namespace Assets.Scripts
 
 		private void PullOutFromShelf()
 		{
-			if (!IsInShelf)
+			if (!IsDefaultPosition)
 				return;
 			GameObject.transform.localPosition = new Vector3(GameObject.transform.localPosition.x, GameObject.transform.localPosition.y, GameObject.transform.localPosition.z - 0.5f);
-			IsInShelf = false;
+			IsDefaultPosition = false;
 			_anim.SetTrigger("Take");
 		}
 
 		private void PushInToShelf()
 		{
-			if (IsInShelf)
+			if (IsDefaultPosition)
 				return;
 			GameObject.transform.localPosition = new Vector3(GameObject.transform.localPosition.x, GameObject.transform.localPosition.y, GameObject.transform.localPosition.z + 0.5f);
-			IsInShelf = true;
+			IsDefaultPosition = true;
 			_anim.SetTrigger("Put");
 		}
 
 		public void TriggerShelfMove()
 		{
-			if(IsInShelf)
+			if(IsDefaultPosition)
 				PullOutFromShelf();
 			else if(IsClosed())
 			{
@@ -161,10 +162,40 @@ namespace Assets.Scripts
 			}
 		}
 
+		public void TriggerRotation()
+		{
+			if (IsDefaultPosition)
+				PopUp();
+			else if (IsClosed())
+			{
+				FallDown();
+			}
+		}
+
+		private void PopUp()
+		{
+			if (!IsDefaultPosition)
+				return;
+			GameObject.transform.localPosition = new Vector3(GameObject.transform.localPosition.x, GameObject.transform.localPosition.y + 0.205f, GameObject.transform.localPosition.z + 0.2f);
+			GameObject.transform.localRotation = new Quaternion(GameObject.transform.localRotation.x + 0.25f, GameObject.transform.localRotation.y, GameObject.transform.localRotation.z, GameObject.transform.localRotation.w);
+			IsDefaultPosition = false;
+			_anim.SetTrigger("TakeTable");
+		}
+
+		private void FallDown()
+		{
+			if (IsDefaultPosition)
+				return;
+			GameObject.transform.localPosition = new Vector3(GameObject.transform.localPosition.x, GameObject.transform.localPosition.y - 0.205f, GameObject.transform.localPosition.z - 0.2f);
+			GameObject.transform.localRotation = new Quaternion(GameObject.transform.localRotation.x - 0.25f, GameObject.transform.localRotation.y, GameObject.transform.localRotation.z, GameObject.transform.localRotation.w);
+			IsDefaultPosition = true;
+			_anim.SetTrigger("PutTable");
+		}
+
 		public void SetShelf(GameObject shelf)
 		{
 			SetParent(shelf);
-			IsInShelf = true;
+			IsDefaultPosition = true;
 			BelongsToAShelf = true;
 			_anim.SetTrigger("Put");
 		}

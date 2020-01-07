@@ -165,6 +165,10 @@ public class Detection : MonoBehaviour
 						{
 							book.TriggerShelfMove();
 						}
+						else
+						{
+							book.TriggerRotation();
+						}
 					}
 					break;
 				case CommandTagEnum.BookNext:
