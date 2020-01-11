@@ -1,12 +1,11 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
 public class KnowledgeBase
 {
 	private readonly Dictionary<string, List<string>> _parameterTypes;
-	private static KnowledgeBase _instance;
+	private static KnowledgeBase instance;
 	private KnowledgeBase()
 	{
 		Employees = new List<string>();
@@ -15,15 +14,7 @@ public class KnowledgeBase
 		_parameterTypes = new Dictionary<string, List<string>>();
 	}
 
-	public static KnowledgeBase Instance
-	{
-		get
-		{
-			if (_instance == null)
-				_instance = new KnowledgeBase();
-			return _instance;
-		}
-	}
+	public static KnowledgeBase Instance => instance ?? (instance = new KnowledgeBase());
 
 	public List<string> History { get; private set; }
 	public List<string> Employees { get; private set; }
@@ -33,13 +24,11 @@ public class KnowledgeBase
 	public bool ContinueTime { get; set; }
 	public bool ProjectDelivered { get; set; }
 
-	public List<Command> EmployeeCommands
+	public List<Command> WhiteBoardCommands
 	{
 		get
 		{
-			return Commands != null
-				? Commands.Where(cmd => cmd.Parameters.Any(param => param.Type == EmployeeType)).ToList()
-				: null;
+			return Commands?.Where(cmd => cmd.Parameters.Any(param => param.Type == EmployeeType)).ToList();
 		}
 	}
 
@@ -47,13 +36,11 @@ public class KnowledgeBase
 	{
 		get
 		{
-			return Commands != null
-				? Commands.Where(cmd => !EmployeeCommands.Contains(cmd)).ToList()
-				: null;
+			return Commands?.Where(cmd => !WhiteBoardCommands.Contains(cmd)).ToList();
 		}
 	}
 
-	public Command DeveloperInformationCommand => EmployeeCommands.Single(x => x.Name == "information about developer");
+	public Command DeveloperInformationCommand => WhiteBoardCommands.Single(x => x.Name == "information about developer");
 	public Command ResourceCommand => SystemCommands.Single(x => x.Name == "information about spent resources");
 	public Command CancelProjectCommand => SystemCommands.Single(x => x.Name == "finish project");
 	public Command FinishProjectCommand => SystemCommands.Single(x => x.Name == "deliver system");

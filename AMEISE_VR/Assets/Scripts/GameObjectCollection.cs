@@ -19,7 +19,8 @@ namespace Assets.Scripts
 		Avatar,
 		Task,
 		PlayerBoard,
-		LoginText
+		LoginText,
+		EmployeeCommandControl
 	}
 
 	public static class GameObjectCollection
@@ -31,6 +32,7 @@ namespace Assets.Scripts
 		public static LoginFailedDialog LoginFailedDialog { get; private set; }
 		public static GameSelectionDialog GameSelectionDialog { get; private set; }
 		public static CommandDialog CommandDialog { get; private set; }
+		public static EmployeeCommandDialog EmployeeCommandDialog { get; private set; }
 		public static MessageListener MessageListener { get; private set; }
 		public static GameObject Office { get; set; }
 		public static GameObject Book { get; private set; }
@@ -41,6 +43,7 @@ namespace Assets.Scripts
 		private static GameObject MyOfficeDesk;
 		private static List<Book> AllBooks = new List<Book>();
 		private static TextMeshPro LoginText;
+		public static GameObject Button;
 		public static AvatarsCollection AvatarsCollection { get; private set; }
 		public static TaskBoard TaskBoard { get; private set; }
 		public static PlayerBoardCollection PlayerBoardCollection { get; private set; }
@@ -73,6 +76,10 @@ namespace Assets.Scripts
 				case GameObjectEnum.CommandControl:
 					CommandDialog = new CommandDialog(gameObject, Player);
 					break;
+				case GameObjectEnum.EmployeeCommandControl:
+					EmployeeCommandDialog = new EmployeeCommandDialog(gameObject, Player);
+					Button = gameObject.transform.Find("TemplateButton").gameObject;
+					break;
 				case GameObjectEnum.Office:
 					Office = gameObject;
 					MyOfficeDesk = Office.transform.Find("MyOffice").Find("Desk").gameObject;
@@ -95,11 +102,6 @@ namespace Assets.Scripts
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type), type, null);
 			}
-		}
-
-		public static void MovePlayer(Vector3 position)
-		{
-			FPSController.transform.position = position;
 		}
 
 		public static void AddBookToShelf(GameObject newBookObject, string title, Command command, string[] parameters)
