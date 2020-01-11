@@ -24,27 +24,25 @@ public class KnowledgeBase
 	public bool ContinueTime { get; set; }
 	public bool ProjectDelivered { get; set; }
 
+	public List<Command> EmployeeCommands
+	{
+		get { return Commands?.Where(cmd => cmd.GetFeedBackImmediately && !SpecialCommands.Contains(cmd) || cmd.Name == "show me tasks of developer").ToList(); }
+	}
+
 	public List<Command> WhiteBoardCommands
 	{
 		get
 		{
-			return Commands?.Where(cmd => cmd.Parameters.Any(param => param.Type == EmployeeType)).ToList();
+			return Commands?.Where(cmd => cmd.Parameters.Any(param => param.Type == EmployeeType) && !cmd.GetFeedBackImmediately).ToList();
 		}
 	}
 
-	public List<Command> SystemCommands
-	{
-		get
-		{
-			return Commands?.Where(cmd => !WhiteBoardCommands.Contains(cmd)).ToList();
-		}
-	}
-
-	public Command DeveloperInformationCommand => WhiteBoardCommands.Single(x => x.Name == "information about developer");
-	public Command ResourceCommand => SystemCommands.Single(x => x.Name == "information about spent resources");
-	public Command CancelProjectCommand => SystemCommands.Single(x => x.Name == "finish project");
-	public Command FinishProjectCommand => SystemCommands.Single(x => x.Name == "deliver system");
-	public Command CustomerAcceptanceTestCommand => SystemCommands.Single(x => x.Name == "customer perform acceptance test");
+	public Command DeveloperInformationCommand => Commands.Single(x => x.Name == "information about developer");
+	public Command ResourceCommand => Commands.Single(x => x.Name == "information about spent resources");
+	public Command CancelProjectCommand => Commands.Single(x => x.Name == "finish project");
+	public Command FinishProjectCommand => Commands.Single(x => x.Name == "deliver system");
+	public Command CustomerAcceptanceTestCommand => Commands.Single(x => x.Name == "customer perform acceptance test");
+	private List<Command> SpecialCommands => new List<Command>{DeveloperInformationCommand, ResourceCommand, CancelProjectCommand, FinishProjectCommand, CustomerAcceptanceTestCommand};
 
 	public const string EmployeeType = "Entwickler";
 

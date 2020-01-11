@@ -108,6 +108,7 @@ public class GameConfiguration
 				var command = new Command();
 
 				command.Name = messageObject.GetValueOf("command" + i);
+				command.Description = messageObject.GetValueOf("command" + i + "_tooltip");
 				int paramcnt = int.Parse(messageObject.GetValueOf("command" + i + "_paramcnt"));
 				for(var j = 0; j<paramcnt; j++)
 				{

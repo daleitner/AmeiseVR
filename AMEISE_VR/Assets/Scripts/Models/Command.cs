@@ -11,6 +11,9 @@ public class Command
 	}
 	public string Name { get; set; }
 
+	public string Description { get; set; }
+
 	public List<Parameter> Parameters { get; set; }
 
+	public bool GetFeedBackImmediately => Description.Contains("(*)");
 }
