@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -15,13 +16,13 @@ namespace Assets.Scripts
 			_avatarsContainer = avatarsContainer;
 		}
 
-		public void AddAvatar(GameObject avatar)
+		public void AddAvatar(GameObject avatar, string employee)
 		{
 			if (_avatars.Count >= MaxAvatars)
 				throw new Exception("max count of avatars reached!");
 			avatar.transform.parent = _avatarsContainer.transform;
 			avatar.transform.localPosition = OfficePlaces[_avatars.Count];
-			_avatars.Add(new Avatar(avatar));
+			_avatars.Add(new Avatar(avatar, employee));
 			avatar.SetActive(true);
 		}
 
@@ -50,5 +51,10 @@ namespace Assets.Scripts
 		};
 
 		private static float YOffset = 0.34f;
+
+		public Avatar Get(GameObject gameObject)
+		{
+			return _avatars.SingleOrDefault(a => a.GameObject == gameObject);
+		}
 	}
 }

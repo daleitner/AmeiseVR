@@ -33,7 +33,7 @@ public class KnowledgeBase
 	{
 		get
 		{
-			return Commands?.Where(cmd => cmd.Parameters.Any(param => param.Type == EmployeeType) && !EmployeeCommands.Contains(cmd)).ToList();
+			return Commands?.Where(cmd => cmd.Parameters.Any(param => param.Type == EmployeeType) && !EmployeeCommands.Contains(cmd) && !cmd.GetFeedBackImmediately).ToList();
 		}
 	}
 

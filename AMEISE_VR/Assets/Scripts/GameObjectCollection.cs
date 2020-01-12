@@ -184,5 +184,11 @@ namespace Assets.Scripts
 		{
 			LoginText.text = text;
 		}
+
+		public static void AddButtonToEmployeeCommandDialog(GameObject button, Command command)
+		{
+			var commandButton = new CommandButton(button, command);
+			EmployeeCommandDialog.AddButton(commandButton);
+		}
 	}
 }

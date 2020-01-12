@@ -249,6 +249,18 @@ public class Detection : MonoBehaviour
 						ClientConnection.GetInstance().SendCommand(KnowledgeBase.Instance.CancelProjectCommand);
 					}
 					break;
+				case CommandTagEnum.Avatar:
+					if (Input.GetMouseButtonDown(0))
+					{
+						var avatar = GameObjectCollection.AvatarsCollection.Get(hit.transform.gameObject);
+						if (!avatar.IsDummy)
+						{
+							var employeeDialog = GameObjectCollection.EmployeeCommandDialog;
+							employeeDialog.SetAvatar(avatar);
+							employeeDialog.OpenDialog();
+						}
+					}
+					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
@@ -281,7 +293,8 @@ public class Detection : MonoBehaviour
 		SendCommand,
 		Phone,
 		PostBox,
-		WasteBin
+		WasteBin,
+		Avatar
 	}
 
 	private static readonly Dictionary<string, CommandTagEnum> Tags = new Dictionary<string, CommandTagEnum>
@@ -296,7 +309,8 @@ public class Detection : MonoBehaviour
 		{"SendCommand", CommandTagEnum.SendCommand},
 		{"Phone", CommandTagEnum.Phone},
 		{"PostBox", CommandTagEnum.PostBox},
-		{"WasteBin", CommandTagEnum.WasteBin}
+		{"WasteBin", CommandTagEnum.WasteBin},
+		{"Avatar", CommandTagEnum.Avatar}
 	};
 
 	private static readonly Dictionary<CommandTagEnum, string> ToolTips = new Dictionary<CommandTagEnum, string>
@@ -311,6 +325,7 @@ public class Detection : MonoBehaviour
 		{CommandTagEnum.SendCommand, "Assign Tasks from Whiteboard" },
 		{CommandTagEnum.Phone, "Call customer to perform acceptance tests" },
 		{CommandTagEnum.PostBox, "Deliver System" },
-		{CommandTagEnum.WasteBin, "Cancel Project" }
+		{CommandTagEnum.WasteBin, "Cancel Project" },
+		{CommandTagEnum.Avatar, "" }
 	};
 }

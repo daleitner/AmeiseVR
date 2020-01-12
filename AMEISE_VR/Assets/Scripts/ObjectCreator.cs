@@ -35,7 +35,13 @@ public class ObjectCreator : MonoBehaviour
 	private static void CreateButtons()
 	{
 		var buttonTemplate = GameObjectCollection.Button;
-
+		var cancelButton = Instantiate(buttonTemplate);
+		GameObjectCollection.EmployeeCommandDialog.AddCancelButton(cancelButton);
+		foreach (var command in KnowledgeBase.Instance.EmployeeCommands)
+		{
+			var gameObject = Instantiate(buttonTemplate);
+			GameObjectCollection.AddButtonToEmployeeCommandDialog(gameObject, command);
+		}
 	}
 
 	private static void CreateTasks()
@@ -54,8 +60,11 @@ public class ObjectCreator : MonoBehaviour
 		var avatarTemplate = GameObjectCollection.Avatar;
 		for (int i = 0; i < AvatarsCollection.MaxAvatars; i++)
 		{
+			var employeeName = "";
+			if (i < KnowledgeBase.Instance.Employees.Count)
+				employeeName = KnowledgeBase.Instance.Employees[i];
 			var gameObject = Instantiate(avatarTemplate);
-			collection.AddAvatar(gameObject);
+			collection.AddAvatar(gameObject, employeeName);
 		}
 	}
 
