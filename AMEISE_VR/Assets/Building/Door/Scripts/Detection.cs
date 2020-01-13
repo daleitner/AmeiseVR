@@ -36,6 +36,7 @@ public class Detection : MonoBehaviour
 	public GameObject Task;
 	public GameObject PlayerBoard;
 	public GameObject EmployeeCommandControl;
+	public GameObject SpeechBubble;
 
 	private GameConfiguration config;
 
@@ -77,6 +78,7 @@ public class Detection : MonoBehaviour
 		GameObjectCollection.AddGameObject(Task, GameObjectEnum.Task);
 		GameObjectCollection.AddGameObject(PlayerBoard, GameObjectEnum.PlayerBoard);
 		GameObjectCollection.AddGameObject(LoginText, GameObjectEnum.LoginText);
+		GameObjectCollection.AddGameObject(SpeechBubble, GameObjectEnum.SpeechBubble);
 		var historyBook = Instantiate(Book);
 		GameObjectCollection.AddHistoryBook(historyBook);
 		config = new GameConfiguration();

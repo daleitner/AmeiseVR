@@ -20,7 +20,8 @@ namespace Assets.Scripts
 		Task,
 		PlayerBoard,
 		LoginText,
-		EmployeeCommandControl
+		EmployeeCommandControl,
+		SpeechBubble
 	}
 
 	public static class GameObjectCollection
@@ -44,6 +45,7 @@ namespace Assets.Scripts
 		private static List<Book> AllBooks = new List<Book>();
 		private static TextMeshPro LoginText;
 		public static GameObject Button;
+		public static GameObject SpeechBubble;
 		public static AvatarsCollection AvatarsCollection { get; private set; }
 		public static TaskBoard TaskBoard { get; private set; }
 		public static PlayerBoardCollection PlayerBoardCollection { get; private set; }
@@ -98,6 +100,9 @@ namespace Assets.Scripts
 					break;
 				case GameObjectEnum.LoginText:
 					LoginText = gameObject.GetComponent<TextMeshPro>();
+					break;
+				case GameObjectEnum.SpeechBubble:
+					SpeechBubble = gameObject;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type), type, null);

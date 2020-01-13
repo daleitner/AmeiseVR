@@ -16,14 +16,16 @@ namespace Assets.Scripts
 			_avatarsContainer = avatarsContainer;
 		}
 
-		public void AddAvatar(GameObject avatar, string employee)
+		public Avatar AddAvatar(GameObject avatarObject)
 		{
 			if (_avatars.Count >= MaxAvatars)
 				throw new Exception("max count of avatars reached!");
-			avatar.transform.parent = _avatarsContainer.transform;
-			avatar.transform.localPosition = OfficePlaces[_avatars.Count];
-			_avatars.Add(new Avatar(avatar, employee));
-			avatar.SetActive(true);
+			avatarObject.transform.parent = _avatarsContainer.transform;
+			avatarObject.transform.localPosition = OfficePlaces[_avatars.Count];
+			var avatar = new Avatar(avatarObject); 
+			_avatars.Add(avatar);
+			avatarObject.SetActive(true);
+			return avatar;
 		}
 
 		public static int MaxAvatars => OfficePlaces.Length;
