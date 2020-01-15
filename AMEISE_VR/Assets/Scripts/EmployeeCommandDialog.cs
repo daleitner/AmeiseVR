@@ -11,17 +11,19 @@ namespace Assets.Scripts
 		private const string Title = "Give a command to ";
 		private const float YFirst = 170.0f;
 		private const float YOffset = 35.0f;
-		private const float YCancelButton = -106.0f;
+		private const float YCancelButton = -180.0f;
 		private readonly GameObject _employeeCommandControl;
 		private readonly FirstPersonController _player;
 		private Avatar _avatar;
 		private List<CommandButton> _buttons;
+		private readonly MessageListener _listener;
 
-		public EmployeeCommandDialog(GameObject employeeCommandControl, FirstPersonController player)
+		public EmployeeCommandDialog(GameObject employeeCommandControl, MessageListener listener, FirstPersonController player)
 		{
 			_employeeCommandControl = employeeCommandControl;
 			_player = player;
 			_buttons = new List<CommandButton>();
+			_listener = listener;
 		}
 
 		public void CloseDialog()
@@ -63,8 +65,21 @@ namespace Assets.Scripts
 				if (firstParameter.Parameter.Type == KnowledgeBase.EmployeeType)
 					firstParameter.Value = _avatar.Name;
 			}
+
+			_listener.ReceivedMessage += _listener_ReceivedMessage;
 			ClientConnection.GetInstance().SendCommand(command.Command, command.ParameterValues.Select(x => x.Value).ToArray());
+			_avatar.ShowBubble();
+
 			CloseDialog();
+		}
+
+		private void _listener_ReceivedMessage(MessageObject messageObject)
+		{
+			if (messageObject.Type == MessageTypeEnum.Feedback)
+			{
+				_listener.ReceivedMessage -= _listener_ReceivedMessage;
+				_avatar.SetText(messageObject.GetValueOf("feedback"));
+			}
 		}
 
 		public void AddCancelButton(GameObject cancelButton)

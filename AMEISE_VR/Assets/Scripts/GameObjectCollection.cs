@@ -79,7 +79,7 @@ namespace Assets.Scripts
 					CommandDialog = new CommandDialog(gameObject, Player);
 					break;
 				case GameObjectEnum.EmployeeCommandControl:
-					EmployeeCommandDialog = new EmployeeCommandDialog(gameObject, Player);
+					EmployeeCommandDialog = new EmployeeCommandDialog(gameObject, MessageListener, Player);
 					Button = gameObject.transform.Find("TemplateButton").gameObject;
 					break;
 				case GameObjectEnum.Office:

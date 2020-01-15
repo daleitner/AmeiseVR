@@ -58,5 +58,10 @@ namespace Assets.Scripts
 		{
 			return _avatars.SingleOrDefault(a => a.GameObject == gameObject);
 		}
+
+		public List<Avatar> GetEmployees()
+		{
+			return _avatars.Where(x => !x.IsDummy).ToList();
+		}
 	}
 }
