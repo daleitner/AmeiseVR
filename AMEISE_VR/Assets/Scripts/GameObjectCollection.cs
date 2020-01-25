@@ -38,7 +38,8 @@ namespace Assets.Scripts
 		public static GameObject Office { get; set; }
 		public static GameObject Book { get; private set; }
 		public static GameObject Task { get; private set; }
-		public static GameObject Avatar { get; private set; }
+		public static GameObject DefaultAvatar { get; private set; }
+		public static Dictionary<string, GameObject> Avatars { get; } = new Dictionary<string, GameObject>();
 		public static GameObject PlayerBoard { get; private set; }
 		private static BookCollection Shelf;
 		private static GameObject MyOfficeDesk;
@@ -73,7 +74,7 @@ namespace Assets.Scripts
 					Book = gameObject;
 					break;
 				case GameObjectEnum.Avatar:
-					Avatar = gameObject;
+					DefaultAvatar = gameObject;
 					break;
 				case GameObjectEnum.CommandControl:
 					CommandDialog = new CommandDialog(gameObject, Player);
@@ -107,6 +108,14 @@ namespace Assets.Scripts
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type), type, null);
 			}
+		}
+
+		public static void AddAvatar(GameObject avatar, string name)
+		{
+			if (Avatars.Keys.Contains(name))
+				return;
+
+			Avatars.Add(name, avatar);
 		}
 
 		public static void AddBookToShelf(GameObject newBookObject, string title, Command command, string[] parameters)

@@ -57,17 +57,24 @@ public class ObjectCreator : MonoBehaviour
 	private static void CreateAvatars()
 	{
 		var collection = GameObjectCollection.AvatarsCollection;
-		var avatarTemplate = GameObjectCollection.Avatar;
+		var avatarTemplate = GameObjectCollection.DefaultAvatar;
+		var avatarDict = GameObjectCollection.Avatars;
 		var speechBubbleTemplate = GameObjectCollection.SpeechBubble;
 		for (int i = 0; i < AvatarsCollection.MaxAvatars; i++)
 		{
-			var gameObject = Instantiate(avatarTemplate);
-			var avatar = collection.AddAvatar(gameObject);
 			if (i < KnowledgeBase.Instance.Employees.Count)
 			{
 				var employeeName = KnowledgeBase.Instance.Employees[i];
+				var gameObject = Instantiate(avatarDict[employeeName]);
+				var avatar = collection.AddAvatar(gameObject);
+				
 				var speechBubble = Instantiate(speechBubbleTemplate);
 				avatar.AssignEmployee(employeeName, speechBubble);
+			}
+			else
+			{
+				var gameObject = Instantiate(avatarTemplate);
+				collection.AddAvatar(gameObject);
 			}
 		}
 	}
