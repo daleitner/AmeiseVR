@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,6 +28,18 @@ public class KnowledgeBase
 	public List<Command> EmployeeCommands
 	{
 		get { return Commands?.Where(cmd => cmd.GetFeedBackImmediately && !SpecialCommands.Contains(cmd) || cmd.Name == "show me tasks of developer").ToList(); }
+	}
+
+	public List<Command> SecretaryCommands
+	{
+		get
+		{
+			return new List<Command>
+			{
+				Commands.Single(x => x.Name == "show me available developers"),
+				Commands.Single(x => x.Name == "show me my team members")
+			};
+		}
 	}
 
 	public List<Command> WhiteBoardCommands

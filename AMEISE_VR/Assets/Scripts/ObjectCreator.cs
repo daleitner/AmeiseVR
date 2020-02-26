@@ -29,10 +29,12 @@ public class ObjectCreator : MonoBehaviour
 
 		CreateTasks();
 
-		CreateButtons();
+		CreateEmployeeCommandDialogButtons();
+
+		CreateSecretaryCommandDialogButtons();
 	}
 
-	private static void CreateButtons()
+	private static void CreateEmployeeCommandDialogButtons()
 	{
 		var buttonTemplate = GameObjectCollection.Button;
 		var cancelButton = Instantiate(buttonTemplate);
@@ -41,6 +43,18 @@ public class ObjectCreator : MonoBehaviour
 		{
 			var gameObject = Instantiate(buttonTemplate);
 			GameObjectCollection.AddButtonToEmployeeCommandDialog(gameObject, command);
+		}
+	}
+
+	private static void CreateSecretaryCommandDialogButtons()
+	{
+		var buttonTemplate = GameObjectCollection.Button;
+		var cancelButton = Instantiate(buttonTemplate);
+		GameObjectCollection.SecretaryCommandDialog.AddCancelButton(cancelButton);
+		foreach (var command in KnowledgeBase.Instance.SecretaryCommands)
+		{
+			var gameObject = Instantiate(buttonTemplate);
+			GameObjectCollection.AddButtonToSecretaryCommandDialog(gameObject, command);
 		}
 	}
 
@@ -63,7 +77,7 @@ public class ObjectCreator : MonoBehaviour
 		for (int i = 0; i < AvatarsCollection.MaxAvatars; i++)
 		{
 			if (i < KnowledgeBase.Instance.Employees.Count)
-			{
+			{ //Employees
 				var employeeName = KnowledgeBase.Instance.Employees[i];
 				var gameObject = Instantiate(avatarDict[employeeName]);
 				var avatar = collection.AddAvatar(gameObject);
@@ -71,8 +85,15 @@ public class ObjectCreator : MonoBehaviour
 				var speechBubble = Instantiate(speechBubbleTemplate);
 				avatar.AssignEmployee(employeeName, speechBubble);
 			}
+			else if (i >= AvatarsCollection.MaxAvatars - 2)
+			{	//secretaries
+				var gameObject = Instantiate(avatarTemplate);
+				var avatar = collection.AddAvatar(gameObject);
+				var speechBubble = Instantiate(speechBubbleTemplate);
+				avatar.AssignSecretary(speechBubble);
+			}
 			else
-			{
+			{ //dummies
 				var gameObject = Instantiate(avatarTemplate);
 				collection.AddAvatar(gameObject);
 			}

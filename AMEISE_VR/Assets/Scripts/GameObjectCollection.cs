@@ -21,7 +21,8 @@ namespace Assets.Scripts
 		PlayerBoard,
 		LoginText,
 		EmployeeCommandControl,
-		SpeechBubble
+		SpeechBubble,
+		SecretaryCommandControl
 	}
 
 	public static class GameObjectCollection
@@ -34,6 +35,7 @@ namespace Assets.Scripts
 		public static GameSelectionDialog GameSelectionDialog { get; private set; }
 		public static CommandDialog CommandDialog { get; private set; }
 		public static EmployeeCommandDialog EmployeeCommandDialog { get; private set; }
+		public static SecretaryCommandDialog SecretaryCommandDialog { get; private set; }
 		public static MessageListener MessageListener { get; private set; }
 		public static GameObject Office { get; set; }
 		public static GameObject Book { get; private set; }
@@ -82,6 +84,9 @@ namespace Assets.Scripts
 				case GameObjectEnum.EmployeeCommandControl:
 					EmployeeCommandDialog = new EmployeeCommandDialog(gameObject, MessageListener, Player);
 					Button = gameObject.transform.Find("TemplateButton").gameObject;
+					break;
+				case GameObjectEnum.SecretaryCommandControl:
+					SecretaryCommandDialog = new SecretaryCommandDialog(gameObject, MessageListener, Player);
 					break;
 				case GameObjectEnum.Office:
 					Office = gameObject;
@@ -203,6 +208,12 @@ namespace Assets.Scripts
 		{
 			var commandButton = new CommandButton(button, command);
 			EmployeeCommandDialog.AddButton(commandButton);
+		}
+
+		public static void AddButtonToSecretaryCommandDialog(GameObject button, Command command)
+		{
+			var commandButton = new CommandButton(button, command);
+			SecretaryCommandDialog.AddButton(commandButton);
 		}
 	}
 }

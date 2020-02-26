@@ -36,6 +36,7 @@ public class Detection : MonoBehaviour
 	public GameObject Task;
 	public GameObject PlayerBoard;
 	public GameObject EmployeeCommandControl;
+	public GameObject SecretaryCommandControl;
 	public GameObject SpeechBubble;
 
 	private GameConfiguration config;
@@ -72,6 +73,7 @@ public class Detection : MonoBehaviour
 		GameObjectCollection.AddGameObject(LoginFailedControl, GameObjectEnum.LoginFailedControl);
 		GameObjectCollection.AddGameObject(CommandControl, GameObjectEnum.CommandControl);
 		GameObjectCollection.AddGameObject(EmployeeCommandControl, GameObjectEnum.EmployeeCommandControl);
+		GameObjectCollection.AddGameObject(SecretaryCommandControl, GameObjectEnum.SecretaryCommandControl);
 		GameObjectCollection.AddGameObject(Book, GameObjectEnum.Book);
 		GameObjectCollection.AddGameObject(Avatar, GameObjectEnum.Avatar);
 		GameObjectCollection.AddGameObject(Office, GameObjectEnum.Office);
@@ -257,9 +259,18 @@ public class Detection : MonoBehaviour
 						var avatar = GameObjectCollection.AvatarsCollection.Get(hit.transform.gameObject);
 						if (!avatar.IsDummy)
 						{
-							var employeeDialog = GameObjectCollection.EmployeeCommandDialog;
-							employeeDialog.SetAvatar(avatar);
-							employeeDialog.OpenDialog();
+							if (avatar.IsSecretary)
+							{
+								var secretaryDialog = GameObjectCollection.SecretaryCommandDialog;
+								secretaryDialog.SetAvatar(avatar);
+								secretaryDialog.OpenDialog();
+							}
+							else
+							{
+								var employeeDialog = GameObjectCollection.EmployeeCommandDialog;
+								employeeDialog.SetAvatar(avatar);
+								employeeDialog.OpenDialog();
+							}
 						}
 					}
 					break;
