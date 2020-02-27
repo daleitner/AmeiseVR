@@ -20,9 +20,7 @@ namespace Assets.Scripts
 		Task,
 		PlayerBoard,
 		LoginText,
-		EmployeeCommandControl,
-		SpeechBubble,
-		SecretaryCommandControl
+		SpeechBubble
 	}
 
 	public static class GameObjectCollection
@@ -34,8 +32,6 @@ namespace Assets.Scripts
 		public static LoginFailedDialog LoginFailedDialog { get; private set; }
 		public static GameSelectionDialog GameSelectionDialog { get; private set; }
 		public static CommandDialog CommandDialog { get; private set; }
-		public static EmployeeCommandDialog EmployeeCommandDialog { get; private set; }
-		public static SecretaryCommandDialog SecretaryCommandDialog { get; private set; }
 		public static MessageListener MessageListener { get; private set; }
 		public static GameObject Office { get; set; }
 		public static GameObject Book { get; private set; }
@@ -81,17 +77,10 @@ namespace Assets.Scripts
 				case GameObjectEnum.CommandControl:
 					CommandDialog = new CommandDialog(gameObject, Player);
 					break;
-				case GameObjectEnum.EmployeeCommandControl:
-					EmployeeCommandDialog = new EmployeeCommandDialog(gameObject, MessageListener, Player);
-					Button = gameObject.transform.Find("TemplateButton").gameObject;
-					break;
-				case GameObjectEnum.SecretaryCommandControl:
-					SecretaryCommandDialog = new SecretaryCommandDialog(gameObject, MessageListener, Player);
-					break;
 				case GameObjectEnum.Office:
 					Office = gameObject;
 					MyOfficeDesk = Office.transform.Find("MyOffice").Find("Desk").gameObject;
-					AvatarsCollection = new AvatarsCollection(Office.transform.Find("Avatars").gameObject);
+					AvatarsCollection = new AvatarsCollection(Office.transform.Find("Avatars").gameObject, MessageListener);
 					var shelf = Office.transform.Find("MyOffice").Find("Shelf_05").Find("Shelf").gameObject;
 					Shelf = new BookCollection(shelf);
 					var whiteBoard = Office.transform.Find("MyOffice").Find("WhiteBoard");
@@ -202,18 +191,6 @@ namespace Assets.Scripts
 		public static void SetLoginText(string text)
 		{
 			LoginText.text = text;
-		}
-
-		public static void AddButtonToEmployeeCommandDialog(GameObject button, Command command)
-		{
-			var commandButton = new CommandButton(button, command);
-			EmployeeCommandDialog.AddButton(commandButton);
-		}
-
-		public static void AddButtonToSecretaryCommandDialog(GameObject button, Command command)
-		{
-			var commandButton = new CommandButton(button, command);
-			SecretaryCommandDialog.AddButton(commandButton);
 		}
 	}
 }

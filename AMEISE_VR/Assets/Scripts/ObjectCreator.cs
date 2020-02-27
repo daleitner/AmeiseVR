@@ -28,34 +28,6 @@ public class ObjectCreator : MonoBehaviour
 		CreateAvatars();
 
 		CreateTasks();
-
-		CreateEmployeeCommandDialogButtons();
-
-		CreateSecretaryCommandDialogButtons();
-	}
-
-	private static void CreateEmployeeCommandDialogButtons()
-	{
-		var buttonTemplate = GameObjectCollection.Button;
-		var cancelButton = Instantiate(buttonTemplate);
-		GameObjectCollection.EmployeeCommandDialog.AddCancelButton(cancelButton);
-		foreach (var command in KnowledgeBase.Instance.EmployeeCommands)
-		{
-			var gameObject = Instantiate(buttonTemplate);
-			GameObjectCollection.AddButtonToEmployeeCommandDialog(gameObject, command);
-		}
-	}
-
-	private static void CreateSecretaryCommandDialogButtons()
-	{
-		var buttonTemplate = GameObjectCollection.Button;
-		var cancelButton = Instantiate(buttonTemplate);
-		GameObjectCollection.SecretaryCommandDialog.AddCancelButton(cancelButton);
-		foreach (var command in KnowledgeBase.Instance.SecretaryCommands)
-		{
-			var gameObject = Instantiate(buttonTemplate);
-			GameObjectCollection.AddButtonToSecretaryCommandDialog(gameObject, command);
-		}
 	}
 
 	private static void CreateTasks()

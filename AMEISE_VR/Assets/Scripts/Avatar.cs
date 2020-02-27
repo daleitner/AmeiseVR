@@ -1,14 +1,20 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
 	public class Avatar : GameObjectModelBase
 	{
+		private readonly MessageListener _listener;
 		private const string DefaultText = "Loading...";
 		private SpeechBubble _speechBubble;
-		public Avatar(GameObject avatar)
+		private DialogCreator _dialogCreator;
+		public Avatar(GameObject avatar, MessageListener listener)
 			:base(avatar)
 		{
+			_listener = listener;
+			_dialogCreator = avatar.GetComponent<DialogCreator>();
 		}
 
 		public string Name { get; private set; }
@@ -52,6 +58,54 @@ namespace Assets.Scripts
 		public void ShowBubble()
 		{
 			SetText(DefaultText);
+		}
+
+		public void ShowDialog()
+		{
+			var dict = new Dictionary<string, object>();
+			if(IsSecretary)
+				KnowledgeBase.Instance.SecretaryCommands.ForEach(cmd => dict.Add(cmd.Name, cmd));
+			else
+				KnowledgeBase.Instance.EmployeeCommands.ForEach(cmd => dict.Add(cmd.Name, cmd));
+			_dialogCreator.ShowSelectionDialog("Give a command to " + (string.IsNullOrEmpty(Name) ? "Secretary" : Name), dict);
+		}
+
+		public void ButtonClicked(GameObject button)
+		{
+			var buttons = _dialogCreator.GetButtons();
+			if (buttons[button] is Command cmd)
+			{
+				SendCommand(cmd);
+				ShowBubble();
+			}
+
+			_dialogCreator.CloseDialog();
+		}
+
+		private void SendCommand(Command cmd)
+		{
+			var command = new CommandInstance(cmd);
+			var firstParameter = command.GetNextEmptyParameter();
+			if (firstParameter != null)
+			{
+				if (firstParameter.Parameter.Type == KnowledgeBase.EmployeeType)
+					firstParameter.Value = Name;
+			}
+
+			_listener.ReceivedMessage += _listener_ReceivedMessage;
+			ClientConnection.GetInstance().SendCommand(command.Command, command.ParameterValues.Select(x => x.Value).ToArray());
+		}
+
+		private void _listener_ReceivedMessage(MessageObject messageObject)
+		{
+			if (messageObject.Type == MessageTypeEnum.Feedback)
+			{
+				_listener.ReceivedMessage -= _listener_ReceivedMessage;
+				var message = messageObject.GetValueOf("feedback");
+				if (IsSecretary)
+					message += " You will find the information tomorrow in your history book.";
+				SetText(message);
+			}
 		}
 	}
 }

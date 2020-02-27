@@ -35,8 +35,6 @@ public class Detection : MonoBehaviour
 	public GameObject Avatar;
 	public GameObject Task;
 	public GameObject PlayerBoard;
-	public GameObject EmployeeCommandControl;
-	public GameObject SecretaryCommandControl;
 	public GameObject SpeechBubble;
 
 	private GameConfiguration config;
@@ -72,8 +70,6 @@ public class Detection : MonoBehaviour
 		GameObjectCollection.AddGameObject(GameSelectionControl, GameObjectEnum.GameSelectionControl);
 		GameObjectCollection.AddGameObject(LoginFailedControl, GameObjectEnum.LoginFailedControl);
 		GameObjectCollection.AddGameObject(CommandControl, GameObjectEnum.CommandControl);
-		GameObjectCollection.AddGameObject(EmployeeCommandControl, GameObjectEnum.EmployeeCommandControl);
-		GameObjectCollection.AddGameObject(SecretaryCommandControl, GameObjectEnum.SecretaryCommandControl);
 		GameObjectCollection.AddGameObject(Book, GameObjectEnum.Book);
 		GameObjectCollection.AddGameObject(Avatar, GameObjectEnum.Avatar);
 		GameObjectCollection.AddGameObject(Office, GameObjectEnum.Office);
@@ -258,20 +254,18 @@ public class Detection : MonoBehaviour
 					{
 						var avatar = GameObjectCollection.AvatarsCollection.Get(hit.transform.gameObject);
 						if (!avatar.IsDummy)
-						{
-							if (avatar.IsSecretary)
-							{
-								var secretaryDialog = GameObjectCollection.SecretaryCommandDialog;
-								secretaryDialog.SetAvatar(avatar);
-								secretaryDialog.OpenDialog();
-							}
-							else
-							{
-								var employeeDialog = GameObjectCollection.EmployeeCommandDialog;
-								employeeDialog.SetAvatar(avatar);
-								employeeDialog.OpenDialog();
-							}
-						}
+							avatar.ShowDialog();
+					}
+					break;
+				case CommandTagEnum.Button:
+					if (Input.GetMouseButtonDown(0))
+					{
+						var avatarGameObject = hit.transform.gameObject;
+						while (!Tags.Keys.Contains(avatarGameObject.tag) || Tags[avatarGameObject.tag] != CommandTagEnum.Avatar)
+							avatarGameObject = avatarGameObject.transform.parent.gameObject;
+
+						var avatar = GameObjectCollection.AvatarsCollection.Get(avatarGameObject);
+						avatar.ButtonClicked(hit.transform.gameObject);
 					}
 					break;
 				default:
@@ -307,7 +301,8 @@ public class Detection : MonoBehaviour
 		Phone,
 		PostBox,
 		WasteBin,
-		Avatar
+		Avatar,
+		Button
 	}
 
 	private static readonly Dictionary<string, CommandTagEnum> Tags = new Dictionary<string, CommandTagEnum>
@@ -323,7 +318,8 @@ public class Detection : MonoBehaviour
 		{"Phone", CommandTagEnum.Phone},
 		{"PostBox", CommandTagEnum.PostBox},
 		{"WasteBin", CommandTagEnum.WasteBin},
-		{"Avatar", CommandTagEnum.Avatar}
+		{"Avatar", CommandTagEnum.Avatar},
+		{"Button", CommandTagEnum.Button}
 	};
 
 	private static readonly Dictionary<CommandTagEnum, string> ToolTips = new Dictionary<CommandTagEnum, string>
@@ -339,6 +335,7 @@ public class Detection : MonoBehaviour
 		{CommandTagEnum.Phone, "Call customer to perform acceptance tests" },
 		{CommandTagEnum.PostBox, "Deliver System" },
 		{CommandTagEnum.WasteBin, "Cancel Project" },
-		{CommandTagEnum.Avatar, "" }
+		{CommandTagEnum.Avatar, "" },
+		{CommandTagEnum.Button, "" }
 	};
 }

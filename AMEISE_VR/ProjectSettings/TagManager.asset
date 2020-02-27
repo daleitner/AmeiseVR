@@ -25,6 +25,7 @@ TagManager:
   - Phone
   - PostBox
   - WasteBin
+  - Button
   layers:
   - Default
   - TransparentFX

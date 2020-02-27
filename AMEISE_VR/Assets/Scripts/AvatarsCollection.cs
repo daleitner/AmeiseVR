@@ -8,12 +8,14 @@ namespace Assets.Scripts
 	public class AvatarsCollection
 	{
 		private readonly GameObject _avatarsContainer;
+		private readonly MessageListener _listener;
 		private readonly List<Avatar> _avatars;
 
-		public AvatarsCollection(GameObject avatarsContainer)
+		public AvatarsCollection(GameObject avatarsContainer, MessageListener listener)
 		{
 			_avatars = new List<Avatar>();
 			_avatarsContainer = avatarsContainer;
+			_listener = listener;
 		}
 
 		public Avatar AddAvatar(GameObject avatarObject)
@@ -23,7 +25,7 @@ namespace Assets.Scripts
 
 			avatarObject.transform.parent = _avatarsContainer.transform;
 			avatarObject.transform.localPosition = OfficePlaces[_avatars.Count];
-			var avatar = new Avatar(avatarObject); 
+			var avatar = new Avatar(avatarObject, _listener); 
 			_avatars.Add(avatar);
 			avatarObject.SetActive(true);
 			return avatar;
