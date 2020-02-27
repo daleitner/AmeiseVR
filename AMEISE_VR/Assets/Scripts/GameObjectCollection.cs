@@ -14,7 +14,6 @@ namespace Assets.Scripts
 		LoginFailedControl,
 		FPSController,
 		Book,
-		CommandControl,
 		Office,
 		Avatar,
 		Task,
@@ -31,7 +30,6 @@ namespace Assets.Scripts
 		public static LoginDialog LoginDialog { get; private set; }
 		public static LoginFailedDialog LoginFailedDialog { get; private set; }
 		public static GameSelectionDialog GameSelectionDialog { get; private set; }
-		public static CommandDialog CommandDialog { get; private set; }
 		public static MessageListener MessageListener { get; private set; }
 		public static GameObject Office { get; set; }
 		public static GameObject Book { get; private set; }
@@ -73,9 +71,6 @@ namespace Assets.Scripts
 					break;
 				case GameObjectEnum.Avatar:
 					DefaultAvatar = gameObject;
-					break;
-				case GameObjectEnum.CommandControl:
-					CommandDialog = new CommandDialog(gameObject, Player);
 					break;
 				case GameObjectEnum.Office:
 					Office = gameObject;

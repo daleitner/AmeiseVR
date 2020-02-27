@@ -28,7 +28,6 @@ public class Detection : MonoBehaviour
 	public GameObject GameSelectionControl;
 	public GameObject LoginFailedControl;
 	public GameObject FPSController;
-	public GameObject CommandControl;
 	public GameObject LoginText;
 	public GameObject Book;
 	public GameObject Office;
@@ -69,7 +68,6 @@ public class Detection : MonoBehaviour
 		GameObjectCollection.AddGameObject(LoginControl, GameObjectEnum.LoginControl);
 		GameObjectCollection.AddGameObject(GameSelectionControl, GameObjectEnum.GameSelectionControl);
 		GameObjectCollection.AddGameObject(LoginFailedControl, GameObjectEnum.LoginFailedControl);
-		GameObjectCollection.AddGameObject(CommandControl, GameObjectEnum.CommandControl);
 		GameObjectCollection.AddGameObject(Book, GameObjectEnum.Book);
 		GameObjectCollection.AddGameObject(Avatar, GameObjectEnum.Avatar);
 		GameObjectCollection.AddGameObject(Office, GameObjectEnum.Office);
@@ -89,10 +87,6 @@ public class Detection : MonoBehaviour
 
         RaycastHit hit; // Variable reading information about the collider hit
 
-		if (Input.GetKey("8"))
-			config.OpenCommandDialog();
-		else if (Input.GetKey("9"))
-			config.CloseCommandDialog();
 		// Cast ray from center of the screen towards where the player is looking
 		if (Physics.Raycast(ray, out hit, Reach))
 		{

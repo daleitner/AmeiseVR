@@ -8,7 +8,6 @@ public class GameConfiguration
 	private readonly LoginDialog _loginDialog;
 	private readonly LoginFailedDialog _loginFailedDialog;
 	private readonly GameSelectionDialog _gameSelectionDialog;
-	private readonly CommandDialog _commandDialog;
 	private readonly Book _historyBook;
 
 	public GameConfiguration()
@@ -17,7 +16,6 @@ public class GameConfiguration
 		_loginDialog = GameObjectCollection.LoginDialog;
 		_loginFailedDialog = GameObjectCollection.LoginFailedDialog;
 		_gameSelectionDialog = GameObjectCollection.GameSelectionDialog;
-		_commandDialog = GameObjectCollection.CommandDialog;
 		_historyBook = GameObjectCollection.HistoryBook;
 		var messageListener = GameObjectCollection.MessageListener;
 		messageListener.ReceivedMessage += ReceivedMessage;
@@ -31,16 +29,6 @@ public class GameConfiguration
 	public void OpenLoginDialog()
 	{
 		_loginDialog.OpenDialog();
-	}
-
-	public void OpenCommandDialog()
-	{
-		_commandDialog.OpenDialog();
-	}
-
-	public void CloseCommandDialog()
-	{
-		_commandDialog.CloseDialog();
 	}
 
 	private void BackClicked()
@@ -121,7 +109,6 @@ public class GameConfiguration
 				}
 				commands.Add(command);
 			}
-			_commandDialog.SetCommands(commands);
 			KnowledgeBase.Instance.Commands = commands;
 
 			var paramDict = new Dictionary<string, List<string>>();
@@ -136,7 +123,6 @@ public class GameConfiguration
 				paramDict.Add(type, parameters);
 				KnowledgeBase.Instance.AddParameterType(type, parameters);
 			}
-			_commandDialog.SetParameters(paramDict);
 			KnowledgeBase.Instance.SetLoadingCommandsFinished();
 
 			var str = "";

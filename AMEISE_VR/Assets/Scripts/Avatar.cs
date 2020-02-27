@@ -10,6 +10,7 @@ namespace Assets.Scripts
 		private const string DefaultText = "Loading...";
 		private SpeechBubble _speechBubble;
 		private DialogCreator _dialogCreator;
+		private Command _tempCommand;
 		public Avatar(GameObject avatar, MessageListener listener)
 			:base(avatar)
 		{
@@ -73,27 +74,51 @@ namespace Assets.Scripts
 		public void ButtonClicked(GameObject button)
 		{
 			var buttons = _dialogCreator.GetButtons();
-			if (buttons[button] is Command cmd)
+
+			if (buttons[button] == null)
 			{
-				SendCommand(cmd);
-				ShowBubble();
+				_tempCommand = null;
+				_dialogCreator.CloseDialog();
+				return;
 			}
+
+			var cmd = _tempCommand ?? buttons[button] as Command;
+			var parameter = buttons[button] as string;
+			
+			var command = CreateCommandInstance(cmd, parameter);
+			var emptyParameter = command.GetNextEmptyParameter();
+			if (emptyParameter != null)
+			{
+				_dialogCreator.CloseDialog();
+				_tempCommand = cmd;
+				var dict = new Dictionary<string, object>();
+				KnowledgeBase.Instance.GetValuesOfParameterType(emptyParameter.Parameter.Type).ForEach(par => dict.Add(par, par));
+				_dialogCreator.ShowSelectionDialog("Select a parameter", dict);
+				return;
+			}
+
+			SendCommand(command);
+			ShowBubble();
 
 			_dialogCreator.CloseDialog();
 		}
 
-		private void SendCommand(Command cmd)
+		private CommandInstance CreateCommandInstance(Command cmd, string parameter = null)
 		{
 			var command = new CommandInstance(cmd);
 			var firstParameter = command.GetNextEmptyParameter();
 			if (firstParameter != null)
 			{
-				if (firstParameter.Parameter.Type == KnowledgeBase.EmployeeType)
-					firstParameter.Value = Name;
+				firstParameter.Value = firstParameter.Parameter.Type == KnowledgeBase.EmployeeType ? Name : parameter;
 			}
+			return command;
+		}
 
+		private void SendCommand(CommandInstance cmd)
+		{
 			_listener.ReceivedMessage += _listener_ReceivedMessage;
-			ClientConnection.GetInstance().SendCommand(command.Command, command.ParameterValues.Select(x => x.Value).ToArray());
+			ClientConnection.GetInstance().SendCommand(cmd.Command, cmd.ParameterValues.Select(x => x.Value).ToArray());
+			_tempCommand = null;
 		}
 
 		private void _listener_ReceivedMessage(MessageObject messageObject)
