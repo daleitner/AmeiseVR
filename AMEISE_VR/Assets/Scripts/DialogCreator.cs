@@ -8,8 +8,8 @@ namespace Assets.Scripts
 	public class DialogCreator : MonoBehaviour
 	{
 		private static readonly Color BackgroundColor = new Color(0.5f, 0.5f, 0.5f, 0.1f);
-		private static readonly Vector3 DialogPosition = new Vector3(1.0f, 2.0f, 0.0f);
-		private static readonly Vector3 DialogScale = new Vector3(0.001f, 4.0f, 2.0f);
+		private static readonly Vector3 DialogPosition = new Vector3(0.0f, 11.0f, -7.0f);
+		private static readonly Vector3 DialogScale = new Vector3(0.001f, 10.0f, 5.0f);
 		private static readonly Vector3 TitlePosition = new Vector3(1.0f, 0.45f, 0.0f);
 		private static readonly Vector3 TitleScale = new Vector3(0.012f, 0.007f, 1.0f);
 		private static readonly Vector3 ButtonScale = new Vector3(10.0f, 0.05f, 0.7f);

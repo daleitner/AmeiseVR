@@ -34,7 +34,7 @@ namespace Assets.Scripts
 		{
 			_speechBubble = new SpeechBubble(speechBubble);
 			_speechBubble.SetParent(GameObject);
-			_speechBubble.MoveTo(new Vector3(0.0f, 2.0f, 0.0f));
+			_speechBubble.MoveTo(new Vector3(0.0f, 14.0f, 0.0f));
 		}
 
 		public void SetText(string text)

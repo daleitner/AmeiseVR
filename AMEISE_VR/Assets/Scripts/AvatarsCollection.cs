@@ -24,41 +24,42 @@ namespace Assets.Scripts
 				throw new Exception("max count of avatars reached!");
 
 			avatarObject.transform.parent = _avatarsContainer.transform;
-			avatarObject.transform.localPosition = OfficePlaces[_avatars.Count];
-			var avatar = new Avatar(avatarObject, _listener); 
+			avatarObject.transform.localPosition = OfficePlaces[_avatars.Count].Position;
+			avatarObject.transform.localRotation = OfficePlaces[_avatars.Count].Rotation;
+
+		var avatar = new Avatar(avatarObject, _listener); 
 			_avatars.Add(avatar);
 			avatarObject.SetActive(true);
 			return avatar;
 		}
 
 		public static int MaxAvatars => OfficePlaces.Length;
+		private static float YOffset = -0.65f;
 
-		private static Vector3[] OfficePlaces =
+		private static TransformObject[] OfficePlaces =
 		{
-			new Vector3(-18.44f, YOffset, -4.603f),
-			new Vector3(-18.44f, YOffset, -7.088f),
-			new Vector3(-18.44f, YOffset, -9.621f),
-			new Vector3(-18.44f, YOffset, -19.667f),
-			new Vector3(-18.44f, YOffset, -22.140f),
-			new Vector3(-18.44f, YOffset, -24.64f),
-			new Vector3(-21.732f, YOffset, -4.151f),
-			new Vector3(-21.732f, YOffset, -6.635f),
-			new Vector3(-21.732f, YOffset, -9.107f),
-			new Vector3(-21.732f, YOffset, -19.179f),
-			new Vector3(-21.732f, YOffset, -21.696f),
-			new Vector3(-21.732f, YOffset, -24.164f),
-			new Vector3(-26.759f, YOffset, -4.151f),
-			new Vector3(-26.759f, YOffset, -6.635f),
-			new Vector3(-26.759f, YOffset, -9.107f),
-			new Vector3(-26.759f, YOffset, -19.179f),
-			new Vector3(-26.759f, YOffset, -21.696f),
-			new Vector3(-26.759f, YOffset, -24.164f),
-			new Vector3(22.5f, YOffset, -6.25f),
-			new Vector3(22.5f, YOffset, -9.1f)
+			new TransformObject(new Vector3(-18.86f, YOffset, -4.603f), Quaternion.Euler(0.0f, -90.0f, 0.0f)),
+			new TransformObject(new Vector3(-18.86f, YOffset, -7.088f), Quaternion.Euler(0.0f, -90.0f, 0.0f)),
+			new TransformObject(new Vector3(-18.86f, YOffset, -9.621f), Quaternion.Euler(0.0f, -90.0f, 0.0f)),
+			new TransformObject(new Vector3(-18.86f, YOffset, -19.667f), Quaternion.Euler(0.0f, -90.0f, 0.0f)),
+			new TransformObject(new Vector3(-18.86f, YOffset, -22.140f), Quaternion.Euler(0.0f, -90.0f, 0.0f)),
+			new TransformObject(new Vector3(-18.86f, YOffset, -24.64f), Quaternion.Euler(0.0f, -90.0f, 0.0f)),
+			new TransformObject(new Vector3(-21.3f, YOffset, -4.151f), Quaternion.Euler(0.0f, 90.0f, 0.0f)),
+			new TransformObject(new Vector3(-21.3f, YOffset, -6.635f), Quaternion.Euler(0.0f, 90.0f, 0.0f)),
+			new TransformObject(new Vector3(-21.3f, YOffset, -9.107f), Quaternion.Euler(0.0f, 90.0f, 0.0f)),
+			new TransformObject(new Vector3(-21.3f, YOffset, -19.179f), Quaternion.Euler(0.0f, 90.0f, 0.0f)),
+			new TransformObject(new Vector3(-21.3f, YOffset, -21.696f), Quaternion.Euler(0.0f, 90.0f, 0.0f)),
+			new TransformObject(new Vector3(-21.3f, YOffset, -24.164f), Quaternion.Euler(0.0f, 90.0f, 0.0f)),
+			new TransformObject(new Vector3(-26.327f, YOffset, -4.151f), Quaternion.Euler(0.0f, 90.0f, 0.0f)),
+			new TransformObject(new Vector3(-26.327f, YOffset, -6.635f), Quaternion.Euler(0.0f, 90.0f, 0.0f)),
+			new TransformObject(new Vector3(-26.327f, YOffset, -9.107f), Quaternion.Euler(0.0f, 90.0f, 0.0f)),
+			new TransformObject(new Vector3(-26.327f, YOffset, -19.179f), Quaternion.Euler(0.0f, 90.0f, 0.0f)),
+			new TransformObject(new Vector3(-26.327f, YOffset, -21.696f), Quaternion.Euler(0.0f, 90.0f, 0.0f)),
+			new TransformObject(new Vector3(-26.327f, YOffset, -24.164f), Quaternion.Euler(0.0f, 90.0f, 0.0f)),
+			new TransformObject(new Vector3(21.931f, -0.86f, -6.25f), Quaternion.Euler(0.0f, -90.0f, 0.0f)),
+			new TransformObject(new Vector3(21.931f, -0.86f, -9.1f), Quaternion.Euler(0.0f, -90.0f, 0.0f))
 		};
-
-		private static float YOffset = 0.34f;
-
+		
 		public Avatar Get(GameObject gameObject)
 		{
 			return _avatars.SingleOrDefault(a => a.GameObject == gameObject);
