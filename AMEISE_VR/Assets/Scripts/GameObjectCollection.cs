@@ -19,7 +19,8 @@ namespace Assets.Scripts
 		Task,
 		PlayerBoard,
 		LoginText,
-		SpeechBubble
+		SpeechBubble,
+		Phone
 	}
 
 	public static class GameObjectCollection
@@ -41,12 +42,12 @@ namespace Assets.Scripts
 		private static GameObject MyOfficeDesk;
 		private static List<Book> AllBooks = new List<Book>();
 		private static TextMeshPro LoginText;
-		public static GameObject Button;
 		public static GameObject SpeechBubble;
 		public static AvatarsCollection AvatarsCollection { get; private set; }
 		public static TaskBoard TaskBoard { get; private set; }
 		public static PlayerBoardCollection PlayerBoardCollection { get; private set; }
 		public static Book HistoryBook { get; private set; }
+		public static Phone Phone { get; private set; }
 
 		public static void AddGameObject(GameObject gameObject, GameObjectEnum type)
 		{
@@ -93,6 +94,9 @@ namespace Assets.Scripts
 					break;
 				case GameObjectEnum.SpeechBubble:
 					SpeechBubble = gameObject;
+					break;
+				case GameObjectEnum.Phone:
+					Phone = new Phone(gameObject);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type), type, null);

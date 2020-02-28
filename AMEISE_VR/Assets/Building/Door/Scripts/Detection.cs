@@ -35,6 +35,7 @@ public class Detection : MonoBehaviour
 	public GameObject Task;
 	public GameObject PlayerBoard;
 	public GameObject SpeechBubble;
+	public GameObject Phone;
 
 	private GameConfiguration config;
 
@@ -75,6 +76,7 @@ public class Detection : MonoBehaviour
 		GameObjectCollection.AddGameObject(PlayerBoard, GameObjectEnum.PlayerBoard);
 		GameObjectCollection.AddGameObject(LoginText, GameObjectEnum.LoginText);
 		GameObjectCollection.AddGameObject(SpeechBubble, GameObjectEnum.SpeechBubble);
+		GameObjectCollection.AddGameObject(Phone, GameObjectEnum.Phone);
 		var historyBook = Instantiate(Book);
 		GameObjectCollection.AddHistoryBook(historyBook);
 		config = new GameConfiguration();
@@ -227,8 +229,9 @@ public class Detection : MonoBehaviour
 				case CommandTagEnum.Phone:
 					if (Input.GetMouseButtonDown(0))
 					{
-						ClientConnection.GetInstance().SendCommand(KnowledgeBase.Instance.CustomerAcceptanceTestCommand);
-						GameObjectCollection.HistoryBook.Open();
+						GameObjectCollection.Phone.ShowDialog();
+						//ClientConnection.GetInstance().SendCommand(KnowledgeBase.Instance.CustomerAcceptanceTestCommand);
+						//GameObjectCollection.HistoryBook.Open();
 					}
 					break;
 				case CommandTagEnum.PostBox:
@@ -254,12 +257,19 @@ public class Detection : MonoBehaviour
 				case CommandTagEnum.Button:
 					if (Input.GetMouseButtonDown(0))
 					{
-						var avatarGameObject = hit.transform.gameObject;
-						while (!Tags.Keys.Contains(avatarGameObject.tag) || Tags[avatarGameObject.tag] != CommandTagEnum.Avatar)
-							avatarGameObject = avatarGameObject.transform.parent.gameObject;
+						var taggedGameObject = hit.transform.gameObject;
+						while (!Tags.Keys.Contains(taggedGameObject.tag) || (Tags[taggedGameObject.tag] != CommandTagEnum.Avatar && Tags[taggedGameObject.tag] != CommandTagEnum.Phone))
+							taggedGameObject = taggedGameObject.transform.parent.gameObject;
 
-						var avatar = GameObjectCollection.AvatarsCollection.Get(avatarGameObject);
-						avatar.ButtonClicked(hit.transform.gameObject);
+						if (Tags[taggedGameObject.tag] == CommandTagEnum.Phone)
+						{
+							GameObjectCollection.Phone.ButtonClicked(hit.transform.gameObject);
+						}
+						else
+						{ 
+							var avatar = GameObjectCollection.AvatarsCollection.Get(taggedGameObject);
+							avatar.ButtonClicked(hit.transform.gameObject);
+						}
 					}
 					break;
 				default:

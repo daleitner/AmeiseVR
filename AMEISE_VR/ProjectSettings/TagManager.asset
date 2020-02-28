@@ -23,7 +23,6 @@ TagManager:
   - BookNext
   - BookBack
   - Phone
-  - PostBox
   - WasteBin
   - Button
   layers:

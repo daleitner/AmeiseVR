@@ -55,6 +55,7 @@ public class KnowledgeBase
 	public Command CancelProjectCommand => Commands.Single(x => x.Name == "finish project");
 	public Command FinishProjectCommand => Commands.Single(x => x.Name == "deliver system");
 	public Command CustomerAcceptanceTestCommand => Commands.Single(x => x.Name == "customer perform acceptance test");
+	public List<Command> CustomerCommands => new List<Command>{CustomerAcceptanceTestCommand, FinishProjectCommand };
 	private List<Command> SpecialCommands => new List<Command>{DeveloperInformationCommand, ResourceCommand, CancelProjectCommand, FinishProjectCommand, CustomerAcceptanceTestCommand};
 
 	public const string EmployeeType = "Entwickler";

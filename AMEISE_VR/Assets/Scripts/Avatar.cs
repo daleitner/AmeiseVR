@@ -6,6 +6,8 @@ namespace Assets.Scripts
 {
 	public class Avatar : GameObjectModelBase
 	{
+		private static readonly Vector3 DialogPosition = new Vector3(0.0f, 11.0f, -7.0f);
+		private static readonly Vector3 DialogScale = new Vector3(0.001f, 10.0f, 5.0f);
 		private readonly MessageListener _listener;
 		private const string DefaultText = "Loading...";
 		private SpeechBubble _speechBubble;
@@ -68,7 +70,7 @@ namespace Assets.Scripts
 				KnowledgeBase.Instance.SecretaryCommands.ForEach(cmd => dict.Add(cmd.Name, cmd));
 			else
 				KnowledgeBase.Instance.EmployeeCommands.ForEach(cmd => dict.Add(cmd.Name, cmd));
-			_dialogCreator.ShowSelectionDialog("Give a command to " + (string.IsNullOrEmpty(Name) ? "Secretary" : Name), dict);
+			_dialogCreator.ShowSelectionDialog("Give a command to " + (string.IsNullOrEmpty(Name) ? "Secretary" : Name), dict, DialogPosition, DialogScale);
 		}
 
 		public void ButtonClicked(GameObject button)
@@ -93,7 +95,7 @@ namespace Assets.Scripts
 				_tempCommand = cmd;
 				var dict = new Dictionary<string, object>();
 				KnowledgeBase.Instance.GetValuesOfParameterType(emptyParameter.Parameter.Type).ForEach(par => dict.Add(par, par));
-				_dialogCreator.ShowSelectionDialog("Select a parameter", dict);
+				_dialogCreator.ShowSelectionDialog("Select a parameter", dict, DialogPosition, DialogScale);
 				return;
 			}
 

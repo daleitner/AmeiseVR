@@ -8,8 +8,6 @@ namespace Assets.Scripts
 	public class DialogCreator : MonoBehaviour
 	{
 		private static readonly Color BackgroundColor = new Color(0.5f, 0.5f, 0.5f, 0.1f);
-		private static readonly Vector3 DialogPosition = new Vector3(0.0f, 11.0f, -7.0f);
-		private static readonly Vector3 DialogScale = new Vector3(0.001f, 10.0f, 5.0f);
 		private static readonly Vector3 TitlePosition = new Vector3(1.0f, 0.45f, 0.0f);
 		private static readonly Vector3 TitleScale = new Vector3(0.012f, 0.007f, 1.0f);
 		private static readonly Vector3 ButtonScale = new Vector3(10.0f, 0.05f, 0.7f);
@@ -23,11 +21,11 @@ namespace Assets.Scripts
 		private GameObject _dialog;
 		private Dictionary<GameObject, object> _items;
 
-		public void ShowSelectionDialog(string title, Dictionary<string, object> items)
+		public void ShowSelectionDialog(string title, Dictionary<string, object> items, Vector3 dialogPosition, Vector3 dialogScale)
 		{
 			if (IsOpen)
 				return;
-			CreateDialog(title);
+			CreateDialog(title, dialogPosition, dialogScale);
 			_items = new Dictionary<GameObject, object>();
 			foreach (var key in items.Keys)
 			{
@@ -51,13 +49,13 @@ namespace Assets.Scripts
 			return _items;
 		}
 
-		private void CreateDialog(string title)
+		private void CreateDialog(string title, Vector3 dialogPosition, Vector3 dialogScale)
 		{
 			_dialog = GameObject.CreatePrimitive(PrimitiveType.Cube);
 			_dialog.GetComponent<Renderer>().material.color = BackgroundColor;
 			_dialog.transform.parent = transform;
-			_dialog.transform.localPosition = DialogPosition;
-			_dialog.transform.localScale = DialogScale;
+			_dialog.transform.localPosition = dialogPosition;
+			_dialog.transform.localScale = dialogScale;
 
 			var titleTextObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
 			titleTextObject.transform.parent = _dialog.transform;
