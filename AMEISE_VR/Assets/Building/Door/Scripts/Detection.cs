@@ -15,9 +15,6 @@ public class Detection : MonoBehaviour
 
     // UI SETTINGS
     [Header("UI Settings")]
-    [Tooltip("The image or text that will be shown whenever the player is in reach of the door.")]
-    public GameObject TextPrefab; // A text element to display when the player is in reach of the door
-    [HideInInspector] public GameObject TextPrefabInstance; // A copy of the text prefab to prevent data corruption
     [HideInInspector] public bool TextActive;
 
 	[Tooltip("The image or text that is shown in the middle of the the screen.")]
@@ -31,13 +28,14 @@ public class Detection : MonoBehaviour
 	public GameObject LoginText;
 	public GameObject Book;
 	public GameObject Office;
-	public GameObject Avatar;
 	public GameObject Task;
 	public GameObject PlayerBoard;
 	public GameObject SpeechBubble;
 	public GameObject Phone;
 
 	private GameConfiguration config;
+
+	private GameObject currentToolTipGameObject;
 
 	// DEBUG SETTINGS
 	[Header("Debug Settings")]
@@ -61,16 +59,13 @@ public class Detection : MonoBehaviour
             CrosshairPrefabInstance = Instantiate(CrosshairPrefab); // Display the crosshair prefab
             CrosshairPrefabInstance.transform.SetParent(transform, true); // Make the player the parent object of the crosshair prefab
         }
-
-        if (TextPrefab == null) Debug.Log("<color=yellow><b>No TextPrefab was found.</b></color>"); // Return an error if no text element was specified
-
+		
 		DebugRayColor.a = Opacity; // Set the alpha value of the DebugRayColor
 		GameObjectCollection.AddGameObject(FPSController, GameObjectEnum.FPSController);
 		GameObjectCollection.AddGameObject(LoginControl, GameObjectEnum.LoginControl);
 		GameObjectCollection.AddGameObject(GameSelectionControl, GameObjectEnum.GameSelectionControl);
 		GameObjectCollection.AddGameObject(LoginFailedControl, GameObjectEnum.LoginFailedControl);
 		GameObjectCollection.AddGameObject(Book, GameObjectEnum.Book);
-		GameObjectCollection.AddGameObject(Avatar, GameObjectEnum.Avatar);
 		GameObjectCollection.AddGameObject(Office, GameObjectEnum.Office);
 		GameObjectCollection.AddGameObject(Task, GameObjectEnum.Task);
 		GameObjectCollection.AddGameObject(PlayerBoard, GameObjectEnum.PlayerBoard);
@@ -101,7 +96,10 @@ public class Detection : MonoBehaviour
 				// Destroy the UI element when Player is no longer in reach of the door
 				if (TextActive)
 				{
-					DestroyImmediate(TextPrefabInstance);
+					if(currentToolTipGameObject != null)
+					{
+						currentToolTipGameObject.SetActive(false);
+					}
 					TextActive = false;
 				}
 				//Draw the ray as a colored line for debugging purposes.
@@ -110,27 +108,27 @@ public class Detection : MonoBehaviour
 			}
 
 			var currentTag = Tags[hit.collider.tag];
+			var currentGameObject = hit.transform.gameObject;
 			InReach = true;
 
 			// Display the UI element when the player is in reach of the door
-			if (TextActive == false && TextPrefab != null)
+			currentToolTipGameObject = GetToolTip(currentGameObject);
+			
+			if (TextActive == false)
 			{
-				TextPrefabInstance = Instantiate(TextPrefab);
+				if (currentToolTipGameObject != null)
+				{
+					currentToolTipGameObject.SetActive(true);
+				}
+				
 				TextActive = true;
-				TextPrefabInstance.transform.SetParent(transform, true); // Make the player the parent object of the text element
-				TextPrefabInstance.transform.Find("Text 1").GetComponent<Text>().text = ToolTips[currentTag];
 			}
 
 			switch (currentTag)
 			{
 				case CommandTagEnum.Door:
-					
-
-					// Give the object that was hit the name 'Door'
-					GameObject Door = hit.transform.gameObject;
-
 					// Get access to the 'Door' script attached to the object that was hit
-					Door dooropening = Door.GetComponent<Door>();
+					Door dooropening = currentGameObject.GetComponent<Door>();
 
 					if (Input.GetMouseButtonDown(0))
 					{
@@ -150,7 +148,7 @@ public class Detection : MonoBehaviour
 				case CommandTagEnum.Book:
 					if (Input.GetMouseButtonDown(0))
 					{
-						var book = GameObjectCollection.GetBookByGameObject(hit.transform.gameObject);
+						var book = GameObjectCollection.GetBookByGameObject(currentGameObject);
 						if (book.IsOpen())
 							book.Close();
 						else if (book.IsClosed())
@@ -158,7 +156,7 @@ public class Detection : MonoBehaviour
 					}
 					else if (Input.GetMouseButtonDown(1))
 					{
-						var book = GameObjectCollection.GetBookByGameObject(hit.transform.gameObject);
+						var book = GameObjectCollection.GetBookByGameObject(currentGameObject);
 						if (book.BelongsToAShelf)
 						{
 							book.TriggerShelfMove();
@@ -172,21 +170,21 @@ public class Detection : MonoBehaviour
 				case CommandTagEnum.BookNext:
 					if (Input.GetMouseButtonDown(0))
 					{
-						var book = GameObjectCollection.GetBookByGameObject(hit.transform.gameObject);
+						var book = GameObjectCollection.GetBookByGameObject(currentGameObject);
 						book.NextPage();
 					}
 					break;
 				case CommandTagEnum.BookPrevious:
 					if (Input.GetMouseButtonDown(0))
 					{
-						var book = GameObjectCollection.GetBookByGameObject(hit.transform.gameObject);
+						var book = GameObjectCollection.GetBookByGameObject(currentGameObject);
 						book.PreviousPage();
 					}
 					break;
 				case CommandTagEnum.Task:
 					if (Input.GetMouseButtonDown(0))
 					{
-						var task = GameObjectCollection.GetTaskByGameObject(hit.transform.gameObject);
+						var task = GameObjectCollection.GetTaskByGameObject(currentGameObject);
 						var playerBoards = GameObjectCollection.PlayerBoardCollection;
 						var playerBoard = playerBoards.PlayerBoards.SingleOrDefault(p => p.Tasks.Contains(task));
 						if (playerBoard != null)
@@ -202,7 +200,7 @@ public class Detection : MonoBehaviour
 					}
 					else if (Input.GetMouseButtonDown(1))
 					{
-						var task = GameObjectCollection.GetTaskByGameObject(hit.transform.gameObject);
+						var task = GameObjectCollection.GetTaskByGameObject(currentGameObject);
 						task.ChangeParameter();
 						task.RelatedTasks.ForEach(t => t.ChangeParameter());
 					}
@@ -216,7 +214,7 @@ public class Detection : MonoBehaviour
 							var playerBoards = GameObjectCollection.PlayerBoardCollection;
 							var newTaskGameObject = Instantiate(GameObjectCollection.Task);
 							var newTask = selectedTask.Clone(newTaskGameObject);
-							playerBoards.AddTask(newTask, hit.transform.gameObject);
+							playerBoards.AddTask(newTask, currentGameObject);
 						}
 					}
 					break;
@@ -230,14 +228,6 @@ public class Detection : MonoBehaviour
 					if (Input.GetMouseButtonDown(0))
 					{
 						GameObjectCollection.Phone.ShowDialog();
-						//ClientConnection.GetInstance().SendCommand(KnowledgeBase.Instance.CustomerAcceptanceTestCommand);
-						//GameObjectCollection.HistoryBook.Open();
-					}
-					break;
-				case CommandTagEnum.PostBox:
-					if (Input.GetMouseButtonDown(0))
-					{
-						ClientConnection.GetInstance().SendCommand(KnowledgeBase.Instance.FinishProjectCommand);
 					}
 					break;
 				case CommandTagEnum.WasteBin:
@@ -249,7 +239,7 @@ public class Detection : MonoBehaviour
 				case CommandTagEnum.Avatar:
 					if (Input.GetMouseButtonDown(0))
 					{
-						var avatar = GameObjectCollection.AvatarsCollection.Get(hit.transform.gameObject);
+						var avatar = GameObjectCollection.AvatarsCollection.Get(currentGameObject);
 						if (!avatar.IsDummy)
 							avatar.ShowDialog();
 					}
@@ -257,18 +247,18 @@ public class Detection : MonoBehaviour
 				case CommandTagEnum.Button:
 					if (Input.GetMouseButtonDown(0))
 					{
-						var taggedGameObject = hit.transform.gameObject;
+						var taggedGameObject = currentGameObject;
 						while (!Tags.Keys.Contains(taggedGameObject.tag) || (Tags[taggedGameObject.tag] != CommandTagEnum.Avatar && Tags[taggedGameObject.tag] != CommandTagEnum.Phone))
 							taggedGameObject = taggedGameObject.transform.parent.gameObject;
 
 						if (Tags[taggedGameObject.tag] == CommandTagEnum.Phone)
 						{
-							GameObjectCollection.Phone.ButtonClicked(hit.transform.gameObject);
+							GameObjectCollection.Phone.ButtonClicked(currentGameObject);
 						}
 						else
 						{ 
 							var avatar = GameObjectCollection.AvatarsCollection.Get(taggedGameObject);
-							avatar.ButtonClicked(hit.transform.gameObject);
+							avatar.ButtonClicked(currentGameObject);
 						}
 					}
 					break;
@@ -283,7 +273,8 @@ public class Detection : MonoBehaviour
             // Destroy the UI element when Player is no longer in reach of the door
             if (TextActive == true)
             {
-                DestroyImmediate(TextPrefabInstance);
+				if(currentToolTipGameObject != null)
+					currentToolTipGameObject.SetActive(false);
                 TextActive = false;
             }
 		}
@@ -291,6 +282,16 @@ public class Detection : MonoBehaviour
         //Draw the ray as a colored line for debugging purposes.
         Debug.DrawRay(ray.origin, ray.direction * Reach, DebugRayColor);
     }
+
+	private GameObject GetToolTip(GameObject currentGameObject)
+	{
+		var childName = "ToolTip";
+		var toolTipTransform = currentGameObject.transform.Find(childName);
+		if (toolTipTransform != null)
+			return toolTipTransform.gameObject;
+		toolTipTransform = currentGameObject.transform.parent.Find(childName);
+		return toolTipTransform?.gameObject;
+	}
 
 	public enum CommandTagEnum
 	{
@@ -303,7 +304,6 @@ public class Detection : MonoBehaviour
 		PlayerBoard,
 		SendCommand,
 		Phone,
-		PostBox,
 		WasteBin,
 		Avatar,
 		Button
@@ -320,26 +320,8 @@ public class Detection : MonoBehaviour
 		{"PlayerBoard", CommandTagEnum.PlayerBoard},
 		{"SendCommand", CommandTagEnum.SendCommand},
 		{"Phone", CommandTagEnum.Phone},
-		{"PostBox", CommandTagEnum.PostBox},
 		{"WasteBin", CommandTagEnum.WasteBin},
 		{"Avatar", CommandTagEnum.Avatar},
 		{"Button", CommandTagEnum.Button}
-	};
-
-	private static readonly Dictionary<CommandTagEnum, string> ToolTips = new Dictionary<CommandTagEnum, string>
-	{
-		{CommandTagEnum.Door, "Open Door" },
-		{CommandTagEnum.Login, "" },
-		{CommandTagEnum.Book, "" },
-		{CommandTagEnum.BookNext, "" },
-		{CommandTagEnum.BookPrevious, "" },
-		{CommandTagEnum.Task, "" },
-		{CommandTagEnum.PlayerBoard, "" },
-		{CommandTagEnum.SendCommand, "Assign Tasks from Whiteboard" },
-		{CommandTagEnum.Phone, "Call customer to perform acceptance tests" },
-		{CommandTagEnum.PostBox, "Deliver System" },
-		{CommandTagEnum.WasteBin, "Cancel Project" },
-		{CommandTagEnum.Avatar, "" },
-		{CommandTagEnum.Button, "" }
 	};
 }
