@@ -4,6 +4,7 @@ using System.Linq;
 using Assets.Scripts;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.XR;
 
 public class Detection : MonoBehaviour
 {
@@ -32,6 +33,9 @@ public class Detection : MonoBehaviour
 	public GameObject PlayerBoard;
 	public GameObject SpeechBubble;
 	public GameObject Phone;
+	public GameObject VRPlayer;
+	public GameObject Teleporting;
+	public GameObject GameController;
 
 	private GameConfiguration config;
 
@@ -49,7 +53,9 @@ public class Detection : MonoBehaviour
 
     void Start()
     {
-        gameObject.name = "Player";
+	    Screen.orientation = ScreenOrientation.AutoRotation;
+	    XRSettings.enabled = false;
+		gameObject.name = "Player";
         gameObject.tag = "Player";
 
         if (CrosshairPrefab == null) Debug.Log("<color=yellow><b>No CrosshairPrefab was found.</b></color>"); // Return an error if no crosshair was specified
@@ -62,6 +68,7 @@ public class Detection : MonoBehaviour
 		
 		DebugRayColor.a = Opacity; // Set the alpha value of the DebugRayColor
 		GameObjectCollection.AddGameObject(FPSController, GameObjectEnum.FPSController);
+		GameObjectCollection.AddGameObject(GameController, GameObjectEnum.GameController);
 		GameObjectCollection.AddGameObject(LoginControl, GameObjectEnum.LoginControl);
 		GameObjectCollection.AddGameObject(GameSelectionControl, GameObjectEnum.GameSelectionControl);
 		GameObjectCollection.AddGameObject(LoginFailedControl, GameObjectEnum.LoginFailedControl);
@@ -72,6 +79,8 @@ public class Detection : MonoBehaviour
 		GameObjectCollection.AddGameObject(LoginText, GameObjectEnum.LoginText);
 		GameObjectCollection.AddGameObject(SpeechBubble, GameObjectEnum.SpeechBubble);
 		GameObjectCollection.AddGameObject(Phone, GameObjectEnum.Phone);
+		GameObjectCollection.AddGameObject(VRPlayer, GameObjectEnum.VRPlayer);
+		GameObjectCollection.AddGameObject(Teleporting, GameObjectEnum.Teleporting);
 		var historyBook = Instantiate(Book);
 		GameObjectCollection.AddHistoryBook(historyBook);
 		config = new GameConfiguration();
@@ -87,9 +96,9 @@ public class Detection : MonoBehaviour
 		// Cast ray from center of the screen towards where the player is looking
 		if (Physics.Raycast(ray, out hit, Reach))
 		{
-			var isKnownTag = Tags.ContainsKey(hit.collider.tag);
+			var isKnownTag = GameObjectCollection.Tags.ContainsKey(hit.collider.tag);
 
-			if (!isKnownTag || Tags[hit.collider.tag] == CommandTagEnum.Door && !KnowledgeBase.Instance.LoadingCommandsFinished)
+			if (!isKnownTag || GameObjectCollection.Tags[hit.collider.tag] == CommandTagEnum.Door && !KnowledgeBase.Instance.LoadingCommandsFinished)
 			{
 				InReach = false;
 
@@ -107,7 +116,7 @@ public class Detection : MonoBehaviour
 				return;
 			}
 
-			var currentTag = Tags[hit.collider.tag];
+			var currentTag = GameObjectCollection.Tags[hit.collider.tag];
 			var currentGameObject = hit.transform.gameObject;
 			InReach = true;
 
@@ -248,10 +257,10 @@ public class Detection : MonoBehaviour
 					if (Input.GetMouseButtonDown(0))
 					{
 						var taggedGameObject = currentGameObject;
-						while (!Tags.Keys.Contains(taggedGameObject.tag) || (Tags[taggedGameObject.tag] != CommandTagEnum.Avatar && Tags[taggedGameObject.tag] != CommandTagEnum.Phone))
+						while (!GameObjectCollection.Tags.Keys.Contains(taggedGameObject.tag) || (GameObjectCollection.Tags[taggedGameObject.tag] != CommandTagEnum.Avatar && GameObjectCollection.Tags[taggedGameObject.tag] != CommandTagEnum.Phone))
 							taggedGameObject = taggedGameObject.transform.parent.gameObject;
 
-						if (Tags[taggedGameObject.tag] == CommandTagEnum.Phone)
+						if (GameObjectCollection.Tags[taggedGameObject.tag] == CommandTagEnum.Phone)
 						{
 							GameObjectCollection.Phone.ButtonClicked(currentGameObject);
 						}
@@ -292,36 +301,4 @@ public class Detection : MonoBehaviour
 		toolTipTransform = currentGameObject.transform.parent.Find(childName);
 		return toolTipTransform?.gameObject;
 	}
-
-	public enum CommandTagEnum
-	{
-		Door,
-		Login,
-		Book,
-		BookNext,
-		BookPrevious,
-		Task,
-		PlayerBoard,
-		SendCommand,
-		Phone,
-		WasteBin,
-		Avatar,
-		Button
-	}
-
-	private static readonly Dictionary<string, CommandTagEnum> Tags = new Dictionary<string, CommandTagEnum>
-	{
-		{"Door", CommandTagEnum.Door},
-		{"Login", CommandTagEnum.Login},
-		{"Book", CommandTagEnum.Book},
-		{"BookNext", CommandTagEnum.BookNext},
-		{"BookBack", CommandTagEnum.BookPrevious},
-		{"Task", CommandTagEnum.Task},
-		{"PlayerBoard", CommandTagEnum.PlayerBoard},
-		{"SendCommand", CommandTagEnum.SendCommand},
-		{"Phone", CommandTagEnum.Phone},
-		{"WasteBin", CommandTagEnum.WasteBin},
-		{"Avatar", CommandTagEnum.Avatar},
-		{"Button", CommandTagEnum.Button}
-	};
 }

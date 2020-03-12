@@ -20,12 +20,31 @@ namespace Assets.Scripts
 		PlayerBoard,
 		LoginText,
 		SpeechBubble,
-		Phone
+		Phone,
+		VRPlayer,
+		Teleporting,
+		GameController
+	}
+
+	public enum CommandTagEnum
+	{
+		Door,
+		Login,
+		Book,
+		BookNext,
+		BookPrevious,
+		Task,
+		PlayerBoard,
+		SendCommand,
+		Phone,
+		WasteBin,
+		Avatar,
+		Button
 	}
 
 	public static class GameObjectCollection
 	{
-		private static GameObject FPSController;
+		public static GameObject FPSController { get; private set; }
 		public static FirstPersonController Player { get; private set; }
 		
 		public static LoginDialog LoginDialog { get; private set; }
@@ -48,6 +67,8 @@ namespace Assets.Scripts
 		public static PlayerBoardCollection PlayerBoardCollection { get; private set; }
 		public static Book HistoryBook { get; private set; }
 		public static Phone Phone { get; private set; }
+		public static GameObject VRPlayer { get; private set; }
+		public static GameObject Teleporting { get; private set; }
 
 		public static void AddGameObject(GameObject gameObject, GameObjectEnum type)
 		{
@@ -65,7 +86,9 @@ namespace Assets.Scripts
 				case GameObjectEnum.FPSController:
 					FPSController = gameObject;
 					Player = FPSController.GetComponent<FirstPersonController>();
-					MessageListener = FPSController.GetComponent<MessageListener>();
+					break;
+				case GameObjectEnum.GameController:
+					MessageListener = gameObject.GetComponent<MessageListener>();
 					break;
 				case GameObjectEnum.Book:
 					Book = gameObject;
@@ -97,6 +120,12 @@ namespace Assets.Scripts
 					break;
 				case GameObjectEnum.Phone:
 					Phone = new Phone(gameObject);
+					break;
+				case GameObjectEnum.VRPlayer:
+					VRPlayer = gameObject;
+					break;
+				case GameObjectEnum.Teleporting:
+					Teleporting = gameObject;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type), type, null);
@@ -191,5 +220,21 @@ namespace Assets.Scripts
 		{
 			LoginText.text = text;
 		}
+
+		public static readonly Dictionary<string, CommandTagEnum> Tags = new Dictionary<string, CommandTagEnum>
+		{
+			{"Door", CommandTagEnum.Door},
+			{"Login", CommandTagEnum.Login},
+			{"Book", CommandTagEnum.Book},
+			{"BookNext", CommandTagEnum.BookNext},
+			{"BookBack", CommandTagEnum.BookPrevious},
+			{"Task", CommandTagEnum.Task},
+			{"PlayerBoard", CommandTagEnum.PlayerBoard},
+			{"SendCommand", CommandTagEnum.SendCommand},
+			{"Phone", CommandTagEnum.Phone},
+			{"WasteBin", CommandTagEnum.WasteBin},
+			{"Avatar", CommandTagEnum.Avatar},
+			{"Button", CommandTagEnum.Button}
+		};
 	}
 }
