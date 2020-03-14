@@ -271,6 +271,18 @@ public class Detection : MonoBehaviour
 						}
 					}
 					break;
+				case CommandTagEnum.Arrow:
+					if (Input.GetMouseButtonDown(0))
+					{
+						var message = new MessageObject(MessageTypeEnum.Proceed,
+							new Dictionary<string, string> {{"steps", "1"}});
+						var connection = ClientConnection.GetInstance();
+						connection.SendText(message);
+						KnowledgeBase.Instance.ContinueTime = true;
+						GameObjectCollection.Player.LockCursor();
+						GameObjectCollection.Player.enabled = false;
+					}
+					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}

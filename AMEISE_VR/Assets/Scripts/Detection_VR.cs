@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts;
-using UnityEngine;
 using Valve.VR.Extras;
 
 public class Detection_VR : SteamVR_LaserPointer
@@ -147,6 +145,15 @@ public class Detection_VR : SteamVR_LaserPointer
 						avatar1.ButtonClicked(currentGameObject);
 					}
 				
+				break;
+			case CommandTagEnum.Arrow:
+					var message = new MessageObject(MessageTypeEnum.Proceed,
+						new Dictionary<string, string> { { "steps", "1" } });
+					var connection = ClientConnection.GetInstance();
+					connection.SendText(message);
+					KnowledgeBase.Instance.ContinueTime = true;
+					GameObjectCollection.Player.LockCursor();
+					GameObjectCollection.Player.enabled = false;
 				break;
 			default:
 				throw new ArgumentOutOfRangeException();

@@ -39,7 +39,8 @@ namespace Assets.Scripts
 		Phone,
 		WasteBin,
 		Avatar,
-		Button
+		Button,
+		Arrow
 	}
 
 	public static class GameObjectCollection
@@ -234,7 +235,8 @@ namespace Assets.Scripts
 			{"Phone", CommandTagEnum.Phone},
 			{"WasteBin", CommandTagEnum.WasteBin},
 			{"Avatar", CommandTagEnum.Avatar},
-			{"Button", CommandTagEnum.Button}
+			{"Button", CommandTagEnum.Button},
+			{"Arrow", CommandTagEnum.Arrow }
 		};
 	}
 }
