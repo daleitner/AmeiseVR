@@ -11,11 +11,11 @@ public class Detection_VR : SteamVR_LaserPointer
 	{
 		base.OnPointerClick(e);
 		var currentGameObject = e.target.gameObject;
-		var isKnownTag = GameObjectCollection.Tags.ContainsKey(currentGameObject.tag);
+		var isKnownTag = GameObjectCollection.Tags.ContainsKey(e.collider.tag);
 		if (!isKnownTag)
 			return;
 
-		var currentTag = GameObjectCollection.Tags[currentGameObject.tag];
+		var currentTag = GameObjectCollection.Tags[e.collider.tag];
 		switch (currentTag)
 		{
 			case CommandTagEnum.Door:
