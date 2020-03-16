@@ -25,6 +25,7 @@ TagManager:
   - Phone
   - WasteBin
   - Button
+  - VRToggle
   layers:
   - Default
   - TransparentFX

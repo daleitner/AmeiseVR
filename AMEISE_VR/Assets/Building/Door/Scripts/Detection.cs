@@ -98,7 +98,9 @@ public class Detection : MonoBehaviour
 		{
 			var isKnownTag = GameObjectCollection.Tags.ContainsKey(hit.collider.tag);
 
-			if (!isKnownTag || GameObjectCollection.Tags[hit.collider.tag] == CommandTagEnum.Door && !KnowledgeBase.Instance.LoadingCommandsFinished)
+			//if tag is unknown or player is not logged in and tag is door or vr toggle
+			if (!isKnownTag || !KnowledgeBase.Instance.LoadingCommandsFinished &&
+			    (GameObjectCollection.Tags[hit.collider.tag] == CommandTagEnum.Door || GameObjectCollection.Tags[hit.collider.tag] == CommandTagEnum.VRToggle))
 			{
 				InReach = false;
 
@@ -282,6 +284,10 @@ public class Detection : MonoBehaviour
 						GameObjectCollection.Player.LockCursor();
 						GameObjectCollection.Player.enabled = false;
 					}
+					break;
+				case CommandTagEnum.VRToggle:
+					if(Input.GetMouseButtonDown(0))
+						VRToggle.ToggleVR();
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();

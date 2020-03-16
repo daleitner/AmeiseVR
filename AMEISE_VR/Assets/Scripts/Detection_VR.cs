@@ -155,6 +155,9 @@ public class Detection_VR : SteamVR_LaserPointer
 					GameObjectCollection.Player.LockCursor();
 					GameObjectCollection.Player.enabled = false;
 				break;
+			case CommandTagEnum.VRToggle:
+				VRToggle.ToggleVR();
+				break;
 			default:
 				throw new ArgumentOutOfRangeException();
 		}

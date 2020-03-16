@@ -130,13 +130,6 @@ public class GameConfiguration
 			commands.ForEach(x => str += x + "\r\n");
 			Debug.Log("commands:\r\n" + str);
 			GameObjectCollection.SetLoginText("Login Succeeded");
-			GameObjectCollection.FPSController.SetActive(false);
-			GameObjectCollection.VRPlayer.SetActive(true);
-			GameObjectCollection.FPSController.transform.Find("FirstPersonCharacter").gameObject.tag = "Untagged";
-			GameObjectCollection.VRPlayer.transform.Find("SteamVRObjects").Find("VRCamera").gameObject.tag = "MainCamera";
-			GameObjectCollection.Teleporting.SetActive(true);
-			Screen.orientation = ScreenOrientation.Portrait;
-			XRSettings.enabled = true;
 		}
 	}
 }

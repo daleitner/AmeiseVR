@@ -40,7 +40,8 @@ namespace Assets.Scripts
 		WasteBin,
 		Avatar,
 		Button,
-		Arrow
+		Arrow,
+		VRToggle
 	}
 
 	public static class GameObjectCollection
@@ -236,7 +237,8 @@ namespace Assets.Scripts
 			{"WasteBin", CommandTagEnum.WasteBin},
 			{"Avatar", CommandTagEnum.Avatar},
 			{"Button", CommandTagEnum.Button},
-			{"Arrow", CommandTagEnum.Arrow }
+			{"Arrow", CommandTagEnum.Arrow },
+			{"VRToggle", CommandTagEnum.VRToggle }
 		};
 	}
 }
