@@ -13,7 +13,7 @@ public class Detection_VR : SteamVR_LaserPointer
 		base.OnPointerClick(e);
 		var currentGameObject = e.target.gameObject;
 		var isKnownTag = GameObjectCollection.Tags.ContainsKey(e.collider.tag);
-		if (!isKnownTag)
+		if (!isKnownTag || KnowledgeBase.Instance.ContinueTime)
 			return;
 
 		var currentTag = GameObjectCollection.Tags[e.collider.tag];

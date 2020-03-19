@@ -99,7 +99,7 @@ public class Detection : MonoBehaviour
 			var isKnownTag = GameObjectCollection.Tags.ContainsKey(hit.collider.tag);
 
 			//if tag is unknown or player is not logged in and tag is door or vr toggle
-			if (!isKnownTag || !KnowledgeBase.Instance.LoadingCommandsFinished &&
+			if (!isKnownTag || KnowledgeBase.Instance.ContinueTime || !KnowledgeBase.Instance.LoadingCommandsFinished &&
 			    (GameObjectCollection.Tags[hit.collider.tag] == CommandTagEnum.Door || GameObjectCollection.Tags[hit.collider.tag] == CommandTagEnum.VRToggle))
 			{
 				InReach = false;
@@ -277,7 +277,7 @@ public class Detection : MonoBehaviour
 					if (Input.GetMouseButtonDown(0))
 					{
 						var message = new MessageObject(MessageTypeEnum.Proceed,
-							new Dictionary<string, string> {{"steps", "1"}});
+							new Dictionary<string, string> { { "steps", "1" } });
 						var connection = ClientConnection.GetInstance();
 						connection.SendText(message);
 						KnowledgeBase.Instance.ContinueTime = true;
