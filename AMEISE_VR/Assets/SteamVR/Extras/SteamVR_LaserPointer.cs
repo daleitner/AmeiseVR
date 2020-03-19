@@ -25,7 +25,7 @@ namespace Valve.VR.Extras
         public event PointerEventHandler PointerClick;
 
         Transform previousContact = null;
-
+        Collider previousCollider = null;
 
         private void Start()
         {
@@ -110,8 +110,10 @@ namespace Valve.VR.Extras
                 args.distance = 0f;
                 args.flags = 0;
                 args.target = previousContact;
+                args.collider = previousCollider;
                 OnPointerOut(args);
                 previousContact = null;
+                previousCollider = null;
             }
             if (bHit && previousContact != hit.transform)
             {
@@ -120,12 +122,15 @@ namespace Valve.VR.Extras
                 argsIn.distance = hit.distance;
                 argsIn.flags = 0;
                 argsIn.target = hit.transform;
+                argsIn.collider = hit.collider;
                 OnPointerIn(argsIn);
                 previousContact = hit.transform;
+                previousCollider = hit.collider;
             }
             if (!bHit)
             {
                 previousContact = null;
+                previousCollider = null;
             }
             if (bHit && hit.distance < 100f)
             {

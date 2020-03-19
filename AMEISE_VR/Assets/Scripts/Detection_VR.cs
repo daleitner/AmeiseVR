@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts;
+using UnityEngine;
 using Valve.VR.Extras;
 
 public class Detection_VR : SteamVR_LaserPointer
@@ -161,5 +162,41 @@ public class Detection_VR : SteamVR_LaserPointer
 			default:
 				throw new ArgumentOutOfRangeException();
 		}
+	}
+
+	public override void OnPointerIn(PointerEventArgs e)
+	{
+		base.OnPointerIn(e);
+		var isKnownTag = GameObjectCollection.Tags.ContainsKey(e.collider.tag);
+		if (!isKnownTag)
+			return;
+
+		var currentGameObject = e.target.gameObject;
+		var currentToolTipGameObject = GetToolTip(currentGameObject);
+		if(currentToolTipGameObject != null)
+			currentToolTipGameObject.SetActive(true);
+	}
+
+	public override void OnPointerOut(PointerEventArgs e)
+	{
+		base.OnPointerOut(e);
+		var isKnownTag = GameObjectCollection.Tags.ContainsKey(e.collider.tag);
+		if (!isKnownTag)
+			return;
+
+		var currentGameObject = e.target.gameObject;
+		var currentToolTipGameObject = GetToolTip(currentGameObject);
+		if(currentToolTipGameObject != null)
+			currentToolTipGameObject.SetActive(false);
+	}
+
+	private GameObject GetToolTip(GameObject currentGameObject)
+	{
+		var childName = "ToolTip";
+		var toolTipTransform = currentGameObject.transform.Find(childName);
+		if (toolTipTransform != null)
+			return toolTipTransform.gameObject;
+		toolTipTransform = currentGameObject.transform.parent.Find(childName);
+		return toolTipTransform?.gameObject;
 	}
 }
