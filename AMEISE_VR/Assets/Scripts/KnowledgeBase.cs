@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class KnowledgeBase
 {
@@ -78,6 +79,11 @@ public class KnowledgeBase
 		if (message.Length >= 10 && DateTime.TryParse(message.Substring(0, 10), out var newDate))
 		{
 			Date = newDate;
+			Debug.Log("Found Date in [" + message + "]");
+		}
+		else
+		{
+			Debug.Log("Found no date in [" + message + "]");
 		}
 		History.Add(message);
 	}

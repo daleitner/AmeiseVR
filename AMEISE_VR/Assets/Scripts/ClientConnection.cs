@@ -116,13 +116,28 @@ public class ClientConnection
 
 							message.AppendFormat("{0}", Encoding.ASCII.GetString(myReadBuffer, 0, numberOfBytesRead));
 
+							if (!message.ToString().StartsWith("DictionaryAndParameter"))
+							{
+								if (!message.ToString().EndsWith(";") && message.ToString().Contains(";"))
+								{
+									var partialMessage = message.ToString().Split(';')[0] + ";";
+									Debug.Log("You received the following message : " + partialMessage);
+									var msgobj = new MessageObject(partialMessage);
+									foreach (var messageList in _messageLists)
+									{
+										messageList.Add(msgobj);
+									}
+
+									message = new StringBuilder(message.ToString().Substring(partialMessage.Length));
+								}
+							}
 						} while (!message.ToString().EndsWith(";"));
 
 						Debug.Log("You received the following message : " + message);
-						var msgobj = new MessageObject(message.ToString());
+						var msgobj2 = new MessageObject(message.ToString());
 						foreach (var messageList in _messageLists)
 						{
-							messageList.Add(msgobj);
+							messageList.Add(msgobj2);
 						}
 					}
 					catch (Exception e)
