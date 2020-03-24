@@ -83,7 +83,12 @@ public class GameConfiguration
 			for (var i = 0; i < feedbacks.Length; i++)
 			{
 				KnowledgeBase.Instance.AddMessage(feedbacks[i]);
-				_historyBook.AppendText(feedbacks[i]);
+				if (feedbacks[i].Length >= 10 && DateTime.TryParse(feedbacks[i].Substring(0, 10), out var newDate))
+				{
+					_historyBook.AppendText("<color=\"blue\"><b>" + feedbacks[i].Substring(0, 10) + "</b></color>" + feedbacks[i].Substring(10));
+				}
+				else
+					_historyBook.AppendText(feedbacks[i]);
 			}
 			_historyBook.AppendText("\n------------------------\n");
 		}
