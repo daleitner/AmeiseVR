@@ -28,6 +28,7 @@ public class Detection : MonoBehaviour
 	public GameObject FPSController;
 	public GameObject LoginText;
 	public GameObject Book;
+	public GameObject Canvas;
 	public GameObject Office;
 	public GameObject Task;
 	public GameObject PlayerBoard;
@@ -81,8 +82,8 @@ public class Detection : MonoBehaviour
 		GameObjectCollection.AddGameObject(Phone, GameObjectEnum.Phone);
 		GameObjectCollection.AddGameObject(VRPlayer, GameObjectEnum.VRPlayer);
 		GameObjectCollection.AddGameObject(Teleporting, GameObjectEnum.Teleporting);
-		var historyBook = Instantiate(Book);
-		GameObjectCollection.AddHistoryBook(historyBook);
+		//var historyBook = Instantiate(Book);
+		GameObjectCollection.AddHistoryBook(Canvas);
 		config = new GameConfiguration();
 	}
 

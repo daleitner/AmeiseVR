@@ -8,8 +8,12 @@ namespace Assets.Scripts
 {
 	public class Book : GameObjectModelBase
 	{
-		private const int LineLength = 26;
-		private const int PageSize = 286;
+		private const int BookLineLength = 26;
+		private const int BookPageSize = 286;
+		private const int CanvasLineLenght = 40;
+		private const int CanvasPageSize = 800;
+		private int _lineLength;
+		private int _pageSize;
 		private readonly Animator _anim;
 		private readonly MessageListener _listener;
 		private readonly TextMeshPro _text;
@@ -26,26 +30,43 @@ namespace Assets.Scripts
 			:base(book)
 		{
 			_isHistoryBook = isHistoryBook;
-			_anim = book.GetComponent<Animator>();
-			_title = book.transform.Find("BookFront").Find("BookTitleField").Find("BookTitle").GetComponent<TextMeshPro>();
-			_text = book.transform.Find("BookSheet").Find("Content").GetComponent<TextMeshPro>();
+			if (!isHistoryBook)
+			{
+				_lineLength = BookLineLength;
+				_pageSize = BookPageSize;
+				_anim = book.GetComponent<Animator>();
+				_title = book.transform.Find("BookFront").Find("BookTitleField").Find("BookTitle")
+					.GetComponent<TextMeshPro>();
+				_text = book.transform.Find("BookSheet").Find("Content").GetComponent<TextMeshPro>();
+				_anim.SetTrigger("Take");
+			}
+			else
+			{
+				_lineLength = CanvasLineLenght;
+				_pageSize = CanvasPageSize;
+				_text = book.transform.Find("Content").GetComponent<TextMeshPro>();
+			}
+
 			_nextButton = book.transform.Find("NextField").gameObject;
 			_backButton = book.transform.Find("BackField").gameObject;
 			_nextButton.SetActive(false);
 			_backButton.SetActive(false);
 			_listener = listener;
-			_anim.SetTrigger("Take");
 			_pages = new List<string>();
 			IsDefaultPosition = true;
 		}
 		
 		public bool IsOpen()
 		{
+			if (_isHistoryBook)
+				return true;
 			return _anim.GetCurrentAnimatorStateInfo(0).IsName("BookOpen");
 		}
 
 		public bool IsClosed()
 		{
+			if (_isHistoryBook)
+				return false;
 			return _anim.GetCurrentAnimatorStateInfo(0).IsName("BookIdle");
 		}
 
@@ -75,6 +96,8 @@ namespace Assets.Scripts
 
 		public void Close()
 		{
+			if (_isHistoryBook)
+				return;
 			_anim.SetTrigger("Close");
 		}
 
@@ -125,6 +148,8 @@ namespace Assets.Scripts
 
 		public void SetTitle(string title)
 		{
+			if (_isHistoryBook)
+				return;
 			_title.text = title;
 		}
 
@@ -136,7 +161,7 @@ namespace Assets.Scripts
 
 		private void PullOutFromShelf()
 		{
-			if (!IsDefaultPosition)
+			if (!IsDefaultPosition || _isHistoryBook)
 				return;
 			GameObject.transform.localPosition = new Vector3(GameObject.transform.localPosition.x, GameObject.transform.localPosition.y, GameObject.transform.localPosition.z - 0.5f);
 			IsDefaultPosition = false;
@@ -145,7 +170,7 @@ namespace Assets.Scripts
 
 		private void PushInToShelf()
 		{
-			if (IsDefaultPosition)
+			if (IsDefaultPosition || _isHistoryBook)
 				return;
 			GameObject.transform.localPosition = new Vector3(GameObject.transform.localPosition.x, GameObject.transform.localPosition.y, GameObject.transform.localPosition.z + 0.5f);
 			IsDefaultPosition = true;
@@ -154,6 +179,8 @@ namespace Assets.Scripts
 
 		public void TriggerShelfMove()
 		{
+			if (_isHistoryBook)
+				return;
 			if(IsDefaultPosition)
 				PullOutFromShelf();
 			else if(IsClosed())
@@ -164,6 +191,8 @@ namespace Assets.Scripts
 
 		public void TriggerRotation()
 		{
+			if (_isHistoryBook)
+				return;
 			if (IsDefaultPosition)
 				PopUp();
 			else if (IsClosed())
@@ -174,7 +203,7 @@ namespace Assets.Scripts
 
 		private void PopUp()
 		{
-			if (!IsDefaultPosition)
+			if (!IsDefaultPosition || _isHistoryBook)
 				return;
 			GameObject.transform.localPosition = new Vector3(GameObject.transform.localPosition.x, GameObject.transform.localPosition.y + 0.205f, GameObject.transform.localPosition.z + 0.2f);
 			GameObject.transform.localRotation = new Quaternion(GameObject.transform.localRotation.x + 0.25f, GameObject.transform.localRotation.y, GameObject.transform.localRotation.z, GameObject.transform.localRotation.w);
@@ -184,7 +213,7 @@ namespace Assets.Scripts
 
 		private void FallDown()
 		{
-			if (IsDefaultPosition)
+			if (IsDefaultPosition || _isHistoryBook)
 				return;
 			GameObject.transform.localPosition = new Vector3(GameObject.transform.localPosition.x, GameObject.transform.localPosition.y - 0.205f, GameObject.transform.localPosition.z - 0.2f);
 			GameObject.transform.localRotation = new Quaternion(GameObject.transform.localRotation.x - 0.25f, GameObject.transform.localRotation.y, GameObject.transform.localRotation.z, GameObject.transform.localRotation.w);
@@ -210,11 +239,11 @@ namespace Assets.Scripts
 			{
 				currentPage += text[i];
 				if (text[i] == '\n')
-					count += LineLength;
+					count += _lineLength;
 				else
 					count++;
 
-				if (count >= PageSize)
+				if (count >= _pageSize)
 				{
 					var lastWord = currentPage.Split(' ').Last();
 					

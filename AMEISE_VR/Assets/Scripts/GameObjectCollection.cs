@@ -178,11 +178,11 @@ namespace Assets.Scripts
 		public static void AddHistoryBook(GameObject newBookObject)
 		{
 			HistoryBook = new Book(newBookObject, MessageListener, true);
-			HistoryBook.SetTitle("History");
-			var bookContainer = MyOfficeDesk.transform.Find("BookContainer").gameObject;
-			newBookObject.transform.parent = bookContainer.transform;
-			HistoryBook.MoveTo(new Vector3(-1.6f, 0.0f, -0.3f));
-			HistoryBook.Rotate(Quaternion.Euler(0.0f, 0.0f, 0.0f));
+			//HistoryBook.SetTitle("History");
+			//var bookContainer = MyOfficeDesk.transform.Find("BookContainer").gameObject;
+			//newBookObject.transform.parent = bookContainer.transform;
+			//HistoryBook.MoveTo(new Vector3(-1.6f, 0.0f, -0.3f));
+			//HistoryBook.Rotate(Quaternion.Euler(0.0f, 0.0f, 0.0f));
 			AllBooks.Add(HistoryBook);
 		}
 

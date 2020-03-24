@@ -142,14 +142,14 @@ public class ClientConnection
 					}
 					catch (Exception e)
 					{
-						Debug.Log("Exception occurs. " + e.GetType() + "\n" + e.Message);
+						Debug.LogError("Exception occurs. " + e.GetType() + "\n" + e.Message);
 					}
 
 					// Print out the received message to the console.
 				}
 				else
 				{
-					Debug.Log("Sorry.  You cannot read from this NetworkStream.");
+					Debug.LogError("Sorry.  You cannot read from this NetworkStream.");
 				}
 			}
 		}

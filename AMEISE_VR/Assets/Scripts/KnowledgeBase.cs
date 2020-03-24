@@ -79,13 +79,13 @@ public class KnowledgeBase
 		if (message.Length >= 10 && DateTime.TryParse(message.Substring(0, 10), out var newDate))
 		{
 			Date = newDate;
-			Debug.Log("Found Date in [" + message + "]");
+			History.Add("<color=\"blue\"><b>" + message.Substring(0, 10) + "</b></color>" + message.Substring(10));
 		}
 		else
 		{
-			Debug.Log("Found no date in [" + message + "]");
+			History.Add(message);
 		}
-		History.Add(message);
+		
 	}
 
 	public void SetLoadingCommandsFinished()
