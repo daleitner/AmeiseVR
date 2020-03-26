@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// Represents a message received from network stream
+/// </summary>
 public class MessageObject
 {
 	private Dictionary<string, string> dictionary;

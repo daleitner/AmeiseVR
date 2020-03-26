@@ -1,4 +1,7 @@
-﻿public class Parameter
+﻿/// <summary>
+/// Represents a parameter of a command
+/// </summary>
+public class Parameter
 {
 	public Parameter(string name, string type)
 	{

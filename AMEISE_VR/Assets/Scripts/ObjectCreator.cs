@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Assets.Scripts;
 using UnityEngine;
 
+/// <summary>
+/// Creates Avatars, Tasks and Books when Dictionary is received from Network stream.
+/// </summary>
 public class ObjectCreator : MonoBehaviour
 {
 	private bool _initialCreationDone;

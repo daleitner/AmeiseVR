@@ -5,6 +5,9 @@ using UnityEngine.UIElements;
 
 namespace Assets.Scripts
 {
+	/// <summary>
+	/// Creates a Command Dialog.
+	/// </summary>
 	public class DialogCreator : MonoBehaviour
 	{
 		private static readonly Color BackgroundColor = new Color(0.5f, 0.5f, 0.5f, 0.1f);

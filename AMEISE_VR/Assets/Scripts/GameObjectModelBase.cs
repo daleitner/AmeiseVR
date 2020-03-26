@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
+	/// <summary>
+	/// Base Class for GameObject Model Classes
+	/// </summary>
 	public class GameObjectModelBase
 	{
 		public GameObjectModelBase(GameObject gameObject)

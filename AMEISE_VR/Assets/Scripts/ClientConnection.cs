@@ -6,6 +6,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
+/// <summary>
+/// Handles the TCP connection. It sends and receives messages.
+/// </summary>
 public class ClientConnection
 {
 	private readonly Socket _socket;
@@ -92,6 +95,9 @@ public class ClientConnection
 		SendText(message);
 	}
 
+	/// <summary>
+	/// Reads from network stream while connection is opened.
+	/// </summary>
 	public void ReceiveText()
 	{
 		using (var stream = new NetworkStream(_socket))
@@ -155,6 +161,10 @@ public class ClientConnection
 		}
 	}
 
+	/// <summary>
+	/// When a message is received from network stream add it to messageObjects.
+	/// </summary>
+	/// <param name="messageObjects"></param>
 	public void RegisterList(List<MessageObject> messageObjects)
 	{
 		_messageLists.Add(messageObjects);

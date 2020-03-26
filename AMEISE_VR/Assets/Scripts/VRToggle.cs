@@ -2,6 +2,9 @@
 using UnityEngine;
 using UnityEngine.XR;
 
+/// <summary>
+/// Switches between 1st Person Player and VR-Player
+/// </summary>
 public static class VRToggle
 {
 	private const string Untagged = "Untagged";

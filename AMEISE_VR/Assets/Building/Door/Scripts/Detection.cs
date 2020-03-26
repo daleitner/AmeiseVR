@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.XR;
 
+/// <summary>
+/// Detection is a component of the 1st person player.
+/// It draws the crosshair, initializes the GameObjectCollection and handles the user interaction.
+/// </summary>
 public class Detection : MonoBehaviour
 {
     // GENERAL SETTINGS
@@ -50,17 +53,17 @@ public class Detection : MonoBehaviour
     [Range(0.0F, 1.0F)]
     public float Opacity = 1.0F;
 
-    private bool _mouseClicked = false;
-
     void Start()
     {
+		//disable vr-player
 	    Screen.orientation = ScreenOrientation.AutoRotation;
 	    XRSettings.enabled = false;
 		gameObject.name = "Player";
         gameObject.tag = "Player";
 
-        if (CrosshairPrefab == null) Debug.Log("<color=yellow><b>No CrosshairPrefab was found.</b></color>"); // Return an error if no crosshair was specified
-
+		//instantiate crosshair
+        if (CrosshairPrefab == null)
+	        Debug.Log("<color=yellow><b>No CrosshairPrefab was found.</b></color>"); // Return an error if no crosshair was specified
         else
         {
             CrosshairPrefabInstance = Instantiate(CrosshairPrefab); // Display the crosshair prefab
@@ -68,6 +71,7 @@ public class Detection : MonoBehaviour
         }
 		
 		DebugRayColor.a = Opacity; // Set the alpha value of the DebugRayColor
+		//add game objects to GameObjectCollection
 		GameObjectCollection.AddGameObject(FPSController, GameObjectEnum.FPSController);
 		GameObjectCollection.AddGameObject(GameController, GameObjectEnum.GameController);
 		GameObjectCollection.AddGameObject(LoginControl, GameObjectEnum.LoginControl);
@@ -82,7 +86,6 @@ public class Detection : MonoBehaviour
 		GameObjectCollection.AddGameObject(Phone, GameObjectEnum.Phone);
 		GameObjectCollection.AddGameObject(VRPlayer, GameObjectEnum.VRPlayer);
 		GameObjectCollection.AddGameObject(Teleporting, GameObjectEnum.Teleporting);
-		//var historyBook = Instantiate(Book);
 		GameObjectCollection.AddHistoryBook(Canvas);
 		config = new GameConfiguration();
 	}
@@ -99,7 +102,7 @@ public class Detection : MonoBehaviour
 		{
 			var isKnownTag = GameObjectCollection.Tags.ContainsKey(hit.collider.tag);
 
-			//if tag is unknown or player is not logged in and tag is door or vr toggle
+			//ignore user interaction if tag is unknown or player is not logged in and tag is door or vr toggle
 			if (!isKnownTag || KnowledgeBase.Instance.ContinueTime || !KnowledgeBase.Instance.LoadingCommandsFinished &&
 			    (GameObjectCollection.Tags[hit.collider.tag] == CommandTagEnum.Door || GameObjectCollection.Tags[hit.collider.tag] == CommandTagEnum.VRToggle))
 			{
@@ -122,10 +125,10 @@ public class Detection : MonoBehaviour
 			var currentTag = GameObjectCollection.Tags[hit.collider.tag];
 			var currentGameObject = hit.transform.gameObject;
 			InReach = true;
-
-			// Display the UI element when the player is in reach of the door
+			
 			currentToolTipGameObject = GetToolTip(currentGameObject);
 			
+			//show Tooltip
 			if (TextActive == false)
 			{
 				if (currentToolTipGameObject != null)
@@ -136,6 +139,7 @@ public class Detection : MonoBehaviour
 				TextActive = true;
 			}
 
+			//handle user interaction
 			switch (currentTag)
 			{
 				case CommandTagEnum.Door:
@@ -145,7 +149,8 @@ public class Detection : MonoBehaviour
 					if (Input.GetMouseButtonDown(0))
 					{
 						// Open/close the door by running the 'Open' function found in the 'Door' script
-						if (dooropening.RotationPending == false) StartCoroutine(hit.collider.GetComponent<Door>().Move());
+						if (dooropening.RotationPending == false)
+							StartCoroutine(hit.collider.GetComponent<Door>().Move());
 					}
 					break;
 				case CommandTagEnum.Login:
@@ -311,6 +316,11 @@ public class Detection : MonoBehaviour
         Debug.DrawRay(ray.origin, ray.direction * Reach, DebugRayColor);
     }
 
+	/// <summary>
+	/// Find a child or a sibling game object of currentGameObject with the name ToolTip.
+	/// </summary>
+	/// <param name="currentGameObject"></param>
+	/// <returns></returns>
 	private GameObject GetToolTip(GameObject currentGameObject)
 	{
 		var childName = "ToolTip";

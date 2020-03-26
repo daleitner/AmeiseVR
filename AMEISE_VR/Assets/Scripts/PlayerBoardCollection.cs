@@ -9,6 +9,9 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
+	/// <summary>
+	/// Contains all player boards of the white board.
+	/// </summary>
 	public class PlayerBoardCollection : GameObjectModelBase
 	{
 		private readonly MessageListener _listener;

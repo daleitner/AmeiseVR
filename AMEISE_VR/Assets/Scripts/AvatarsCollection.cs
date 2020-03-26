@@ -5,6 +5,10 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
+	/// <summary>
+	/// Contains all avatars in the game.
+	/// It handles their creation and position.
+	/// </summary>
 	public class AvatarsCollection
 	{
 		private readonly GameObject _avatarsContainer;

@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
+	/// <summary>
+	/// Represents a Task on the white board.
+	/// </summary>
 	public class Task : GameObjectModelBase
 	{
 		private static readonly Color DefaultColor = new Color(0.25f, 0.5f, 1.0f);

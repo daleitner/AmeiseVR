@@ -5,6 +5,9 @@ using UnityStandardAssets.Characters.FirstPerson;
 
 namespace Assets.Scripts
 {
+	/// <summary>
+	/// Represents the 2D login dialog.
+	/// </summary>
 	public class LoginDialog
 	{
 		private readonly GameObject _loginControl;

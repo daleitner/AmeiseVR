@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+/// <summary>
+/// CommandInstance is used to instantiate a command, which means that values are assigned to its parameters.
+/// </summary>
 public class CommandInstance
 {
 	public CommandInstance(Command command)
@@ -21,6 +24,10 @@ public class CommandInstance
 		return ParameterValues.FirstOrDefault(x => string.IsNullOrEmpty(x.Value));
 	}
 
+	/// <summary>
+	/// returns the command in that format where it is sent to the old client.
+	/// </summary>
+	/// <returns></returns>
 	public override string ToString()
 	{
 		var cmd = Command.Name + " ";

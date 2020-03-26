@@ -1,10 +1,12 @@
 ﻿using Assets.Scripts;
 using UnityEngine;
 
+/// <summary>
+/// Sun is a component of the Sun and the Moon game object.
+/// Handles the day/night animation
+/// </summary>
 public class Sun : MonoBehaviour
 {
-
-	//private bool _isNight;
 	private bool _sunGoesDown;
 	private bool _previousSunGoesDown;
     // Start is called before the first frame update

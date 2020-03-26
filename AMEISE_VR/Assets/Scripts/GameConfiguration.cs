@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using Assets.Scripts;
 using UnityEngine.XR;
 
+/// <summary>
+/// Handles interactions in login and game selection dialog.
+/// Handles received messages from network stream.
+/// </summary>
 public class GameConfiguration
 {
 	private readonly LoginDialog _loginDialog;
@@ -69,12 +73,6 @@ public class GameConfiguration
 			}
 			_gameSelectionDialog.AddListItems(games);
 			GameObjectCollection.SetLoginText("Loading...");
-		}
-		else if (messageObject.Type == MessageTypeEnum.ContinueGame)
-		{
-			//var today = DateTime.Parse(messageObject.GetValueOf("current"));
-			//KnowledgeBase.Instance.Date = today;
-			//GameObjectCollection.MovePlayer(new Vector3(230.0f, 21.0f, 163.0f));
 		}
 		else if(messageObject.Type == MessageTypeEnum.Feedback || messageObject.Type == MessageTypeEnum.Callback)
 		{

@@ -4,6 +4,9 @@ using UnityStandardAssets.Characters.FirstPerson;
 
 namespace Assets.Scripts
 {
+	/// <summary>
+	/// Represents the 2D login failed dialog.
+	/// </summary>
 	public class LoginFailedDialog
 	{
 		private readonly GameObject _gameObject;

@@ -6,6 +6,9 @@ using UnityStandardAssets.Characters.FirstPerson;
 
 namespace Assets.Scripts
 {
+	/// <summary>
+	/// represents the 2D Game Selection Dialog.
+	/// </summary>
 	public class GameSelectionDialog
 	{
 		private readonly GameObject _gameObject;
@@ -70,7 +73,6 @@ namespace Assets.Scripts
 				newToggle.transform.SetParent(_gameObject.transform);
 				newToggle.GetComponent<Toggle>().isOn = i == 0;
 				newToggle.transform.Find("Label").gameObject.GetComponent<Text>().text = games[i];
-				//newToggle.transform.position = new Vector3(433.0f, 301.0f - (23.0f * i), 0.0f);
 				_listBox.AddItem(new ListBox.ListItem(newToggle));
 				toggles.Add(newToggle);
 			}

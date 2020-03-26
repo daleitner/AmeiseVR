@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
+	/// <summary>
+	/// Represents the phone in players office to call the customer.
+	/// </summary>
 	public class Phone : GameObjectModelBase
 	{
 		private static readonly Vector3 DialogPosition = new Vector3(0.0f, 0.52f, -0.14f);

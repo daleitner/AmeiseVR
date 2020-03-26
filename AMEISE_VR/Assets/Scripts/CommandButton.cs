@@ -8,6 +8,9 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
+	/// <summary>
+	/// Represents a Button in a Command Dialog
+	/// </summary>
 	public class CommandButton : GameObjectModelBase
 	{
 		public delegate void ButtonClickedEventHandler(CommandButton button);

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Assets.Scripts;
 using UnityEngine;
 
+/// <summary>
+/// Contains the prefabs of the avatars and assign them to the GameObjectCollection.
+/// </summary>
 public class AvatarCollectionScript : MonoBehaviour
 {
 	public GameObject DefaultAvatar;

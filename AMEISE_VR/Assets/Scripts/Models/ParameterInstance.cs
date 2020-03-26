@@ -1,4 +1,7 @@
-﻿public class ParameterInstance
+﻿/// <summary>
+/// Contains a value to the given parameter.
+/// </summary>
+public class ParameterInstance
 {
 	public ParameterInstance(Parameter parameter)
 	{

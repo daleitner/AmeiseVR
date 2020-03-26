@@ -7,6 +7,10 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
+	/// <summary>
+	/// Represents a shelf.
+	/// It handles the position of the books added to the shelf.
+	/// </summary>
 	public class BookCollection
 	{
 		private readonly GameObject _shelf;

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Contains the Date and all Commands.
+/// </summary>
 public class KnowledgeBase
 {
 	private readonly Dictionary<string, List<string>> _parameterTypes;
@@ -12,13 +15,11 @@ public class KnowledgeBase
 	{
 		Employees = new List<string>();
 		Commands = new List<Command>();
-		History = new List<string>();
 		_parameterTypes = new Dictionary<string, List<string>>();
 	}
 
 	public static KnowledgeBase Instance => instance ?? (instance = new KnowledgeBase());
-
-	public List<string> History { get; private set; }
+	
 	public List<string> Employees { get; private set; }
 	public List<Command> Commands { get; set; }
 	public DateTime Date { get; set; }
@@ -79,13 +80,7 @@ public class KnowledgeBase
 		if (message.Length >= 10 && DateTime.TryParse(message.Substring(0, 10), out var newDate))
 		{
 			Date = newDate;
-			History.Add("<color=\"blue\"><b>" + message.Substring(0, 10) + "</b></color>" + message.Substring(10));
 		}
-		else
-		{
-			History.Add(message);
-		}
-		
 	}
 
 	public void SetLoadingCommandsFinished()

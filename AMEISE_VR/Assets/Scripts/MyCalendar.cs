@@ -5,6 +5,10 @@ using System.Globalization;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// MyCalendar is a component of the calendar prefab.
+/// It keeps track of the Date in the KnowledgeBase and updates the Date.
+/// </summary>
 public class MyCalendar : MonoBehaviour
 {
 	private DateTime _today;

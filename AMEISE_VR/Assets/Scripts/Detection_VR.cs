@@ -5,14 +5,26 @@ using Assets.Scripts;
 using UnityEngine;
 using Valve.VR.Extras;
 
+/// <summary>
+/// Detection_VR is a component of the hand of the VR-Player.
+/// It handles the user interactions.
+/// </summary>
 public class Detection_VR : SteamVR_LaserPointer
 {
+	//isRightHand is set if the owning game object is the right hand of the player.
+	//The right hand triggers the right mouse click, the left hand triggers the left mouse click.
 	public bool isRightHand;
+
+	/// <summary>
+	/// OnPointerClick is called when the trigger button on the controller is clicked.
+	/// </summary>
+	/// <param name="e"></param>
 	public override void OnPointerClick(PointerEventArgs e)
 	{
 		base.OnPointerClick(e);
 		var currentGameObject = e.target.gameObject;
 		var isKnownTag = GameObjectCollection.Tags.ContainsKey(e.collider.tag);
+		//cancel user interaction when proceed animation is running
 		if (!isKnownTag || KnowledgeBase.Instance.ContinueTime)
 			return;
 
@@ -29,16 +41,9 @@ public class Detection_VR : SteamVR_LaserPointer
 				
 				break;
 			case CommandTagEnum.Login:
-			//	if (config.LoggedIn)
-			//		break;
-
-			//	if (Input.GetMouseButtonDown(0) && !LoginControl.activeSelf && !LoginFailedControl.activeSelf)
-			//	{
-			//		config.OpenLoginDialog();
-			//	}
+				//Login is always done in 1st person mode.
 				break;
 			case CommandTagEnum.Book:
-
 				if (!isRightHand)
 				{
 					var book = GameObjectCollection.GetBookByGameObject(currentGameObject);
@@ -106,32 +111,22 @@ public class Detection_VR : SteamVR_LaserPointer
 						var newTask = selectedTask.Clone(newTaskGameObject);
 						playerBoards1.AddTask(newTask, currentGameObject);
 					}
-				
 				break;
 			case CommandTagEnum.SendCommand:
-				
 					GameObjectCollection.PlayerBoardCollection.SendCommands();
-				
 				break;
 			case CommandTagEnum.Phone:
-				
 					GameObjectCollection.Phone.ShowDialog();
-				
 				break;
 			case CommandTagEnum.WasteBin:
-				
 					ClientConnection.GetInstance().SendCommand(KnowledgeBase.Instance.CancelProjectCommand);
-				
 				break;
 			case CommandTagEnum.Avatar:
-				
 					var avatar = GameObjectCollection.AvatarsCollection.Get(currentGameObject);
 					if (!avatar.IsDummy)
 						avatar.ShowDialog();
-				
 				break;
 			case CommandTagEnum.Button:
-				
 					var taggedGameObject = currentGameObject;
 					while (!GameObjectCollection.Tags.Keys.Contains(taggedGameObject.tag) || (GameObjectCollection.Tags[taggedGameObject.tag] != CommandTagEnum.Avatar && GameObjectCollection.Tags[taggedGameObject.tag] != CommandTagEnum.Phone))
 						taggedGameObject = taggedGameObject.transform.parent.gameObject;
@@ -145,7 +140,6 @@ public class Detection_VR : SteamVR_LaserPointer
 						var avatar1 = GameObjectCollection.AvatarsCollection.Get(taggedGameObject);
 						avatar1.ButtonClicked(currentGameObject);
 					}
-				
 				break;
 			case CommandTagEnum.Arrow:
 					var message = new MessageObject(MessageTypeEnum.Proceed,
@@ -164,6 +158,11 @@ public class Detection_VR : SteamVR_LaserPointer
 		}
 	}
 
+	/// <summary>
+	/// OnPointerIn is called when the laser pointer collides with a game object.
+	/// It is used to show a tooltip if exists.
+	/// </summary>
+	/// <param name="e"></param>
 	public override void OnPointerIn(PointerEventArgs e)
 	{
 		base.OnPointerIn(e);
@@ -177,6 +176,11 @@ public class Detection_VR : SteamVR_LaserPointer
 			currentToolTipGameObject.SetActive(true);
 	}
 
+	/// <summary>
+	/// OnPointerOut is called when the laser pointer leaves a colliding game object.
+	/// It is used to hide a tooltip if exists.
+	/// </summary>
+	/// <param name="e"></param>
 	public override void OnPointerOut(PointerEventArgs e)
 	{
 		base.OnPointerOut(e);
@@ -190,6 +194,11 @@ public class Detection_VR : SteamVR_LaserPointer
 			currentToolTipGameObject.SetActive(false);
 	}
 
+	/// <summary>
+	/// Find a child or a sibling game object of currentGameObject with the name ToolTip.
+	/// </summary>
+	/// <param name="currentGameObject"></param>
+	/// <returns></returns>
 	private GameObject GetToolTip(GameObject currentGameObject)
 	{
 		var childName = "ToolTip";

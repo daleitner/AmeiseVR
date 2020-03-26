@@ -6,6 +6,9 @@ using Vector3 = UnityEngine.Vector3;
 
 namespace Assets.Scripts
 {
+	/// <summary>
+	/// Represents a book or the history canvas
+	/// </summary>
 	public class Book : GameObjectModelBase
 	{
 		private const int BookLineLength = 26;

@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
+	/// <summary>
+	/// Handles interactions with Avatar Game objects.
+	/// </summary>
 	public class Avatar : GameObjectModelBase
 	{
 		private static readonly Vector3 DialogPosition = new Vector3(0.0f, 11.0f, -7.0f);
@@ -25,6 +28,11 @@ namespace Assets.Scripts
 		public bool IsDummy => string.IsNullOrEmpty(Name) && !IsSecretary;
 		public bool IsSecretary { get; private set; }
 
+		/// <summary>
+		/// Assign an employee to the avatar
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="speechBubble"></param>
 		public void AssignEmployee(string name, GameObject speechBubble)
 		{
 			Name = name;
@@ -51,6 +59,10 @@ namespace Assets.Scripts
 			_speechBubble.SetText(DefaultText);
 		}
 
+		/// <summary>
+		/// Assign a secretary to the avatar.
+		/// </summary>
+		/// <param name="speechBubble"></param>
 		public void AssignSecretary(GameObject speechBubble)
 		{
 			IsSecretary = true;
@@ -58,11 +70,17 @@ namespace Assets.Scripts
 			HideBubble();
 		}
 
+		/// <summary>
+		/// Show the speech bubble of the avatar which contains the answer of the last sent command.
+		/// </summary>
 		public void ShowBubble()
 		{
 			SetText(DefaultText);
 		}
 
+		/// <summary>
+		/// Show a dialog with possible commands a user can give to the avatar.
+		/// </summary>
 		public void ShowDialog()
 		{
 			var dict = new Dictionary<string, object>();
@@ -73,6 +91,10 @@ namespace Assets.Scripts
 			_dialogCreator.ShowSelectionDialog("Give a command to " + (string.IsNullOrEmpty(Name) ? "Secretary" : Name), dict, DialogPosition, DialogScale);
 		}
 
+		/// <summary>
+		/// Is called when a Command Button in Dialog was clicked
+		/// </summary>
+		/// <param name="button"></param>
 		public void ButtonClicked(GameObject button)
 		{
 			var buttons = _dialogCreator.GetButtons();
@@ -89,6 +111,7 @@ namespace Assets.Scripts
 			
 			var command = CreateCommandInstance(cmd, parameter);
 			var emptyParameter = command.GetNextEmptyParameter();
+			//if parameters are needed for command.
 			if (emptyParameter != null)
 			{
 				_dialogCreator.CloseDialog();
@@ -123,6 +146,10 @@ namespace Assets.Scripts
 			_tempCommand = null;
 		}
 
+		/// <summary>
+		/// is called when the answer of the sent command is received.
+		/// </summary>
+		/// <param name="messageObject"></param>
 		private void _listener_ReceivedMessage(MessageObject messageObject)
 		{
 			if (messageObject.Type == MessageTypeEnum.Feedback)

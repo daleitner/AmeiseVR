@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
+	/// <summary>
+	/// Represents a column of the whiteboard which is assigned to one employee.
+	/// </summary>
 	public class PlayerBoard : GameObjectModelBase
 	{
 		private const float x = 0.0f;

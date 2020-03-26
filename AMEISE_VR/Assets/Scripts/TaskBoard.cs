@@ -3,7 +3,9 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-
+	/// <summary>
+	/// Represents the part of the white board which contains all tasks.
+	/// </summary>
 	public class TaskBoard : GameObjectModelBase
 	{
 		private const float first_x = -0.95f;
