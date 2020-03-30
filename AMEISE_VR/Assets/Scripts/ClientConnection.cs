@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using UnityEngine;
 using System.Net;
 using System.Net.Sockets;
@@ -145,6 +146,11 @@ public class ClientConnection
 						{
 							messageList.Add(msgobj2);
 						}
+					}
+					catch (IOException ex)
+					{
+						Debug.LogError("IOException occurs.\n" + ex.Message);
+						_connectionClosed = true;
 					}
 					catch (Exception e)
 					{

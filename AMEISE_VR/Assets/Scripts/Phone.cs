@@ -37,7 +37,6 @@ namespace Assets.Scripts
 			var cmd = buttons[button] as Command;
 			
 			ClientConnection.GetInstance().SendCommand(cmd);
-			GameObjectCollection.HistoryBook.Open();
 
 			_dialogCreator.CloseDialog();
 		}
