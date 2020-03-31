@@ -23,7 +23,8 @@ namespace Assets.Scripts
 		Phone,
 		VRPlayer,
 		Teleporting,
-		GameController
+		GameController,
+		Login
 	}
 
 	public enum CommandTagEnum
@@ -75,6 +76,7 @@ namespace Assets.Scripts
 		public static Phone Phone { get; private set; }
 		public static GameObject VRPlayer { get; private set; }
 		public static GameObject Teleporting { get; private set; }
+		public static LoginGameObject LoginGameObject { get; private set; }
 
 		public static void AddGameObject(GameObject gameObject, GameObjectEnum type)
 		{
@@ -132,6 +134,9 @@ namespace Assets.Scripts
 					break;
 				case GameObjectEnum.Teleporting:
 					Teleporting = gameObject;
+					break;
+				case GameObjectEnum.Login:
+					LoginGameObject = new LoginGameObject(gameObject);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type), type, null);

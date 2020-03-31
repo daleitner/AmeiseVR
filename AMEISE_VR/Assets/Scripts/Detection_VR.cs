@@ -41,7 +41,8 @@ public class Detection_VR : SteamVR_LaserPointer
 				
 				break;
 			case CommandTagEnum.Login:
-				//Login is always done in 1st person mode.
+				if (KnowledgeBase.Instance.LoadingCommandsFinished)
+					GameObjectCollection.LoginGameObject.ShowQuitDialog();
 				break;
 			case CommandTagEnum.Book:
 				if (!isRightHand)

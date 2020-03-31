@@ -40,6 +40,7 @@ public class Detection : MonoBehaviour
 	public GameObject VRPlayer;
 	public GameObject Teleporting;
 	public GameObject GameController;
+	public GameObject LoginGameObject;
 
 	private GameConfiguration config;
 
@@ -86,6 +87,7 @@ public class Detection : MonoBehaviour
 		GameObjectCollection.AddGameObject(Phone, GameObjectEnum.Phone);
 		GameObjectCollection.AddGameObject(VRPlayer, GameObjectEnum.VRPlayer);
 		GameObjectCollection.AddGameObject(Teleporting, GameObjectEnum.Teleporting);
+		GameObjectCollection.AddGameObject(LoginGameObject, GameObjectEnum.Login);
 		GameObjectCollection.AddHistoryBook(Canvas);
 		config = new GameConfiguration();
 	}
@@ -154,12 +156,12 @@ public class Detection : MonoBehaviour
 					}
 					break;
 				case CommandTagEnum.Login:
-					if (config.LoggedIn)
-						break;
-					
-					if (Input.GetMouseButtonDown(0) && !LoginControl.activeSelf && !LoginFailedControl.activeSelf)
+					if (Input.GetMouseButtonDown(0) && !LoginControl.activeSelf && !LoginFailedControl.activeSelf && !GameSelectionControl.activeSelf)
 					{
-						config.OpenLoginDialog();
+						if (config.LoggedIn && KnowledgeBase.Instance.LoadingCommandsFinished)
+							GameObjectCollection.LoginGameObject.ShowQuitDialog();
+						else
+							config.OpenLoginDialog();
 					}
 					break;
 				case CommandTagEnum.Book:
@@ -265,12 +267,19 @@ public class Detection : MonoBehaviour
 					if (Input.GetMouseButtonDown(0))
 					{
 						var taggedGameObject = currentGameObject;
-						while (!GameObjectCollection.Tags.Keys.Contains(taggedGameObject.tag) || (GameObjectCollection.Tags[taggedGameObject.tag] != CommandTagEnum.Avatar && GameObjectCollection.Tags[taggedGameObject.tag] != CommandTagEnum.Phone))
+						while (!GameObjectCollection.Tags.Keys.Contains(taggedGameObject.tag) || 
+						       (GameObjectCollection.Tags[taggedGameObject.tag] != CommandTagEnum.Avatar 
+						        && GameObjectCollection.Tags[taggedGameObject.tag] != CommandTagEnum.Phone
+						        && GameObjectCollection.Tags[taggedGameObject.tag] != CommandTagEnum.Login))
 							taggedGameObject = taggedGameObject.transform.parent.gameObject;
 
 						if (GameObjectCollection.Tags[taggedGameObject.tag] == CommandTagEnum.Phone)
 						{
 							GameObjectCollection.Phone.ButtonClicked(currentGameObject);
+						}
+						else if (GameObjectCollection.Tags[taggedGameObject.tag] == CommandTagEnum.Login)
+						{
+							GameObjectCollection.LoginGameObject.ButtonClicked(currentGameObject);
 						}
 						else
 						{ 

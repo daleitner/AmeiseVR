@@ -727,7 +727,7 @@ MonoBehaviour:
   m_ViewDataDictionary: {fileID: 0}
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 23386
+  m_LastSelectedObjectID: -3226
 --- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -824,20 +824,20 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/AssetStoreOriginals/_SNAPS_PrototypingAssets/About
+    - Assets/Scripts
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/AssetStoreOriginals/_SNAPS_PrototypingAssets/About
+  - Assets/Scripts
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\MCLeite\Documents\Unity\AMEISE-VR\AMEISE_VR
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 143}
-    m_SelectedIDs: 224f0000
-    m_LastClickedID: 20258
-    m_ExpandedIDs: 000000005a390000663a0000643b0000243c0000323c0000be3c0000363d0000603d0000503e0000563e0000063f0000663f0000a63f0000f2400000f6400000824100004a4300007a4400007c4500001a470000744900005c4a00002e4c0000064d0000704d00007a4d0000ca4d0000344e0000d44f0000fc4f000012510000ac510000588200005a8200005c8200005e82000060820000628200006482000066820000688200006a8200006c8200006e82000070820000728200007482000076820000788200007a8200007c8200007e82000080820000828200008482000086820000888200008a8200008c8200008e820000
+    scrollPos: {x: 0, y: 203}
+    m_SelectedIDs: 563e0000
+    m_LastClickedID: 15958
+    m_ExpandedIDs: 000000005a390000663a0000643b0000243c0000323c0000be3c0000363d0000603d0000503e0000563e0000063f0000663f0000a63f0000f2400000f6400000824100004a4300007a4400007c4500001a470000744900005c4a00002e4c0000064d0000704d00007a4d0000ca4d0000344e0000d44f0000fc4f000012510000ac510000588200005a8200005c8200005e82000060820000628200006482000066820000688200006a8200006c8200006e82000070820000728200007482000076820000788200007a8200007c8200007e82000080820000828200008482000086820000888200008a8200008c8200008e82000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -890,9 +890,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 2c400000
-    m_LastClickedInstanceID: 16428
-    m_HadKeyboardFocusLastEvent: 0
+    m_SelectedInstanceIDs: 66f3ffff
+    m_LastClickedInstanceID: -3226
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: be240000f24f00009a5a0000b24100007a4000003440000094410000587f0000583000002a2b0000ac340000388400005e3e0000b83300004c4b00005c3f00005c4d00006a33000090420000983a00003a3200003c2a0000023500008a33000028320000524800007a320000ec4d0000a23b0000a6930000fa2b0000225e00008e4900000844000002440000022c0000e4530000fe5800007e3f00008eee000070ee0000162f00002eca0000d8550000a23c000000000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -988,9 +988,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 5a5b0000
-      m_LastClickedID: 23386
-      m_ExpandedIDs: 70fbffff4c5900009a5f000050680000
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: 8256ffffba56ffffe459ffff66f3ffff70fbffff4e590000805b00002a5c0000a65f0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1050,9 +1050,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 245.6495, y: 9.331044, z: 185.25012}
+    m_Target: {x: 241.91699, y: 36.94375, z: 157.647}
     speed: 2
-    m_Value: {x: 245.6495, y: 9.331044, z: 185.25012}
+    m_Value: {x: 241.91699, y: 36.94375, z: 157.647}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1081,13 +1081,13 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: 0.20967093, y: 0.23635861, z: -0.052308667, w: 0.9473586}
+    m_Target: {x: 0.035776574, y: 0.57642126, z: -0.025263004, w: 0.8160111}
     speed: 2
-    m_Value: {x: 0.2096655, y: 0.2363525, z: -0.052307315, w: 0.9473341}
+    m_Value: {x: 0.035775613, y: 0.5764058, z: -0.025262326, w: 0.8159892}
   m_Size:
-    m_Target: 26.872597
+    m_Target: 27.671452
     speed: 2
-    m_Value: 26.872597
+    m_Value: 27.671452
   m_Ortho:
     m_Target: 0
     speed: 2
