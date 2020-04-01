@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using System.Net;
 using System.Net.Sockets;
@@ -122,29 +123,31 @@ public class ClientConnection
 							numberOfBytesRead = stream.Read(myReadBuffer, 0, myReadBuffer.Length);
 
 							message.AppendFormat("{0}", Encoding.ASCII.GetString(myReadBuffer, 0, numberOfBytesRead));
-
-							if (!message.ToString().StartsWith("DictionaryAndParameter"))
-							{
-								if (!message.ToString().EndsWith(";") && message.ToString().Contains(";"))
-								{
-									var partialMessage = message.ToString().Split(';')[0] + ";";
-									Debug.Log("You received the following message : " + partialMessage);
-									var msgobj = new MessageObject(partialMessage);
-									foreach (var messageList in _messageLists)
-									{
-										messageList.Add(msgobj);
-									}
-
-									message = new StringBuilder(message.ToString().Substring(partialMessage.Length));
-								}
-							}
+							
 						} while (!message.ToString().EndsWith(";"));
 
-						Debug.Log("You received the following message : " + message);
-						var msgobj2 = new MessageObject(message.ToString());
-						foreach (var messageList in _messageLists)
+						if (!message.ToString().StartsWith("DictionaryAndParameter"))
 						{
-							messageList.Add(msgobj2);
+							var messages = message.ToString().Split(';');
+							foreach (var msg in messages.Where(x => !string.IsNullOrEmpty(x)))
+							{
+								var currentMessage = msg + ";";
+								Debug.Log("You received the following message : " + currentMessage);
+								var msgobj = new MessageObject(currentMessage);
+								foreach (var messageList in _messageLists)
+								{
+									messageList.Add(msgobj);
+								}
+							}
+						}
+						else
+						{
+							Debug.Log("You received the following message : " + message);
+							var msgobj = new MessageObject(message.ToString());
+							foreach (var messageList in _messageLists)
+							{
+								messageList.Add(msgobj);
+							}
 						}
 					}
 					catch (IOException ex)
